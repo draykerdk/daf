@@ -2,16 +2,22 @@
 # Source: https://github.com/draykerdk/drayker-theme
 remote_theme: draykerdk/drayker-theme
 
+# Set explicitly: GitHub Pages derives site.url without TLS when the certificate is
+# terminated upstream, which leaves absolute URLs in meta tags on http. Everything the
+# sitemap and the social cards emit has to be the canonical https address.
+url: "https://daf.drayker.org"
+
 plugins:
   - jekyll-remote-theme
   - jekyll-optional-front-matter
+  - jekyll-sitemap
 
-title: DAF
-description: Decentralized Autonomous Federation — the alliance basis between Drayker DAOs and DACs.
+title: "DAF"
+description: "Decentralized Autonomous Federation — the alliance basis between Drayker DAOs and DACs."
 
-dk_kicker: Organization
-dk_subdomain: daf.drayker.org
-dk_repo: https://github.com/draykerdk/daf
+dk_kicker: "Organization"
+dk_subdomain: "daf.drayker.org"
+dk_repo: "https://github.com/draykerdk/daf"
 
 defaults:
   - scope:

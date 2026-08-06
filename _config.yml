@@ -1,2 +1,20 @@
-# Title site
-title: 'DAF'
+# The Drayker documentation theme — one layout shared by every *.drayker.org site.
+# Source: https://github.com/draykerdk/drayker-theme
+remote_theme: draykerdk/drayker-theme
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-optional-front-matter
+
+title: DAF
+description: Decentralized Autonomous Federation — the alliance basis between Drayker DAOs and DACs.
+
+dk_kicker: Organization
+dk_subdomain: daf.drayker.org
+dk_repo: https://github.com/draykerdk/daf
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default

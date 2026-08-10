@@ -1,0 +1,33 @@
+schema_version: 1
+component:
+  id: daf
+  name: DAF
+  layer: ORGANIZATION
+  artifact_type: governance-proposal
+  problem: Describe how autonomous Drayker units could cooperate and govern shared resources without a central office.
+  scope:
+    - Public governance proposal for a future federation.
+    - Open specification work for participation, resources and decisions.
+  non_scope:
+    - An operating DAO federation.
+    - A deployed smart contract, federative-points system or voting procedure.
+  dependencies:
+    - dfmp
+    - advices
+    - uid
+  implementation:
+    level: none
+    scope: DAF is a governance proposal; its smart contract, points and voting mechanics are not implemented.
+    evidence:
+      - type: document
+        ref: README.md
+  risks:
+    - Governance language may incorrectly imply a legal or operational federation.
+    - Unspecified resource rules can create expectations the project cannot meet.
+  contributions:
+    availability: open
+    entrypoint: https://github.com/draykerdk/daf/issues
+  source_of_truth:
+    repository: https://github.com/draykerdk/daf
+    path: README.md
+  last_reviewed: "2026-08-10"

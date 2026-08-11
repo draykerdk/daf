@@ -8,9 +8,11 @@ The argument in full is on the [manifesto](https://drayker.org/manifesto/); the 
 
 ## How a unit joins
 
-Anyone — a person, a team, a project or an initiative — can create their own DAO and link it to the smart federation contract. Over time, DAOs accumulate **federative points** and voting power over federation resources and federation decisions.
+Anyone — a person, a team, a project or an initiative — can link their own unit to the federation. Over time, units accumulate **federative points** and voting power over federation resources and federation decisions.
 
-Weight follows delivered work. It is not appointed.
+Weight follows delivered work. It is not appointed, and it cannot be bought: a point records one delivered [function](https://dfmp.drayker.org), it is non-transferable, and it does not decay. Influence moves only as other people deliver.
+
+The mechanics are specified in [DAF-000](./dafp/daf-000-federation-constitution.md).
 
 ## How resources work
 
@@ -18,13 +20,24 @@ The initial DAO is funded by grants and side projects. **All support requests mu
 
 That rule is published on purpose. A federation that treats its shared resources as a first resort stops being able to fund anything that matters.
 
+It is also enforceable rather than decorative: a request that does not say what was tried first is returned unjudged, and funding is granted one function at a time, each grant evaluated against the evidence of the last.
+
 ## Role in the system
 
 DAF is where the ecosystem's autonomous units cooperate without being absorbed into one organization: [projects](https://dfmpproject.drayker.org), councils, initiatives and the [volunteers portal](https://drayker.org) all connect through it, while keeping their own scope and their own decisions.
 
+## The specification
+
+[`dafp/`](./dafp) holds the proposals that specify the federation.
+
+- **[DAF-000](./dafp/daf-000-federation-constitution.md)** — the minimal constitution, independent of any platform: participants and units, how a point is earned, how points become voting weight, quorum and majority, how a resource request is judged, penalties and exit.
+- **[DAF-001](./dafp/daf-001-phase-0-github-federation.md)** — Phase 0, the initial version: the federation running on this repository, with no chain and no token, and an explicit account of what is deferred to later phases.
+
 ## State of this documentation
 
-The rules of the federation are stated; **the smart contract, the point mechanics and the voting procedure are not specified anywhere**. Anyone who has designed governance before would find the gap obvious — and fillable.
+The point mechanics and the voting procedure are now specified, as drafts open to argument. **Nothing is running yet**: no unit is recorded, no assembly has been held, and there is no deployed contract. Phase 0 begins at the first assembly that records a real delivery, not at the first commit.
+
+Several things are still unspecified on purpose — the substrate beyond Phase 0, the transferable instrument the earlier drafts describe, the authority of councils, and how federative points convert into [`uid`](https://uid.drayker.org) reputation. They are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle). Anyone can write them.
 
 ## Contributing
 

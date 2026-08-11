@@ -23,7 +23,7 @@ What belongs to this MVP, and what is deliberately deferred:
 
 | Concern | Phase 0 — this document | Later phases |
 | --- | --- | --- |
-| **Substrate** | This repository. Git history is the ledger. | A chain or equivalent, chosen against §7. |
+| **Substrate** | This repository. Git history is the ledger. | ICP is the stated direction, on the conditions in §7. |
 | **Units** | Records in `federation/units/`, one file each. | Linked by contract or canister. |
 | **Points** | Integers in the assembly ledger, recomputable from history. | Non-transferable on-chain records, migrated with their history. |
 | **Voting** | Declared votes on the assembly pull request, tallied in the open. | Enforced by the substrate. |
@@ -95,6 +95,8 @@ Phase 0 should be replaced when it is failing at something specific, not when a 
 - **A contributor is put at risk by publicity.** Anonymous participation stops being theoretical.
 
 None of these is reached by adding features. Each is reached by the federation actually working — which is why the migration is a consequence of Phase 0 succeeding, not a prerequisite for starting it. When one is reached, the substrate is chosen against the requirement that caused it, and the history in `federation/` migrates with it.
+
+**The stated direction is ICP**, for reputation and resource management that a repository cannot carry. That is a direction, not a deployment and not a date: it says where the work is expected to go, and the conditions above still decide when it goes there. Naming it early is useful — it lets the record in `federation/` be designed to survive the move — and it is exactly the claim that three previous attempts got wrong by treating the platform as the starting point rather than the consequence.
 
 ## 8. Status
 

@@ -98,9 +98,11 @@ None of these is reached by adding features. Each is reached by the federation a
 
 ## 8. Status
 
-Nothing in this document is running yet. The directory in §3 does not exist, no unit is recorded, and no assembly has been held. Building it is the next function, and it is small: the structure is four directories and a report template.
+The structure in §3 exists, at [`federation/`](../federation), with the templates for a unit record, a resource request and an assembly report. **Nothing is running in it.** No unit is recorded, no points have been issued, and no assembly has been held.
 
-The federation begins at the first assembly that records a real delivery — not at the first commit that creates the folders.
+The next function is the first assembly: open the cycle, claim a delivery that already happened, and take the record through the procedure in §4 to see where it breaks. It is deliberately small, because the point is to find out what these rules cost to operate before anyone else is asked to live under them.
+
+The federation begins at that assembly — not at the commit that created the folders.
 
 ---
 

@@ -167,7 +167,7 @@ Where a rule is unspecified, the federation says so rather than filling the gap 
 
 ## 9. What this document does not settle
 
-- **The substrate beyond Phase 0.** [DAF-001](./daf-001-phase-0-github-federation.md) runs on a repository. Which platform holds the federation when a repository is no longer enough, and what triggers the move, is stated there as open.
+- **The substrate beyond Phase 0.** [DAF-001](./daf-001-phase-0-github-federation.md) runs on a repository, and names ICP as the direction. What that migration actually costs, what it carries, and which of the conditions in DAF-001 §7 triggers it are not settled.
 - **The transferable instrument** (§6.1).
 - **Where councils fit.** [`advices`](https://advices.drayker.org) is the proposed council layer, and specialist review before a federation vote is described across the drafts. Neither the composition of a council nor its authority over a proposal is specified anywhere.
 - **The relationship to UID.** [`uid`](https://uid.drayker.org) is meant to carry contribution history, and federative points are meant to convert into it. No conversion is specified.

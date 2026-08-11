@@ -33,9 +33,11 @@ DAF is where the ecosystem's autonomous units cooperate without being absorbed i
 - **[DAF-000](./dafp/daf-000-federation-constitution.md)** — the minimal constitution, independent of any platform: participants and units, how a point is earned, how points become voting weight, quorum and majority, how a resource request is judged, penalties and exit.
 - **[DAF-001](./dafp/daf-001-phase-0-github-federation.md)** — Phase 0, the initial version: the federation running on this repository, with no chain and no token, and an explicit account of what is deferred to later phases.
 
+The record itself lives in [`federation/`](./federation): unit records, assembly reports, resource requests and the ledger, in plain text under version control, so that any claim about who delivered what can be checked by reading.
+
 ## State of this documentation
 
-The point mechanics and the voting procedure are now specified, as drafts open to argument. **Nothing is running yet**: no unit is recorded, no assembly has been held, and there is no deployed contract. Phase 0 begins at the first assembly that records a real delivery, not at the first commit.
+The point mechanics and the voting procedure are now specified, as drafts open to argument, and the structure that would hold the record exists. **Nothing is running in it**: no unit is recorded, no points have been issued, no assembly has been held, and there is no deployed contract. Phase 0 begins at the first assembly that records a real delivery, not at the commit that created the folders.
 
 Several things are still unspecified on purpose — the substrate beyond Phase 0, the transferable instrument the earlier drafts describe, the authority of councils, and how federative points convert into [`uid`](https://uid.drayker.org) reputation. They are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle). Anyone can write them.
 

@@ -25,6 +25,12 @@ defaults:
     values:
       layout: default
 
+# Record templates are structure to copy, not pages to publish. Left in, they
+# would land in the sitemap as documents that read like real assemblies.
+exclude:
+  - federation/assemblies/TEMPLATE.md
+  - federation/requests/TEMPLATE.md
+
 # The official mark, recoloured. Geometry is fixed for every project
 # (DRAYKER-MARK.md §2.5); only the globe carries the scope.
 dk_accent: "#FF8A00"

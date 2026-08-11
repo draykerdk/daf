@@ -1,0 +1,35 @@
+# Copy to <unit-id>.yml and send it in the pull request that claims your first
+# delivered function. A record without a delivery is not a unit yet.
+#
+# Only what the federation needs in order to count a vote and find your work.
+# Internal governance, member lists and finances stay with the unit.
+
+schema_version: 1
+unit:
+  # Lowercase, letters, digits and hyphens. Becomes the filename and the id you
+  # vote as, so it does not change afterwards.
+  id: example-unit
+
+  name: Example Unit
+
+  # participant = one person. unit = a group of any kind.
+  kind: unit
+
+  # The single purpose this unit exists to serve. Everything it later delivers
+  # hangs off this. One sentence; if it needs two, it is probably two units.
+  founding_function: >-
+    Describe the one thing this unit exists to do.
+
+  # Who can speak for the unit in the federation. Public accounts, because a
+  # vote has to be attributable. A participant lists only themselves.
+  speaks_for:
+    - https://github.com/example
+
+  # Where the work is. Repositories, published documents, anything public that
+  # a claim can point at.
+  work:
+    - https://github.com/example/repository
+
+  # The assembly that accepted this record, as YYYY-MM. Written by the assembly,
+  # not by the applicant.
+  joined: null

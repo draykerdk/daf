@@ -1,5 +1,11 @@
 DAF is the alliance basis between Drayker's DAOs and DACs — the organizational and governance layer of the ecosystem, and the reason Drayker has no head office.
 
+## Why this exists
+
+Drayker is a way of working where people keep creating, discovering and learning while intelligence carries the rest, and what results reaches the work that produced it. DAF is the organizational half of that: how decisions and resources move when there is no head office to move them.
+
+The argument in full is on the [manifesto](https://drayker.org/manifesto/); the [economy page](https://drayker.org/economy/) states plainly what contributing here earns and what it does not.
+
 ## How a unit joins
 
 Anyone — a person, a team, a project or an initiative — can create their own DAO and link it to the smart federation contract. Over time, DAOs accumulate **federative points** and voting power over federation resources and federation decisions.
@@ -22,7 +28,7 @@ The rules of the federation are stated; **the smart contract, the point mechanic
 
 ## Contributing
 
-Open an issue. Issues small enough for one person to finish carry the `open-function` label and appear on the board at [drayker.org](https://drayker.org/#org/fn).
+Open an issue. Issues small enough for one person to finish carry the `open-function` label and appear on the board at [drayker.org](https://drayker.org/fn/).
 
 Related: [`dfmp`](https://dfmp.drayker.org) (how proposals are validated) · [`uid`](https://uid.drayker.org) (identity and contribution) · [`advices`](https://advices.drayker.org) (councils)
 

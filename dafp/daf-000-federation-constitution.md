@@ -1,4 +1,4 @@
-# DAF-000 — Minimal constitution of the federation
+# DAF-000. Minimal constitution of the federation
 
 **Status:** draft · **Type:** process · **Created:** 2026-08-11 · **License:** CC BY 4.0
 **Discussion:** https://github.com/draykerdk/daf/issues/1
@@ -19,9 +19,9 @@ It is not a company, not a legal person, and not a fund with a return. Contribut
 
 ## 2. Participants and units
 
-**A participant** is one person, identified by a public account that can sign work — during the founding phase, a GitHub account. One human, one participant record.
+**A participant** is one person, identified by a public account that can sign work. During the founding phase, that account is a GitHub account. One human, one participant record.
 
-**A unit** is any group that links itself to the federation: a team, a project, a cooperative, a DAO. A unit declares a founding function — the single purpose it exists to serve — and every later contribution of that unit hangs off it. A unit governs itself internally however it wants; the federation judges its deliveries, not its bylaws.
+**A unit** is any group that links itself to the federation: a team, a project, a cooperative, a DAO. A unit declares a founding function, the single purpose it exists to serve, and every later contribution of that unit hangs off it. A unit governs itself internally however it wants. The federation judges its deliveries, not its bylaws.
 
 Both participants and units hold points and vote. Joining a unit is not required, but the federation's work is modular, and a unit is what lets several people carry one module together.
 
@@ -37,8 +37,8 @@ The unit of account is the **function**, as defined by [DFM](https://dfmp.drayke
 
 A function counts as delivered when all of the following hold:
 
-1. it was declared in public before the work was accepted as complete — an issue, a proposal, or a line in a funded module;
-2. its result is public and inspectable — merged code, a published document, a translation, a review, a design, an operational task with a record;
+1. it was declared in public before the work was accepted as complete, as an issue, a proposal, or a line in a funded module.
+2. its result is public and inspectable, as merged code, a published document, a translation, a review, a design, or an operational task with a record.
 3. it closes. Ongoing effort with no completion is not a function.
 
 A **module** is a set of functions declared in advance as delivering one whole. A module completes when all of its functions are delivered and the whole works.
@@ -60,13 +60,13 @@ Both the award values and the rising bar are starting parameters. They are chang
 
 **Points do not decay.** History is not deleted, and a contributor who steps away does not lose the record of what they did.
 
-Influence still moves, by dilution: as new work is delivered, new points are issued, and every existing holder's share of the total falls unless they keep contributing. An early holder with a large share who stops working watches that share shrink. This is the mechanism by which founding weight is meant to disperse — not an amnesty schedule, but continued work by other people.
+Influence still moves, by dilution: as new work is delivered, new points are issued, and every existing holder's share of the total falls unless they keep contributing. An early holder with a large share who stops working watches that share shrink. This is the mechanism by which founding weight is meant to disperse. Not an amnesty schedule, but continued work by other people.
 
 Points are removed only as a penalty (§6).
 
 ### 3.4 Points and voting weight
 
-One point is one vote. A unit votes with the points it holds; how it decides its own position is internal to the unit and is not the federation's business.
+One point is one vote. A unit votes with the points it holds. How it decides its own position is internal to the unit and is not the federation's business.
 
 A holder is **active** if it cast a vote or delivered a function in any of the last three assemblies. Holders who are neither are **dormant**: they keep every point, and their points are excluded from the denominator when quorum is computed (§5.3). Without this, an abandoned unit's points would make quorum unreachable and freeze the federation.
 
@@ -86,7 +86,7 @@ Every proposal states, in this order:
 
 Proposals compose the way functions do. When a function has been funded, later proposals must reference it, so a project accumulates a visible tree: unsatisfied deliveries become bad references, and everything hanging off them is harder to approve. A record of finished work makes the next proposal easier to pass. That feedback loop is the federation's fraud resistance, and it is the reason funding is granted per function rather than per project.
 
-Proposals should be small. A participant with a single function is better served by proposing it to a unit already working in that area than to the whole federation; the federation reviews with more rigor than any one person can satisfy, and a unit can absorb a beginner's mistakes without them becoming a public failure.
+Proposals should be small. A participant with a single function is better served by proposing it to a unit already working in that area than to the whole federation. The federation reviews with more rigor than any one person can satisfy, and a unit can absorb a beginner's mistakes without them becoming a public failure.
 
 ## 5. Decisions
 
@@ -100,14 +100,14 @@ Proposals should be small. A participant with a single function is better served
 
 - Anything internal to a unit. The federation does not govern its members' work.
 - Anything that contradicts Drayker's published values and purpose. This is not a matter of majority.
-- Anything requiring authority the federation does not have — legal, financial, or contractual obligations of any kind.
+- Anything requiring authority the federation does not have. Legal, financial, or contractual obligations of any kind.
 
 ### 5.3 Quorum and majority
 
 A proposal passes when both hold:
 
-- **participation of at least 30%** of active points (§3.4), counting all votes cast, including abstentions and votes against; and
-- **a simple majority of the votes cast** — 50% + 1.
+- **participation of at least 30%** of active points (§3.4), counting all votes cast, including abstentions and votes against, and
+- **a simple majority of the votes cast**, 50% + 1.
 
 Below 30% participation nothing passes, whatever the split. The threshold is deliberately a participation floor rather than an approval floor: a federation that cannot get a third of its weight to look at a decision has no business making it.
 
@@ -117,7 +117,7 @@ During the founding phase, the authority the drafts call the Embassy is exercise
 
 The steward's intervention is limited to proposals that are misaligned with Drayker's published values and purpose, and to fraud, spam, and attacks on the federation. It is not a preference veto, and every use of it is recorded with its reason.
 
-The way out is §3.3: other people delivering functions. There is no automatic date, and this document cannot create one — the transition is governed by GOVERNANCE.md and changes only there.
+The way out is §3.3: other people delivering functions. There is no automatic date, and this document cannot create one. The transition is governed by GOVERNANCE.md and changes only there.
 
 ### 5.5 The assembly
 
@@ -133,29 +133,29 @@ The federation is funded by grants, donations, and side projects. It is non-prof
 
 A resource request is evaluated only if it states:
 
-1. **what was tried first**, and why no other route exists — the applicant's own resources, the unit's treasury, a side project, an external grant;
-2. **which main project this serves**, concretely;
-3. **the function or module tree** it funds, with the previous deliveries it builds on;
-4. **the amount, and what happens at partial funding** — what gets delivered with less, or why less delivers nothing;
+1. **what was tried first**, and why no other route exists. The applicant's own resources, the unit's treasury, a side project, an external grant.
+2. **which main project this serves**, concretely.
+3. **the function or module tree** it funds, with the previous deliveries it builds on.
+4. **the amount, and what happens at partial funding**. What gets delivered with less, or why less delivers nothing.
 5. **how the result will be evidenced**, and by when.
 
-A request missing any of these is not judged on merit; it is returned.
+A request missing any of these is not judged on merit. It is returned.
 
-Funding is granted per function or per module, in sequence. The next grant is evaluated against the evidence of the last one. Undelivered work does not merely fail to earn points — it degrades every proposal that references it.
+Funding is granted per function or per module, in sequence. The next grant is evaluated against the evidence of the last one. Undelivered work does not merely fail to earn points. It degrades every proposal that references it.
 
 ### 6.1 What is not in scope here
 
-The earlier drafts describe a second, **transferable** instrument representing a claim on the treasury, convertible to local currency and later to the ecosystem's unit of value. That design is not specified in this document and is not issued. It cannot exist on the current substrate, and a transferable claim on pooled funds is a financial instrument with obligations the federation is not in a position to carry. It stays out until there is a substrate that can hold it and a review that says it may exist. The drafts are preserved; they are not in force.
+The earlier drafts describe a second, **transferable** instrument representing a claim on the treasury, convertible to local currency and later to the ecosystem's unit of value. That design is not specified in this document and is not issued. It cannot exist on the current substrate, and a transferable claim on pooled funds is a financial instrument with obligations the federation is not in a position to carry. It stays out until there is a substrate that can hold it and a review that says it may exist. The drafts are preserved. They are not in force.
 
 Federative points are the only instrument this constitution creates, and they are not tradable.
 
 ## 7. Joining, penalties, and leaving
 
-**Joining.** A participant or unit submits a record — who it is, its founding function, how to reach it — and delivers a first function. The record and the first award are accepted in the same assembly. There is no fee and no invitation.
+**Joining.** A participant or unit submits a record, who it is, its founding function, how to reach it, and delivers a first function. The record and the first award are accepted in the same assembly. There is no fee and no invitation.
 
 **Penalties.** A unit that commits to a function and does not deliver it loses points, in proportion to what was committed and what the federation had already granted. Where collusion or fraud is established, the holder loses its accumulated points entirely. A member's failure is the unit's failure: how a unit distributes that internally is its own affair, and units that govern themselves well are visibly the ones whose proposals keep passing.
 
-Every penalty is proposed, justified against a specific commitment, and voted like anything else. Absence of activity is never a penalty — a dormant holder loses no points (§3.4).
+Every penalty is proposed, justified against a specific commitment, and voted like anything else. Absence of activity is never a penalty. A dormant holder loses no points (§3.4).
 
 **Leaving.** A unit may leave at any time by saying so. Its points remain in the record: the history of delivered work is not erased by departure. Resources granted for functions it will not deliver are returned, or the outstanding amount is recorded in the ledger, where it stays visible.
 

@@ -22,9 +22,11 @@ That rule is published on purpose. A federation that treats its shared resources
 
 It is also enforceable rather than decorative: a request that does not say what was tried first is returned unjudged, and funding is granted one function at a time, each grant evaluated against the evidence of the last.
 
-## Role in the system
+## How it fits the whole
 
-DAF is where the ecosystem's autonomous units cooperate without being absorbed into one organization: [projects](https://dfmpproject.drayker.org), councils, initiatives and the [volunteers portal](https://drayker.org) all connect through it, while keeping their own scope and their own decisions.
+DAF is where the ecosystem's autonomous units cooperate without being absorbed into one organization: [projects](https://dfmpproject.drayker.org), [councils](https://advices.drayker.org), initiatives and the [volunteers portal](https://drayker.org) all connect through it, while keeping their own scope and their own decisions.
+
+It sits above the same layers everything else does. Contribution is attributable through [UID](https://uid.drayker.org) — federative points record delivered work, and identity is what makes a point non-transferable. The [value unit](https://value.drayker.org) overlaps the federative points, and the funds of the [economy](https://drayker.org/economy/) feed the resources the federation governs. Councils validate what enters; the federation decides how shared resources are held. Drayker has no head office, and DAF is the reason: a federation of autonomous units can outgrow whoever started it without anyone owning it.
 
 ## The specification
 

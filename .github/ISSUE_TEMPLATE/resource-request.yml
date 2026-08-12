@@ -1,0 +1,64 @@
+name: Resource request
+description: Ask the federation for resources. Read DAF-000 §6 before you do.
+title: "[Request] "
+labels: ["resource-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Federation support is requested only where there is no alternative.** The five sections below are
+        not a form to fill politely — a request missing any of them is returned without being judged on merit
+        (DAF-000 §6). In Phase 0 the federation holds no treasury: an approval is a decision to support, not
+        a transfer.
+
+        When this is agreed, the request is committed as a file in `federation/requests/`.
+  - type: input
+    id: from
+    attributes:
+      label: From
+      description: The unit or participant id making the request.
+      placeholder: river-unit
+    validations:
+      required: true
+  - type: input
+    id: amount
+    attributes:
+      label: Amount
+      placeholder: 180 EUR
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: 1. What was tried first
+      description: Your own resources, the unit's treasury, a side project, an external grant — what was attempted, and what happened. This is the section most requests fail.
+    validations:
+      required: true
+  - type: textarea
+    id: serves
+    attributes:
+      label: 2. What this serves
+      description: Which main project, concretely. Not the ecosystem in general.
+    validations:
+      required: true
+  - type: textarea
+    id: funds
+    attributes:
+      label: 3. What it funds
+      description: The function or module, defined so a stranger can tell whether it was done. Name the previous deliveries it builds on, by link.
+    validations:
+      required: true
+  - type: textarea
+    id: partial
+    attributes:
+      label: 4. The amount, and partial funding
+      description: What still gets delivered with less, or why less delivers nothing at all. "Anything helps" is not an answer.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 5. How it will be evidenced
+      description: What will exist when this is finished, and by when. This is what the next assembly checks, and what your next request is judged against.
+    validations:
+      required: true

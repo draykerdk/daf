@@ -1,0 +1,73 @@
+name: Federation snapshot
+
+# Commits data/federation.json in the exact shape drayker.org/#org/daf consumes, so
+# the page reads the record without depending on the GitHub API at page load. The
+# site prefers this file and lets the live API only refresh it.
+
+on:
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - 'federation/**'
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the record
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p data
+
+          listdir () {
+            gh api "repos/${GITHUB_REPOSITORY}/contents/$1" --jq \
+              '[ .[] | select(.type=="file")
+                     | select(.name | test("^TEMPLATE\\.";"i") | not)
+                     | select(.name | test("^README";"i") | not)
+                     | {name: .name, url: .html_url} ]' 2>/dev/null || echo '[]'
+          }
+
+          listdir federation/units       > /tmp/units.json
+          listdir federation/assemblies  > /tmp/assemblies.json
+          listdir federation/requests    > /tmp/requests.json
+
+          gh api "repos/${GITHUB_REPOSITORY}/issues?state=open&per_page=30" --jq \
+            '[ .[] | {num: .number, title: .title, url: .html_url, pr: (has("pull_request"))} ]' \
+            > /tmp/issues.json || echo '[]' > /tmp/issues.json
+
+          jq -n \
+            --slurpfile units /tmp/units.json \
+            --slurpfile assemblies /tmp/assemblies.json \
+            --slurpfile requests /tmp/requests.json \
+            --slurpfile issues /tmp/issues.json \
+            --arg generated "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{generated: $generated,
+              units: $units[0],
+              assemblies: $assemblies[0],
+              requests: $requests[0],
+              issues: $issues[0]}' > data/federation.json
+
+          cat data/federation.json
+
+      - name: Commit if it changed
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- data/federation.json; then
+            echo "no change"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/federation.json
+          git commit -m "federation snapshot"
+          git push

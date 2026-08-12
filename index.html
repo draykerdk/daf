@@ -266,6 +266,32 @@
           </div>
         </div>
       </section>
+
+      <section style="border-top:1px solid var(--line)">
+        <div style="max-width:1320px;margin:0 auto;padding:clamp(42px,6vw,84px) clamp(16px,4vw,44px)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#3FA9FF;margin-bottom:18px">Roadmap &amp; transition</div>
+          <h2 style="font-size:clamp(26px,3.4vw,44px);line-height:1.04;letter-spacing:-0.035em;font-weight:600;margin:0 0 16px;max-width:24ch;text-wrap:balance">From the first draft to the substrate that will carry it.</h2>
+          <p style="font-size:16px;line-height:1.68;color:var(--tx2);margin:0 0 clamp(24px,3.4vw,36px);max-width:64ch;text-wrap:pretty">The federation was designed for a chain three times before it ran anywhere: Aragon on Ethereum, then DAOHaus on Optimism, then canisters on ICP. Each was abandoned before deployment — not because of the design, but because a chain demands funding, tokenomics and an audience before the federation has produced a single recorded decision. So Phase 0 inverts the order: run the rules first on infrastructure that already exists and already works.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)">
+            <div style="background:var(--bg);padding:28px 24px;display:flex;flex-direction:column;gap:10px;min-height:220px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--tx3)">WHERE IT CAME FROM</div>
+              <div style="font-size:20px;font-weight:600;letter-spacing:-0.02em">Three chains, zero deployments</div>
+              <p style="font-size:14.5px;line-height:1.62;color:var(--tx2);margin:0;flex:1;text-wrap:pretty">Aragon on Ethereum, DAOHaus on Optimism, canisters on ICP. Each draft taught the design something and each was abandoned before running, for the same reason: the substrate cost more than the federation had produced.</p>
+            </div>
+            <div style="background:var(--bg);padding:28px 24px;display:flex;flex-direction:column;gap:10px;min-height:220px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#3FA9FF">WHERE IT IS NOW</div>
+              <div style="font-size:20px;font-weight:600;letter-spacing:-0.02em">Phase 0, on a repository</div>
+              <p style="font-size:14.5px;line-height:1.62;color:var(--tx2);margin:0;flex:1;text-wrap:pretty">Git history is the ledger, points are integers recomputable from history, votes are declared in the open, no treasury is held. The smallest thing that is a real federation rather than a description of one. It buys none of the guarantees a chain buys — and says so plainly.</p>
+            </div>
+            <div style="background:var(--bg);padding:28px 24px;display:flex;flex-direction:column;gap:10px;min-height:220px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--tx3)">WHERE IT GOES</div>
+              <div style="font-size:20px;font-weight:600;letter-spacing:-0.02em">ICP, when there is something worth the guarantee</div>
+              <p style="font-size:14.5px;line-height:1.62;color:var(--tx2);margin:0;flex:1;text-wrap:pretty">ICP (Internet Computer Protocol) is the stated direction, on conditions: migrate when there is value whose guarantee justifies a chain, and carry a real history into the migration instead of a whitepaper. Deliberately deferred: the transferable instrument, councils, automated function evaluation, anonymous participation.</p>
+            </div>
+          </div>
+          <p style="font-size:14.5px;line-height:1.66;color:var(--tx3);margin:22px 0 0;max-width:64ch;text-wrap:pretty">The right-hand column of the phase map is not a roadmap and carries no dates. It is a record of what was deliberately left out, so that Phase 0 is not mistaken for the whole design and the rest is not mistaken for work in progress. Detail in <a href="https://github.com/draykerdk/daf/blob/master/dafp/daf-001-phase-0-github-federation.md" style="color:#3FA9FF">DAF-001</a>.</p>
+        </div>
+      </section>
       </div>
     </sc-if>
 

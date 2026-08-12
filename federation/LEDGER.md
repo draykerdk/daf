@@ -1,6 +1,6 @@
 # Ledger
 
-Current standing, summed from the assemblies in [`assemblies/`](./assemblies). Those are the source of truth; if this file disagrees with them, this file is wrong.
+Current standing, summed from the assemblies in [`assemblies/`](./assemblies). Those are the source of truth. If this file disagrees with them, this file is wrong.
 
 **As of:** no assembly held.
 
@@ -17,7 +17,7 @@ Current standing, summed from the assemblies in [`assemblies/`](./assemblies). T
 
 ## Reading this
 
-**Points** are delivered functions and completed modules, never bought and never transferred. They do not decay ([DAF-000 §3.3](../dafp/daf-000-federation-constitution.md#33-decay-and-dilution)) — a share falls only because other people deliver.
+**Points** are delivered functions and completed modules, never bought and never transferred. They do not decay ([DAF-000 §3.3](../dafp/daf-000-federation-constitution.md#33-decay-and-dilution)). A share falls only because other people deliver.
 
 **Active** means the holder voted or delivered in one of the last three assemblies. Dormant holders keep every point and leave the quorum denominator, so an abandoned unit cannot freeze the federation ([DAF-000 §3.4](../dafp/daf-000-federation-constitution.md#34-points-and-voting-weight)). Voting or delivering makes a holder active again, with no readmission procedure.
 

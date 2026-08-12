@@ -1,12 +1,12 @@
 # The federation record
 
-This directory is the federation. Not a description of it — the record itself, as specified in [DAF-001](../dafp/daf-001-phase-0-github-federation.md).
+This directory is the federation. Not a description of it. The record itself, as specified in [DAF-001](../dafp/daf-001-phase-0-github-federation.md).
 
-Everything here is plain text under version control, so that any claim about who delivered what, who holds how many points, and what was decided can be checked by reading, and disputed with evidence.
+Everything here is plain text under version control, so that any claim about who delivered what, who holds how many points, and what was decided can be checked by reading and disputed with evidence.
 
 ```text
 units/         one record per participant or unit
-assemblies/    one report per cycle — the decisions, the awards, the tally
+assemblies/    one report per cycle. The decisions, the awards, the tally
 requests/      resource requests under evaluation
 LEDGER.md      current standing, generated from the assemblies
 ```
@@ -23,12 +23,12 @@ LEDGER.md      current standing, generated from the assemblies
 
 Nothing in this directory is edited directly on `master`. Every change arrives as a pull request:
 
-- **Joining** — add your record to `units/`, from [`units/TEMPLATE.yml`](./units/TEMPLATE.yml), in the same pull request that claims your first delivered function.
-- **Requesting resources** — add a file to `requests/`, from [`requests/TEMPLATE.md`](./requests/TEMPLATE.md). Read [DAF-000 §6](../dafp/daf-000-federation-constitution.md#6-resources) first: a request that does not say what was tried before it is returned without being judged.
-- **Running an assembly** — open the cycle as an issue, then the report as a pull request, from [`assemblies/TEMPLATE.md`](./assemblies/TEMPLATE.md). The procedure is [DAF-001 §4](../dafp/daf-001-phase-0-github-federation.md#4-the-cycle).
+- **Joining**. Add your record to `units/`, from [`units/TEMPLATE.yml`](./units/TEMPLATE.yml), in the same pull request that claims your first delivered function.
+- **Requesting resources**. Add a file to `requests/`, from [`requests/TEMPLATE.md`](./requests/TEMPLATE.md). Read [DAF-000 §6](../dafp/daf-000-federation-constitution.md#6-resources) first: a request that does not say what was tried before it is returned without being judged.
+- **Running an assembly**. Open the cycle as an issue, then the report as a pull request, from [`assemblies/TEMPLATE.md`](./assemblies/TEMPLATE.md). The procedure is [DAF-001 §4](../dafp/daf-001-phase-0-github-federation.md#4-the-cycle).
 
 ## State
 
 Empty. No unit is recorded and no assembly has been held.
 
-The structure exists so that the first delivery has somewhere to be written down. The federation starts at the first assembly that records real work — not at the commit that created these folders.
+The structure exists so that the first delivery has somewhere to be written down. The federation starts at the first assembly that records real work, not at the commit that created these folders.

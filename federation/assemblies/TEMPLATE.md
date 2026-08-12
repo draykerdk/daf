@@ -1,10 +1,10 @@
 # Assembly YYYY-MM
 
-**Window:** opens YYYY-MM-DD · closes YYYY-MM-DD (seven days) · **Cycle issue:** #N
+**Window:** opens YYYY-MM-DD, closes YYYY-MM-DD (seven days). **Cycle issue:** #N
 
 > Copy to `YYYY-MM.md` and open as a pull request. Every award and every penalty
 > below names the specific delivery it answers to. A line without a link is not
-> evidence, and the assembly is the only record — anything decided elsewhere did
+> evidence, and the assembly is the only record. Anything decided elsewhere did
 > not happen. Delete this block.
 
 ## Where the federation is
@@ -73,7 +73,7 @@ A proposal that fails for lack of participation is recorded as exactly that. See
 
 None.
 
-> Used only against proposals misaligned with Drayker's published values and purpose, or against fraud, spam and attacks — never as a preference. If used, say which proposal and why, in full. See [DAF-000 §5.4](../../dafp/daf-000-federation-constitution.md#54-the-founding-steward).
+> Used only against proposals misaligned with Drayker's published values and purpose, or against fraud, spam and attacks. Never as a preference. If used, say which proposal and why, in full. See [DAF-000 §5.4](../../dafp/daf-000-federation-constitution.md#54-the-founding-steward).
 
 ## What the federation would change about itself
 

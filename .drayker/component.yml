@@ -9,7 +9,7 @@ component:
     - Public governance proposal for a future federation.
     - Specification of participation, federative points, decisions and resource evaluation.
     - A first phase designed to run on a public repository, with no chain and no token.
-    - A public reading surface (daf.drayker.org) for the specification, the record and the instruments: unit record, claim, resource request, cycle and vote.
+    - "A public reading surface (daf.drayker.org) for the specification, the record and the instruments: unit record, claim, resource request, cycle and vote."
   non_scope:
     - An operating DAO federation.
     - A deployed smart contract or an enforced voting procedure.

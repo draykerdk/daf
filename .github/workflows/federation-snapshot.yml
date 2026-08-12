@@ -60,6 +60,8 @@ jobs:
           cat data/federation.json
 
       - name: Commit if it changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           # git diff alone misses the first run, when the file is still untracked.

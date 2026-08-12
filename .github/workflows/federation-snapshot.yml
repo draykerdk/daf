@@ -62,7 +62,9 @@ jobs:
       - name: Commit if it changed
         run: |
           set -euo pipefail
-          if git diff --quiet -- data/federation.json; then
+          # git diff alone misses the first run, when the file is still untracked.
+          if git diff --quiet -- data/federation.json \
+             && [ -z "$(git status --porcelain -- data/federation.json)" ]; then
             echo "no change"
             exit 0
           fi

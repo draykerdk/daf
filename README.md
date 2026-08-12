@@ -41,7 +41,7 @@ The record itself lives in [`federation/`](./federation): unit records, assembly
 
 The point mechanics and the voting procedure are now specified, as drafts open to argument, and the structure that would hold the record exists. **Nothing is running in it**: no unit is recorded, no points have been issued, no assembly has been held, and there is no deployed contract. Phase 0 begins at the first assembly that records a real delivery, not at the commit that created the folders.
 
-Several things are still unspecified on purpose. The substrate beyond Phase 0, the transferable instrument the earlier drafts describe, the authority of councils, and how federative points convert into [`uid`](https://uid.drayker.org) reputation. They are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle). Anyone can write them.
+Several things are still unspecified on purpose. The substrate beyond Phase 0 is decided — **ICP** (Internet Computer Protocol) — but the transferable instrument the earlier drafts describe, the authority of councils, and how federative points convert into [`uid`](https://uid.drayker.org) reputation remain open. They are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle). Anyone can write them.
 
 ## Contributing
 

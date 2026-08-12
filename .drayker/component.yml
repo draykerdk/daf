@@ -9,6 +9,7 @@ component:
     - Public governance proposal for a future federation.
     - Specification of participation, federative points, decisions and resource evaluation.
     - A first phase designed to run on a public repository, with no chain and no token.
+    - A public reading surface (daf.drayker.org) for the specification, the record and the instruments: unit record, claim, resource request, cycle and vote.
   non_scope:
     - An operating DAO federation.
     - A deployed smart contract or an enforced voting procedure.
@@ -20,7 +21,7 @@ component:
     - uid
   implementation:
     level: none
-    scope: The points and voting mechanics are specified as drafts; no unit is recorded, no assembly has been held and no contract is deployed.
+    scope: The points and voting mechanics are specified as drafts; no unit is recorded, no assembly has been held and no contract is deployed. The site is a reading and composing surface over the repository, not an operating federation.
     evidence:
       - type: document
         ref: README.md
@@ -28,6 +29,8 @@ component:
         ref: dafp/daf-000-federation-constitution.md
       - type: document
         ref: dafp/daf-001-phase-0-github-federation.md
+      - type: deployment
+        ref: https://daf.drayker.org/
   risks:
     - Governance language may incorrectly imply a legal or operational federation.
     - A written specification may be read as a deployed system.
@@ -35,8 +38,8 @@ component:
     - Unspecified resource rules can create expectations the project cannot meet.
   contributions:
     availability: open
-    entrypoint: https://github.com/draykerdk/daf/issues
+    entrypoint: https://github.com/draykerdk/daf/issues/new/choose
   source_of_truth:
     repository: https://github.com/draykerdk/daf
     path: README.md
-  last_reviewed: "2026-08-11"
+  last_reviewed: "2026-08-12"

@@ -1,0 +1,76 @@
+name: Claim a delivered function
+description: Claim a function you finished, so it can be awarded in the open cycle.
+title: "[Claim] "
+labels: ["claim"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A claim is public and can be contested by anyone in this thread. That argument is the review.
+        All three conditions in DAF-000 §3.1 have to hold — a claim that fails one of them is not a
+        smaller claim, it is not a function.
+  - type: input
+    id: holder
+    attributes:
+      label: Claimed as
+      description: The unit or participant id that holds the points. It must match a record in federation/units/.
+      placeholder: river-unit
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What was delivered
+      description: Defined so a stranger can tell whether it was done.
+    validations:
+      required: true
+  - type: input
+    id: declared
+    attributes:
+      label: Declared in
+      description: The issue, proposal or funded module line that declared this function before it was finished.
+      placeholder: https://github.com/draykerdk/<repo>/issues/00
+    validations:
+      required: true
+  - type: input
+    id: result
+    attributes:
+      label: The result
+      description: The merged pull request, published document, translation, review or record.
+      placeholder: https://github.com/draykerdk/<repo>/pull/00
+    validations:
+      required: true
+  - type: checkboxes
+    id: conditions
+    attributes:
+      label: Conditions — DAF-000 §3.1
+      options:
+        - label: It was declared in public before it was accepted as complete.
+          required: true
+        - label: The result is public and inspectable.
+          required: true
+        - label: It closes. This is not ongoing effort.
+          required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What is being claimed
+      options:
+        - One function — 1 point
+        - A completed module — 1 additional point per function in it
+    validations:
+      required: true
+  - type: input
+    id: module
+    attributes:
+      label: If a module, the functions in it
+      description: The declared functions this module was made of, by number.
+      placeholder: "#7, #12, #13"
+  - type: input
+    id: cycle
+    attributes:
+      label: Cycle
+      description: The assembly this claim belongs to.
+      placeholder: 2026-09
+    validations:
+      required: true

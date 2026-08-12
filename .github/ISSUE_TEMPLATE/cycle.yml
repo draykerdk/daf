@@ -1,0 +1,62 @@
+name: Open an assembly cycle
+description: Open the monthly cycle — the issue that collects claims, requests and proposed changes.
+title: "[Cycle] Assembly "
+labels: ["assembly"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The cycle opens here and closes as a merged report in `federation/assemblies/`.
+        Procedure: DAF-001 §4. Running an assembly is itself a function and earns a point like any other.
+  - type: input
+    id: cycle
+    attributes:
+      label: Cycle
+      placeholder: 2026-09
+    validations:
+      required: true
+  - type: input
+    id: opens
+    attributes:
+      label: Window opens
+      placeholder: 2026-09-01
+    validations:
+      required: true
+  - type: input
+    id: closes
+    attributes:
+      label: Window closes
+      description: Seven days after it opens.
+      placeholder: 2026-09-08
+    validations:
+      required: true
+  - type: textarea
+    id: agenda
+    attributes:
+      label: Up for decision
+      value: |
+        - Deliveries claimed since the last assembly
+        - Resource requests filed in `federation/requests/`
+        - Proposed changes to DAF-000 and DAF-001
+        - Unit records applying with a first delivery
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ### How to claim a delivery
+
+        Open a claim issue, or comment here with the issue that declared the function and the merged result.
+        Claims are public and can be contested by anyone in this thread.
+
+        ### How the vote works
+
+        The report is opened as a pull request against `master`. Holders vote there, one comment each:
+
+        ```text
+        VOTE: for | against | abstain
+        AS: <unit-id or participant-id>
+        ```
+
+        Weight comes from the ledger as it stood at the previous assembly. Quorum is 30% participation of
+        active points, then a simple majority of the votes cast. A holder's last comment of this form counts.

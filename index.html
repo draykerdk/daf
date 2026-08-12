@@ -11,6 +11,9 @@
 <helmet>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="description" content="DAF — the Decentralized Autonomous Federation of Drayker. A preliminary MVP running on GitHub: how a delivered function becomes voting weight, what a point is worth, how quorum is computed, and the forms that compose a unit record, a claim, a resource request, an assembly and a vote." />
+<link rel="shortcut icon" href="./favicon.ico" />
+<link rel="icon" href="./favicon.ico" type="image/x-icon" sizes="32x32" />
+<link rel="icon" href="./drayker-favicon.svg" type="image/svg+xml" sizes="any" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin" />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet" />
@@ -2305,8 +2308,8 @@ class Component extends DCLogic {
         : 'NOT READ YET',
       dafRefresh: () => this.loadDAF(true),
       dafEmpty: ready && nU === 0 && nA === 0,
-      dafThreads: ready ? dd.issues.slice(0, 6) : [],
-      dafHasThreads: ready && dd.issues.length > 0,
+      dafThreads: ready ? dd.issues.filter((i) => !i.pr).slice(0, 6) : [],
+      dafHasThreads: ready && dd.issues.filter((i) => !i.pr).length > 0,
 
       dafPipe: DAF_PIPE.map((st2, i) => {
         const on = s.dafStep === i;

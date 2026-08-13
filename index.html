@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>DAF — the federation, running on a repository</title>
-<meta name="description" content="The Decentralized Autonomous Federation of Drayker: a preliminary, auditable governance MVP running on a public GitHub repository.">
+<title>DAF — federation designed to run on a repository</title>
+<meta name="description" content="The Decentralized Autonomous Federation of Drayker: a preliminary, auditable governance MVP designed to run on a public GitHub repository; no assembly has been held yet.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#08080A">
 <link rel="canonical" href="https://daf.drayker.org/">
 <link rel="alternate" type="text/plain" href="/llms.txt" title="AI-readable site summary">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Drayker DAF">
-<meta property="og:title" content="DAF — the federation, running on a repository">
-<meta property="og:description" content="The Decentralized Autonomous Federation of Drayker: a preliminary, auditable governance MVP running on a public GitHub repository.">
+<meta property="og:title" content="DAF — federation designed to run on a repository">
+<meta property="og:description" content="The Decentralized Autonomous Federation of Drayker: a preliminary, auditable governance MVP designed to run on a public GitHub repository; no assembly has been held yet.">
 <meta property="og:url" content="https://daf.drayker.org/">
 <meta property="og:image" content="https://drayker.org/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="DAF — the federation, running on a repository">
-<meta name="twitter:description" content="The Decentralized Autonomous Federation of Drayker: a preliminary, auditable governance MVP running on a public GitHub repository.">
+<meta name="twitter:title" content="DAF — federation designed to run on a repository">
+<meta name="twitter:description" content="The Decentralized Autonomous Federation of Drayker: a preliminary, auditable governance MVP designed to run on a public GitHub repository; no assembly has been held yet.">
 <meta name="twitter:image" content="https://drayker.org/og.png">
 <script type="application/ld+json">
 {
@@ -42,7 +42,7 @@
     {
       "@type": "WebPage",
       "@id": "https://daf.drayker.org/#webpage",
-      "name": "DAF — the federation, running on a repository",
+      "name": "DAF — federation designed to run on a repository",
       "url": "https://daf.drayker.org/",
       "description": "The Decentralized Autonomous Federation of Drayker: a preliminary, auditable governance MVP running on a public GitHub repository.",
       "isPartOf": { "@id": "https://daf.drayker.org/#website" },
@@ -58,7 +58,7 @@
 <x-dc>
 <helmet>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="DAF — the Decentralized Autonomous Federation of Drayker. A preliminary MVP running on GitHub: how a delivered function becomes voting weight, what a point is worth, how quorum is computed, and the forms that compose a unit record, a claim, a resource request, an assembly and a vote." />
+<meta name="description" content="DAF — the Decentralized Autonomous Federation of Drayker. A preliminary MVP designed to run on GitHub: how a delivered function becomes voting weight, what a point is worth, how quorum is computed, and the forms that compose a unit record, a claim, a resource request, an assembly and a vote." />
 <link rel="shortcut icon" href="./favicon.ico" />
 <link rel="icon" href="./favicon.ico" type="image/x-icon" sizes="32x32" />
 <link rel="icon" href="./drayker-favicon.svg" type="image/svg+xml" sizes="any" />
@@ -75,6 +75,8 @@
   a:hover{color:#6FC1FF}
   ::selection{background:#3FA9FF;color:#0A0A0C}
   input,textarea,select,button{font-family:inherit}
+  button{appearance:none;background:none;color:inherit;border:0;margin:0;text-align:inherit}
+  button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px solid #3FA9FF;outline-offset:3px}
   @keyframes dk-fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   .dk-page{animation:dk-fade .34s ease both}
 </style>
@@ -84,25 +86,25 @@
 
   <header style="position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)">
     <div style="max-width:1320px;margin:0 auto;padding:13px clamp(16px,4vw,44px);display:flex;align-items:center;gap:clamp(14px,2.6vw,36px);flex-wrap:wrap">
-      <div onClick="{{ goHome }}" style="display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0">
+      <a href="#/" onClick="{{ goHome }}" aria-label="DAF home" style="display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0;color:var(--tx)">
 <!-- Mark host. drayker-mark.js paints into it (see markHost in the logic class);
      geometry is never redrawn by hand, and only the globe carries the scope
      colour — DAF is #3FA9FF. -->
 <div ref="{{ markHeader }}" style="width:30px;height:30px;flex:none"></div>
         <span style="font-size:17px;font-weight:600;letter-spacing:-0.02em">DAF</span>
         <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--tx3);letter-spacing:0.08em;padding-top:3px">daf.drayker.org</span>
-      </div>
+      </a>
 
       <nav style="display:flex;align-items:center;gap:clamp(9px,1.5vw,20px);flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;min-width:0;flex:{{ navFlex }};order:{{ navOrder }};width:{{ navWidth }}">
         <sc-for list="{{ nav }}" as="item" hint-placeholder-count="6">
-          <div onClick="{{ item.onClick }}" style="font-size:13.5px;font-weight:500;cursor:pointer;padding:5px 0;border-bottom:1px solid transparent;white-space:nowrap;color:{{ item.color }};border-bottom-color:{{ item.line }}" style-hover="color:var(--tx)">{{ item.label }}</div>
+          <a href="{{ item.href }}" onClick="{{ item.onClick }}" style="font-size:13.5px;font-weight:500;cursor:pointer;padding:5px 0;border-bottom:1px solid transparent;white-space:nowrap;color:{{ item.color }};border-bottom-color:{{ item.line }}" style-hover="color:var(--tx)">{{ item.label }}</a>
         </sc-for>
       </nav>
 
       <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;order:{{ ctrlOrder }};margin-left:{{ ctrlPush }}">
-        <div onClick="{{ toggleTheme }}" title="Switch light / dark" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:var(--tx3);border:1px solid var(--line2);padding:6px 10px;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">{{ themeLabel }}</div>
+        <button type="button" onClick="{{ toggleTheme }}" aria-label="Switch light and dark theme" title="Switch light / dark" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:var(--tx3);border:1px solid var(--line2);padding:6px 10px;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">{{ themeLabel }}</button>
         <a href="https://drayker.org" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:var(--tx3);border:1px solid var(--line2);padding:6px 10px" style-hover="border-color:#3FA9FF;color:#3FA9FF">DRAYKER.ORG</a>
-        <div onClick="{{ goJoin }}" style="background:#3FA9FF;color:#0A0A0C;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 0 16px rgba(63,169,255,0.2)" style-hover="background:#6FC1FF;box-shadow:0 0 24px rgba(63,169,255,0.35)">Link your unit</div>
+        <a href="#/join" onClick="{{ goJoin }}" style="background:#3FA9FF;color:#0A0A0C;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 0 16px rgba(63,169,255,0.2)" style-hover="background:#6FC1FF;box-shadow:0 0 24px rgba(63,169,255,0.35)">Link your unit</a>
       </div>
     </div>
   </header>
@@ -147,8 +149,8 @@
               </sc-for>
             </div>
             <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px">
-              <div onClick="{{ goJoin }}" style="background:#3FA9FF;color:#0A0A0C;padding:15px 28px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 0 24px rgba(63,169,255,0.25)" style-hover="background:#6FC1FF;box-shadow:0 0 36px rgba(63,169,255,0.4)">Link your unit</div>
-              <div onClick="{{ goRules }}" style="border:1px solid var(--line3);color:var(--tx);padding:15px 28px;font-size:14px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">How the rules work</div>
+              <a href="#/join" onClick="{{ goJoin }}" style="background:#3FA9FF;color:#0A0A0C;padding:15px 28px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 0 24px rgba(63,169,255,0.25)" style-hover="background:#6FC1FF;box-shadow:0 0 36px rgba(63,169,255,0.4)">Link your unit</a>
+              <a href="#/rules" onClick="{{ goRules }}" style="border:1px solid var(--line3);color:var(--tx);padding:15px 28px;font-size:14px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">How the rules work</a>
             </div>
           </div>
         </div>
@@ -179,7 +181,7 @@
             <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#3FA9FF">The record, right now</div>
             <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
               <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3)">{{ dafSrcLine }}</div>
-              <div onClick="{{ dafRefresh }}" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3);border:1px solid var(--line2);padding:5px 10px;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">REREAD</div>
+              <button type="button" onClick="{{ dafRefresh }}" aria-label="Reread the federation record" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3);border:1px solid var(--line2);padding:5px 10px;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">REREAD</button>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:{{ fourCol }};gap:1px">
@@ -195,7 +197,7 @@
               <p style="font-size:15px;line-height:1.66;color:var(--tx2);margin:0;text-wrap:pretty">The record is empty, and that is the honest state rather than a placeholder. The structure exists so the first delivery has somewhere to be written down. <strong style="color:var(--tx);font-weight:500">The federation begins at the first assembly that records real work</strong> — not at the commit that created the folders.</p>
               <div>
                 <p style="font-size:15px;line-height:1.66;color:var(--tx2);margin:0 0 16px;text-wrap:pretty">Which means the first function is unclaimed and the door is wider than it will ever be again: open the cycle, claim a delivery that already happened, and take it through the procedure to see where it breaks.</p>
-                <div onClick="{{ goAssembly }}" style="display:inline-block;border:1px solid var(--line3);color:var(--tx);padding:12px 20px;font-size:13.5px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">Run the first assembly →</div>
+                <div role="button" tabindex="0" onClick="{{ goAssembly }}" style="display:inline-block;border:1px solid var(--line3);color:var(--tx);padding:12px 20px;font-size:13.5px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">Run the first assembly →</div>
               </div>
             </div>
           </sc-if>
@@ -230,7 +232,7 @@
                 <div style="font-size:14px;line-height:1.62;color:var(--tx2);text-wrap:pretty">Claims are made in the thread and can be contested by anyone in it. Weight comes from the ledger as it stood at the previous assembly, so the awards under vote cannot change the votes that approve them.</div>
                 <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:2px">
                   <a href="{{ cyc.url }}" target="_blank" rel="noreferrer" style="background:#3FA9FF;color:#0A0A0C;padding:13px 22px;font-size:13.5px;font-weight:600" style-hover="background:#6FC1FF">Open the cycle · #{{ cyc.num }} →</a>
-                  <div onClick="{{ goAssembly }}" style="border:1px solid var(--line3);color:var(--tx);padding:13px 22px;font-size:13.5px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">Claim, vote or count</div>
+                  <div role="button" tabindex="0" onClick="{{ goAssembly }}" style="border:1px solid var(--line3);color:var(--tx);padding:13px 22px;font-size:13.5px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">Claim, vote or count</div>
                 </div>
               </div>
               <div style="background:var(--bg);padding:clamp(22px,3vw,32px);display:flex;flex-direction:column;gap:12px;outline:1px solid var(--line)">
@@ -261,7 +263,7 @@
               <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.16em;color:var(--tx3);margin-bottom:8px">NO CYCLE IS OPEN</div>
               <div style="font-size:15px;line-height:1.62;color:var(--tx2);max-width:62ch;text-wrap:pretty">Nothing is up for decision right now, which means nothing is waiting on anyone else. Opening a cycle is itself a function, and it earns a point like any other.</div>
             </div>
-            <div onClick="{{ goAssembly }}" style="border:1px solid var(--line3);color:var(--tx);padding:13px 22px;font-size:13.5px;font-weight:500;cursor:pointer;flex-shrink:0" style-hover="border-color:#3FA9FF;color:#3FA9FF">Open one →</div>
+            <div role="button" tabindex="0" onClick="{{ goAssembly }}" style="border:1px solid var(--line3);color:var(--tx);padding:13px 22px;font-size:13.5px;font-weight:500;cursor:pointer;flex-shrink:0" style-hover="border-color:#3FA9FF;color:#3FA9FF">Open one →</div>
           </div>
         </section>
       </sc-if>
@@ -273,7 +275,7 @@
           <p style="font-size:16px;line-height:1.66;color:var(--tx2);margin:0 0 32px;max-width:64ch;text-wrap:pretty">Six steps, and no discretion anywhere in them. Each one answers to a written rule, each rule is a line you can open and argue with, and each step is an ordinary thing on the platform the federation already runs on.</p>
           <div style="display:grid;grid-template-columns:{{ threeCol }};gap:1px">
             <sc-for list="{{ dafPipe }}" as="p" hint-placeholder-count="6">
-              <div onClick="{{ p.pick }}" style="background:{{ p.bg }};padding:20px 18px;cursor:pointer;display:flex;flex-direction:column;gap:8px;border-bottom:2px solid {{ p.line }};outline:1px solid var(--line)" style-hover="background:var(--surf2)">
+              <div role="button" tabindex="0" onClick="{{ p.pick }}" style="background:{{ p.bg }};padding:20px 18px;cursor:pointer;display:flex;flex-direction:column;gap:8px;border-bottom:2px solid {{ p.line }};outline:1px solid var(--line)" style-hover="background:var(--surf2)">
                 <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:{{ p.fg }}">{{ p.n }}</div>
                 <div style="font-size:15px;font-weight:600;letter-spacing:-0.015em;color:{{ p.tx }}">{{ p.k }}</div>
               </div>
@@ -294,7 +296,7 @@
                 <div style="font-size:14px;line-height:1.6;color:var(--tx2)">{{ dafStepOpen.g }}</div>
               </div>
               <a href="{{ dafStepOpen.ref }}" target="_blank" rel="noreferrer" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em">READ THE SECTION →</a>
-              <div onClick="{{ dafStepToolOpen }}" style="border:1px solid var(--line3);color:var(--tx);padding:14px 20px;font-size:14px;font-weight:500;cursor:pointer;text-align:center" style-hover="border-color:#3FA9FF;color:#3FA9FF">{{ dafStepOpen.tl }} →</div>
+              <div role="button" tabindex="0" onClick="{{ dafStepToolOpen }}" style="border:1px solid var(--line3);color:var(--tx);padding:14px 20px;font-size:14px;font-weight:500;cursor:pointer;text-align:center" style-hover="border-color:#3FA9FF;color:#3FA9FF">{{ dafStepOpen.tl }} →</div>
             </div>
           </div>
         </div>
@@ -390,7 +392,7 @@
                 </div>
                 <input type="range" min="0" max="12" value="{{ calcMod }}" onChange="{{ onCalcMod }}" style="width:100%;accent-color:#3FA9FF" />
               </div>
-              <div onClick="{{ toggleModDone }}" style="border:1px solid {{ calcModLine }};padding:16px 18px;cursor:pointer;display:flex;gap:14px;align-items:center" style-hover="border-color:#3FA9FF">
+              <div role="button" tabindex="0" onClick="{{ toggleModDone }}" style="border:1px solid {{ calcModLine }};padding:16px 18px;cursor:pointer;display:flex;gap:14px;align-items:center" style-hover="border-color:#3FA9FF">
                 <div style="width:12px;height:12px;border:1px solid {{ calcModLine }};background:{{ calcModLine }};flex-shrink:0"></div>
                 <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:{{ calcModFg }}">{{ calcModLabel }}</div>
               </div>
@@ -557,7 +559,7 @@
         <div style="max-width:1320px;margin:0 auto;padding:clamp(32px,4vw,58px) clamp(16px,4vw,44px)">
           <div style="display:grid;grid-template-columns:{{ twoCol }};gap:1px">
             <sc-for list="{{ joinTabs }}" as="t" hint-placeholder-count="2">
-              <div onClick="{{ t.pick }}" style="background:{{ t.bg }};padding:18px 18px;cursor:pointer;display:flex;flex-direction:column;gap:6px;outline:1px solid var(--line)" style-hover="background:var(--surf2)">
+              <div role="button" tabindex="0" onClick="{{ t.pick }}" style="background:{{ t.bg }};padding:18px 18px;cursor:pointer;display:flex;flex-direction:column;gap:6px;outline:1px solid var(--line)" style-hover="background:var(--surf2)">
                 <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:{{ t.fg }}">{{ t.t }}</div>
                 <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:{{ t.sub }}">{{ t.d }}</div>
               </div>
@@ -569,11 +571,11 @@
               <div style="display:flex;flex-direction:column;gap:18px">
                 <p style="font-size:14.5px;line-height:1.64;color:var(--tx2);margin:0;text-wrap:pretty">A record states only what the federation needs in order to count your vote and find your work. Internal governance, member lists and finances stay with the unit. Send it in the same pull request that claims your first delivered function — a record without a delivery is not a unit yet.</p>
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
-                  <div onClick="{{ uKindUnit }}" style="border:1px solid {{ uKindUnitLine }};background:{{ uKindUnitBg }};padding:14px 16px;cursor:pointer" style-hover="border-color:#3FA9FF">
+                  <div role="button" tabindex="0" onClick="{{ uKindUnit }}" style="border:1px solid {{ uKindUnitLine }};background:{{ uKindUnitBg }};padding:14px 16px;cursor:pointer" style-hover="border-color:#3FA9FF">
                     <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;color:var(--tx3);margin-bottom:5px">KIND</div>
                     <div style="font-size:14px;font-weight:500">A unit — a group of any kind</div>
                   </div>
-                  <div onClick="{{ uKindPart }}" style="border:1px solid {{ uKindPartLine }};background:{{ uKindPartBg }};padding:14px 16px;cursor:pointer" style-hover="border-color:#3FA9FF">
+                  <div role="button" tabindex="0" onClick="{{ uKindPart }}" style="border:1px solid {{ uKindPartLine }};background:{{ uKindPartBg }};padding:14px 16px;cursor:pointer" style-hover="border-color:#3FA9FF">
                     <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;color:var(--tx3);margin-bottom:5px">KIND</div>
                     <div style="font-size:14px;font-weight:500">A participant — one person</div>
                   </div>
@@ -606,7 +608,7 @@
                 <div style="background:var(--surf);border:1px solid var(--line);padding:20px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.75;color:var(--tx2);white-space:pre-wrap;word-break:break-word;overflow:auto;max-height:420px">{{ uYaml }}</div>
                 <div style="display:flex;gap:12px;flex-wrap:wrap">
                   <a href="{{ uUrl }}" target="_blank" rel="noreferrer" style="background:#3FA9FF;color:#0A0A0C;padding:15px 26px;font-size:14px;font-weight:600;box-shadow:0 0 20px rgba(63,169,255,0.2)" style-hover="background:#6FC1FF">Create the file on GitHub →</a>
-                  <div onClick="{{ uCopy }}" style="border:1px solid var(--line3);color:var(--tx);padding:15px 24px;font-size:13px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">{{ uCopied }}</div>
+                  <div role="button" tabindex="0" onClick="{{ uCopy }}" style="border:1px solid var(--line3);color:var(--tx);padding:15px 24px;font-size:13px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">{{ uCopied }}</div>
                 </div>
                 <div style="font-size:13px;line-height:1.6;color:var(--tx3);text-wrap:pretty">GitHub opens its own editor with this file prefilled. You commit it as a pull request against master, and it is accepted in the same assembly as your first award.</div>
               </div>
@@ -619,7 +621,7 @@
                 <p style="font-size:14.5px;line-height:1.64;color:var(--tx2);margin:0;text-wrap:pretty">A claim is public and can be contested by anyone in its thread. That argument is the review — there is no committee behind it. All three conditions have to hold before this form will let you post.</p>
                 <div style="display:flex;flex-direction:column;gap:10px">
                   <sc-for list="{{ cConds }}" as="c" hint-placeholder-count="3">
-                    <div onClick="{{ c.toggle }}" style="border:1px solid {{ c.line }};padding:14px 16px;cursor:pointer;display:flex;gap:14px;align-items:flex-start" style-hover="border-color:#3FA9FF">
+                    <div role="button" tabindex="0" onClick="{{ c.toggle }}" style="border:1px solid {{ c.line }};padding:14px 16px;cursor:pointer;display:flex;gap:14px;align-items:flex-start" style-hover="border-color:#3FA9FF">
                       <div style="width:12px;height:12px;border:1px solid {{ c.line }};background:{{ c.mark }};flex-shrink:0;margin-top:4px"></div>
                       <div>
                         <div style="font-size:14px;line-height:1.45;color:{{ c.fg }};font-weight:500">{{ c.t }}</div>
@@ -664,7 +666,7 @@
                 <p style="font-size:14.5px;line-height:1.64;color:var(--tx2);margin:0 0 14px;text-wrap:pretty">There is no committee. A claim is checked by whoever reads it, in its own thread, which means contesting one is ordinary participation rather than an accusation — and doing it well is itself work the federation depends on.</p>
                 <p style="font-size:13.5px;line-height:1.62;color:var(--tx3);margin:0;text-wrap:pretty">Say which of the three conditions fails and show why with links. A contest without evidence is an opinion, and it costs the thread more than it gives.</p>
                 <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:18px">
-                  <div onClick="{{ copyContest }}" style="border:1px solid var(--line3);color:var(--tx);padding:13px 22px;font-size:13px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">{{ contestLabel }}</div>
+                  <div role="button" tabindex="0" onClick="{{ copyContest }}" style="border:1px solid var(--line3);color:var(--tx);padding:13px 22px;font-size:13px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">{{ contestLabel }}</div>
                   <a href="{{ claimsUrl }}" target="_blank" rel="noreferrer" style="border:1px solid var(--line3);color:var(--tx);padding:13px 22px;font-size:13px;font-weight:500" style-hover="border-color:#3FA9FF;color:#3FA9FF">Open claims →</a>
                 </div>
               </div>
@@ -703,7 +705,7 @@
         <div style="max-width:1320px;margin:0 auto;padding:clamp(32px,4vw,58px) clamp(16px,4vw,44px)">
           <div style="display:grid;grid-template-columns:{{ threeCol }};gap:1px">
             <sc-for list="{{ asmTabs }}" as="t" hint-placeholder-count="3">
-              <div onClick="{{ t.pick }}" style="background:{{ t.bg }};padding:18px 18px;cursor:pointer;display:flex;flex-direction:column;gap:6px;outline:1px solid var(--line)" style-hover="background:var(--surf2)">
+              <div role="button" tabindex="0" onClick="{{ t.pick }}" style="background:{{ t.bg }};padding:18px 18px;cursor:pointer;display:flex;flex-direction:column;gap:6px;outline:1px solid var(--line)" style-hover="background:var(--surf2)">
                 <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:{{ t.fg }}">{{ t.t }}</div>
                 <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:{{ t.sub }}">{{ t.d }}</div>
               </div>
@@ -749,7 +751,7 @@
                 <p style="font-size:14.5px;line-height:1.64;color:var(--tx2);margin:0;text-wrap:pretty">A vote is a single comment on the assembly pull request, in a fixed format so it can be found and counted mechanically. Anything else in the comment is discussion. Your last comment of this form is the one that counts — so you can change your vote by voting again before the window closes.</p>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
                   <sc-for list="{{ vChoices }}" as="c" hint-placeholder-count="3">
-                    <div onClick="{{ c.pick }}" style="border:1px solid {{ c.line }};background:{{ c.bg }};padding:16px 12px;cursor:pointer;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:{{ c.fg }}" style-hover="border-color:#3FA9FF">{{ c.t }}</div>
+                    <div role="button" tabindex="0" onClick="{{ c.pick }}" style="border:1px solid {{ c.line }};background:{{ c.bg }};padding:16px 12px;cursor:pointer;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:{{ c.fg }}" style-hover="border-color:#3FA9FF">{{ c.t }}</div>
                   </sc-for>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:7px">
@@ -762,7 +764,7 @@
                 <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--tx3)">YOUR COMMENT</div>
                 <div style="background:var(--surf);border:1px solid #3FA9FF;padding:24px;font-family:'JetBrains Mono',monospace;font-size:15px;line-height:1.9;color:var(--tx);white-space:pre-wrap">{{ vText }}</div>
                 <div style="display:flex;gap:12px;flex-wrap:wrap">
-                  <div onClick="{{ vCopy }}" style="background:#3FA9FF;color:#0A0A0C;padding:15px 26px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 0 20px rgba(63,169,255,0.2)" style-hover="background:#6FC1FF">{{ vCopied }}</div>
+                  <div role="button" tabindex="0" onClick="{{ vCopy }}" style="background:#3FA9FF;color:#0A0A0C;padding:15px 26px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 0 20px rgba(63,169,255,0.2)" style-hover="background:#6FC1FF">{{ vCopied }}</div>
                   <a href="{{ vPrUrl }}" target="_blank" rel="noreferrer" style="border:1px solid var(--line3);color:var(--tx);padding:15px 24px;font-size:13px;font-weight:500" style-hover="border-color:#3FA9FF;color:#3FA9FF">Open pull requests →</a>
                 </div>
                 <div style="font-size:13px;line-height:1.6;color:var(--tx3);text-wrap:pretty">Nothing is signed and nothing is enforced by math. A GitHub account is not a key and the tally is computed by a person — everything here is verifiable by reading, which is exactly what this MVP buys and all it buys.</div>
@@ -778,7 +780,7 @@
                   <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--tx3)">PULL REQUEST NUMBER</label>
                   <input value="{{ tallyPr }}" onChange="{{ onTallyPr }}" placeholder="14" style="background:var(--surf);border:1px solid var(--line2);color:var(--tx);padding:11px 13px;font-size:14px;width:100%;outline:none;font-family:'JetBrains Mono',monospace" />
                 </div>
-                <div onClick="{{ runTally }}" style="background:#3FA9FF;color:#0A0A0C;padding:15px 26px;font-size:14px;font-weight:600;cursor:pointer;text-align:center;box-shadow:0 0 20px rgba(63,169,255,0.2)" style-hover="background:#6FC1FF">{{ tallyBtn }}</div>
+                <div role="button" tabindex="0" onClick="{{ runTally }}" style="background:#3FA9FF;color:#0A0A0C;padding:15px 26px;font-size:14px;font-weight:600;cursor:pointer;text-align:center;box-shadow:0 0 20px rgba(63,169,255,0.2)" style-hover="background:#6FC1FF">{{ tallyBtn }}</div>
                 <sc-if value="{{ tallyErr }}" hint-placeholder-val="{{ false }}">
                   <div style="border-left:2px solid #FF5500;padding:2px 0 2px 16px;font-size:13.5px;line-height:1.6;color:var(--tx2)">{{ tallyMsg }}</div>
                 </sc-if>
@@ -1010,7 +1012,7 @@
               </sc-if>
               <div style="display:flex;gap:12px;flex-wrap:wrap">
                 <a href="{{ rUrl }}" target="_blank" rel="noreferrer" style="background:#3FA9FF;color:#0A0A0C;padding:15px 26px;font-size:14px;font-weight:600;opacity:{{ rOpacity }};box-shadow:0 0 20px rgba(63,169,255,0.2)" style-hover="background:#6FC1FF">File it on GitHub →</a>
-                <div onClick="{{ rCopy }}" style="border:1px solid var(--line3);color:var(--tx);padding:15px 24px;font-size:13px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">{{ rCopied }}</div>
+                <div role="button" tabindex="0" onClick="{{ rCopy }}" style="border:1px solid var(--line3);color:var(--tx);padding:15px 24px;font-size:13px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">{{ rCopied }}</div>
               </div>
             </div>
           </div>
@@ -1104,7 +1106,7 @@
         <div style="max-width:1320px;margin:0 auto;padding:clamp(30px,4vw,54px) clamp(16px,4vw,44px)">
           <div style="display:grid;grid-template-columns:{{ fourCol }};gap:1px">
             <sc-for list="{{ recTabs }}" as="t" hint-placeholder-count="4">
-              <div onClick="{{ t.pick }}" style="background:{{ t.bg }};padding:18px 18px;cursor:pointer;display:flex;flex-direction:column;gap:6px;outline:1px solid var(--line)" style-hover="background:var(--surf2)">
+              <div role="button" tabindex="0" onClick="{{ t.pick }}" style="background:{{ t.bg }};padding:18px 18px;cursor:pointer;display:flex;flex-direction:column;gap:6px;outline:1px solid var(--line)" style-hover="background:var(--surf2)">
                 <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:{{ t.fg }}">{{ t.t }}</div>
                 <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:{{ t.sub }}">{{ t.d }}</div>
               </div>
@@ -1152,7 +1154,7 @@
                 <div style="border-left:2px solid #3FA9FF;padding:4px 0 4px 18px;max-width:70ch">
                   <div style="font-size:15px;line-height:1.66;color:var(--tx2);text-wrap:pretty">No unit is recorded. The folder holds its template and nothing else, which is the honest state — a record is accepted at an assembly, together with the unit's first delivered function.</div>
                   <div style="font-size:13.5px;line-height:1.6;color:var(--tx3);margin-top:12px;text-wrap:pretty">Each record states only what the federation needs to count a vote and find the work: an id, a kind, one founding function, the public accounts that speak for it, and where its work lives. Internal governance stays with the unit.</div>
-                  <div onClick="{{ goJoin }}" style="display:inline-block;border:1px solid var(--line3);color:var(--tx);padding:12px 20px;font-size:13.5px;font-weight:500;cursor:pointer;margin-top:18px" style-hover="border-color:#3FA9FF;color:#3FA9FF">Be the first record →</div>
+                  <div role="button" tabindex="0" onClick="{{ goJoin }}" style="display:inline-block;border:1px solid var(--line3);color:var(--tx);padding:12px 20px;font-size:13.5px;font-weight:500;cursor:pointer;margin-top:18px" style-hover="border-color:#3FA9FF;color:#3FA9FF">Be the first record →</div>
                 </div>
               </sc-if>
               <div style="display:grid;grid-template-columns:{{ twoCol }};gap:1px">
@@ -1197,7 +1199,7 @@
               <sc-if value="{{ asmEmpty }}" hint-placeholder-val="{{ true }}">
                 <div style="border-left:2px solid #3FA9FF;padding:4px 0 4px 18px;max-width:70ch">
                   <div style="font-size:15px;line-height:1.66;color:var(--tx2);text-wrap:pretty">No assembly has been held. The federation begins at the first one that records real work — the folders and templates are only the place for it to be written down.</div>
-                  <div onClick="{{ goAssembly }}" style="display:inline-block;border:1px solid var(--line3);color:var(--tx);padding:12px 20px;font-size:13.5px;font-weight:500;cursor:pointer;margin-top:18px" style-hover="border-color:#3FA9FF;color:#3FA9FF">Run the first one →</div>
+                  <div role="button" tabindex="0" onClick="{{ goAssembly }}" style="display:inline-block;border:1px solid var(--line3);color:var(--tx);padding:12px 20px;font-size:13.5px;font-weight:500;cursor:pointer;margin-top:18px" style-hover="border-color:#3FA9FF;color:#3FA9FF">Run the first one →</div>
                 </div>
               </sc-if>
               <div style="display:flex;flex-direction:column;gap:1px">
@@ -1284,7 +1286,7 @@
 <div ref="{{ markFooter }}" style="width:26px;height:26px;flex:none"></div>
           <span style="font-size:15px;font-weight:600;letter-spacing:-0.02em">DAF</span>
         </div>
-        <div style="font-size:13.5px;line-height:1.62;color:var(--tx2);max-width:34ch">The organizational layer of Drayker, and the reason it has no head office. A preliminary MVP, running on GitHub, with nothing recorded in it yet.</div>
+        <div style="font-size:13.5px;line-height:1.62;color:var(--tx2);max-width:34ch">The organizational layer of Drayker, and the reason it has no head office. A preliminary MVP designed to run on GitHub, with nothing recorded in it yet.</div>
       </div>
       <div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.16em;color:var(--tx3);margin-bottom:14px">THE SPECIFICATION</div>
@@ -1347,7 +1349,7 @@ const FORM = (tmpl, params) => {
 };
 
 const ROUTE_META = {
-  home: { t: 'DAF — the federation, running on a repository', d: 'The organizational layer of Drayker: weight follows delivered work, and a preliminary MVP runs the whole thing on GitHub — no chain, no token, no treasury.' },
+  home: { t: 'DAF — federation designed to run on a repository', d: 'The organizational layer of Drayker: weight follows delivered work, and a preliminary MVP is ready to run on GitHub — no chain, no token, no treasury, and no assembly held yet.' },
   rules: { t: 'The rules — DAF', d: 'DAF-000 and DAF-001 in short: units, how a point is earned, how points become voting weight, quorum and majority, and what Phase 0 deliberately leaves out.' },
   join: { t: 'Join — DAF', d: 'A record and one delivered function. Compose your unit record and your first claim, and publish both on GitHub under your own account.' },
   assembly: { t: 'The assembly — DAF', d: 'One cycle a month, seven days to argue with it. Open the cycle, draft the report, cast a vote in the format that can be counted mechanically.' },
@@ -1550,6 +1552,9 @@ class Component extends DCLogic {
   // ==========================================================================
   DAF_CACHE = 'daf-record-v1';
 
+  validSnapshot = (snapshot) => !!snapshot && ['units', 'assemblies', 'requests', 'issues']
+    .every((key) => Array.isArray(snapshot[key]));
+
   loadDAF = async (force) => {
     if (this.state.dafState === 'loading') return;
     if (!force) {
@@ -1583,7 +1588,7 @@ class Component extends DCLogic {
         if (r.ok) snap = await r.json();
       } catch (e) {}
       let d;
-      if (snap && snap.units) {
+      if (this.validSnapshot(snap)) {
         d = { units: snap.units || [], assemblies: snap.assemblies || [], requests: snap.requests || [], issues: snap.issues || [], src: 'snapshot' };
       } else {
         const [units, assemblies, requests] = await Promise.all([dir('federation/units'), dir('federation/assemblies'), dir('federation/requests')]);
@@ -2090,6 +2095,16 @@ class Component extends DCLogic {
     window.addEventListener('hashchange', this.onHash);
     this.onResize = () => this.setState({ vw: window.innerWidth });
     window.addEventListener('resize', this.onResize);
+    // DC templates can bind click handlers to generic containers. Keep those
+    // controls keyboard-equivalent until every remaining one can be expressed
+    // as a native link or button without changing the component contract.
+    this.onActionKey = (event) => {
+      const target = event.target && event.target.closest && event.target.closest('[role="button"]');
+      if (!target || (event.key !== 'Enter' && event.key !== ' ')) return;
+      event.preventDefault();
+      target.click();
+    };
+    document.addEventListener('keydown', this.onActionKey);
     this.paintMarks();
     this.loadDAF(false);
   }
@@ -2153,6 +2168,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     window.removeEventListener('hashchange', this.onHash);
     window.removeEventListener('resize', this.onResize);
+    document.removeEventListener('keydown', this.onActionKey);
     if (this.mq && this.mq.removeEventListener) this.mq.removeEventListener('change', this.onScheme);
     if (this.mqMotion && this.mqMotion.removeEventListener) this.mqMotion.removeEventListener('change', this.onMotion);
   }
@@ -2208,6 +2224,7 @@ class Component extends DCLogic {
 
       nav: NAV.map((n) => ({
         label: n.label,
+        href: n.ext || '#/' + n.id,
         onClick: n.ext ? (() => { window.location.href = n.ext; }) : this.go(n.id),
         color: p === n.id ? 'var(--tx)' : 'var(--tx2)',
         line: p === n.id ? '#3FA9FF' : 'transparent'

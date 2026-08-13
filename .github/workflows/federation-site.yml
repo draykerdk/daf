@@ -4,7 +4,8 @@ name: Federation site
 # regenerating data/federation.json at every build. The founding ruleset
 # protects master (no direct pushes, required component-contract check), and
 # workflow runs on bot-opened pull requests cannot be approved — so committing
-# the snapshot back to master is not possible, and the artifact is the record.
+# the snapshot back to master is not possible. The repository remains the record;
+# the Pages artifact is only a generated reading surface over that record.
 # Same pattern as draykerdk/general-forum.
 
 on:

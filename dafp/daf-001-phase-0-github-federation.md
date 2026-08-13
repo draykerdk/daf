@@ -49,6 +49,8 @@ Nothing here is a database. Each file is readable on its own, and `LEDGER.md` is
 
 **A unit record** states its id, what it is, its founding function, who can speak for it, and where its work is. Nothing about its internal governance, its members' identities, or its finances belongs in the federation's records.
 
+The Phase 0 repository, issue forms and assembly reports use English as the federation's common audit interface. Units may organize and work in any language, including communities formed around a language, region or nationality; evidence published in another language carries an English summary in the claim or report. These characteristics do not affect points or voting weight.
+
 **An assembly report** is the record of one cycle: what was delivered, what was decided, which points were awarded and removed and for which delivery, and what the federation would change about itself. It is written as one pull request.
 
 ## 4. The cycle

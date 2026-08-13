@@ -12,7 +12,9 @@ unit:
 
   name: Example Unit
 
-  # participant = one person. unit = a group of any kind.
+  # participant = one person. unit = a group of any kind, including a community
+  # organized around a language, region or nationality. The shared federation
+  # record stays in English; the unit's internal language is its own.
   kind: unit
 
   # The single purpose this unit exists to serve. Everything it later delivers

@@ -1,0 +1,24 @@
+name: DAF site contract
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  site-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate component logic
+        run: node --check tools/render-check.js
+      - name: Exercise render, data and offline states
+        run: node tools/render-check.js
+      - name: Check whitespace errors
+        run: git diff --check

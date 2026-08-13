@@ -1,0 +1,22 @@
+# Drayker DAF
+
+> The Decentralized Autonomous Federation of Drayker: a preliminary and auditable governance MVP running on a public GitHub repository.
+
+## Current operational boundary
+
+- Phase 0 runs through public GitHub issues, pull requests, files and history.
+- Delivered functions create non-transferable points and voting weight under the published DAF-000 and DAF-001 rules.
+- No blockchain, token, treasury custody, anonymous participation or automated evaluation is running here.
+- The public repository is the ledger; decisions must be recomputable from its history.
+
+## Canonical resources
+
+- [DAF site](https://daf.drayker.org/)
+- [DAF repository](https://github.com/draykerdk/daf)
+- [DAF-000 constitution](https://github.com/draykerdk/daf/blob/master/dafp/daf-000-federation-constitution.md)
+- [DAF-001 Phase 0](https://github.com/draykerdk/daf/blob/master/dafp/daf-001-phase-0-github-federation.md)
+- [Drayker organization](https://drayker.com/)
+
+## Crawling
+
+Public pages and records may be indexed and quoted with attribution. The sitemap is at https://daf.drayker.org/sitemap.xml.

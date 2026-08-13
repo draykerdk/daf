@@ -10,6 +10,8 @@ The argument in full is on the [manifesto](https://drayker.org/manifesto/). The 
 
 Anyone, a person, a team, a project or an initiative, can link their own unit to the federation. Over time, units accumulate **federative points** and voting power over federation resources and federation decisions.
 
+The federation's shared interface and public record are maintained in English so every assembly has one auditable reference. A unit may organize around a particular language, region or nationality, and may work internally in that language. It only needs to submit its unit record, claims, requests and assembly evidence to the federation in English. Language or nationality never changes how points are earned or how a vote is weighted.
+
 Weight follows delivered work. It is not appointed, and it cannot be bought. A point records one delivered [function](https://dfmp.drayker.org), it is non-transferable, and it does not decay. Influence moves only as other people deliver.
 
 The mechanics are specified in [DAF-000](./dafp/daf-000-federation-constitution.md).
@@ -33,7 +35,7 @@ It sits above the same layers everything else does. Contribution is attributable
 [`dafp/`](./dafp) holds the proposals that specify the federation.
 
 - **[DAF-000](./dafp/daf-000-federation-constitution.md)**. The minimal constitution, independent of any platform: participants and units, how a point is earned, how points become voting weight, quorum and majority, how a resource request is judged, penalties and exit.
-- **[DAF-001](./dafp/daf-001-phase-0-github-federation.md)**. Phase 0, the initial version: the federation running on this repository, with no chain and no token, and an explicit account of what is deferred to later phases.
+- **[DAF-001](./dafp/daf-001-phase-0-github-federation.md)**. Phase 0, the initial version: the federation designed to run on this repository, with no chain and no token, and an explicit account of what is deferred to later phases.
 
 The record itself lives in [`federation/`](./federation): unit records, assembly reports, resource requests and the ledger, in plain text under version control, so that any claim about who delivered what can be checked by reading.
 
@@ -47,9 +49,9 @@ Several things are still unspecified on purpose. The substrate beyond Phase 0 is
 
 Open an issue. Issues small enough for one person to finish carry the `open-function` label and appear on the board at [drayker.org](https://drayker.org/fn/).
 
-Related: [`dfmp`](https://dfmp.drayker.org) (how proposals are validated) · [`uid`](https://uid.drayker.org) (identity and contribution) · [`advices`](https://advices.drayker.org) (councils)
+Run `node tools/render-check.js` before opening a site change. It exercises the empty, snapshot, malformed-snapshot and offline states without sending any external action.
 
-Other languages: [Português](./README.PT.md). Currently behind this English version.
+Related: [`dfmp`](https://dfmp.drayker.org) (how proposals are validated) · [`uid`](https://uid.drayker.org) (identity and contribution) · [`advices`](https://advices.drayker.org) (councils)
 
 ---
 

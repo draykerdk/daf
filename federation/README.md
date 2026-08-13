@@ -19,6 +19,8 @@ LEDGER.md      current standing, generated from the assemblies
 
 **A unit record says what a unit is, not how it works.** Its id, its founding function, who can speak for it, where its work is. Internal governance, member identities and finances are the unit's own business and do not belong here.
 
+The shared record is written in English. A unit may be organized around a language, region or nationality and may conduct its internal work in any language. Claims and assembly evidence written in another language include an English summary here; none of these characteristics affects points or voting weight.
+
 ## How to add to it
 
 Nothing in this directory is edited directly on `master`. Every change arrives as a pull request:

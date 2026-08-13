@@ -23,6 +23,8 @@ It is not a company, not a legal person, and not a fund with a return. Contribut
 
 **A unit** is any group that links itself to the federation: a team, a project, a cooperative, a DAO. A unit declares a founding function, the single purpose it exists to serve, and every later contribution of that unit hangs off it. A unit governs itself internally however it wants. The federation judges its deliveries, not its bylaws.
 
+A unit may be a community organized around a language, region or nationality. Its internal language and cultural scope are its own. The federation's common record, proposals and assembly evidence are maintained in English so decisions remain auditable through one shared interface. Language, residence, citizenship and nationality do not create or reduce federative weight; delivered functions do.
+
 Both participants and units hold points and vote. Joining a unit is not required, but the federation's work is modular, and a unit is what lets several people carry one module together.
 
 A unit exists in the federation from the moment its record is accepted (§7) and it delivers its first function.

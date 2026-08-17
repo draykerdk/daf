@@ -4,9 +4,9 @@ component:
   name: DAF
   layer: ORGANIZATION
   artifact_type: governance-proposal
-  problem: Describe how autonomous Drayker units could cooperate and govern shared resources without a central office.
+  problem: Describe a transparent transitional scaffold through which autonomous Drayker units can cooperate and test shared-resource rules before a durable member constitution and PAP are operational.
   scope:
-    - Public governance proposal for a future federation.
+    - Public transitional governance proposal for a future federation.
     - Specification of participation, federative points, decisions and resource evaluation.
     - A first phase designed to run on a public repository, with no chain and no token.
     - "A public reading surface (daf.drayker.org) for the specification, the record and the instruments: unit record, claim, resource request, cycle and vote."
@@ -15,6 +15,7 @@ component:
     - A deployed smart contract or an enforced voting procedure.
     - A treasury held by the federation.
     - A transferable instrument, token or claim on pooled funds.
+    - Drayker's final constitution, a definition of membership rights, or permanent authority over PAP.
   dependencies:
     - dfmp
     - advices
@@ -35,6 +36,7 @@ component:
     - Governance language may incorrectly imply a legal or operational federation.
     - A written specification may be read as a deployed system.
     - Point and quorum parameters are untested starting values, not validated by use.
+    - Transitional mechanics may be mistaken for Drayker's final member constitution.
     - Unspecified resource rules can create expectations the project cannot meet.
   contributions:
     availability: open

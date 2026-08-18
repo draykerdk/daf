@@ -34,7 +34,7 @@
       "@type": "WebSite",
       "@id": "https://daf.drayker.org/#website",
       "name": "Drayker DAF",
-      "alternateName": "Decentralized Autonomous Federation",
+      "alternateName": "Transitional federation scaffold",
       "url": "https://daf.drayker.org/",
       "publisher": { "@id": "https://drayker.com/#organization" },
       "inLanguage": "en"
@@ -58,7 +58,7 @@
 <x-dc>
 <helmet>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="DAF — the Decentralized Autonomous Federation of Drayker. A preliminary MVP designed to run on GitHub: how a delivered function becomes voting weight, what a point is worth, how quorum is computed, and the forms that compose a unit record, a claim, a resource request, an assembly and a vote." />
+<meta name="description" content="DAF — Drayker's transitional federation scaffold. A provisional federation designed to run on GitHub: how a delivered function becomes voting weight, how quorum is computed, and the forms that compose a unit record, a claim, a resource request, an assembly and a vote." />
 <link rel="icon" href="https://drayker.org/assets/logo/drayker-icone.svg?v=20260813" type="image/svg+xml" sizes="any" media="(prefers-color-scheme: light)" />
 <link rel="icon" href="https://drayker.org/assets/logo/escuro/drayker-icone.svg?v=20260813" type="image/svg+xml" sizes="any" media="(prefers-color-scheme: dark)" />
 <link rel="icon" href="https://drayker.org/assets/logo/kit/icon-512.png?v=20260813" type="image/png" sizes="512x512" media="(prefers-color-scheme: light)" />
@@ -119,7 +119,7 @@
      in a second row on the same split, so the mark's column has no dead space. -->
 <div style="display:grid;grid-template-columns:{{ heroCols }};gap:clamp(26px,5vw,64px);align-items:center">
           <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#3FA9FF;margin-bottom:22px">Decentralized Autonomous Federation</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#3FA9FF;margin-bottom:22px">Transitional federation scaffold</div>
             <h1 style="font-size:clamp(40px,5.8vw,80px);line-height:0.96;letter-spacing:-0.04em;font-weight:700;margin:0 0 26px;max-width:15ch;text-wrap:balance">A transition must leave a public record.</h1>
             <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);max-width:54ch;margin:0;text-wrap:pretty">DAF is a transitional scaffold for cooperation between autonomous units while Drayker's member constitution and PAP are not operational. Its draft points record delivered functions for this provisional federation; they do not define membership, human worth or permanent constitutional authority.</p>
           </div>
@@ -1425,7 +1425,7 @@ const PHASE_MAP = [
 
 const NEIGHBOURS = [
   { k: 'THE METHOD', t: 'DFM / DFMP', d: 'What a function is, and how a proposal is validated. The federation counts what the method defines.', href: 'https://dfmp.drayker.org' },
-  { k: 'IDENTITY', t: 'UID', d: 'Meant to carry contribution history. How federative points convert into it is unspecified — an open function.', href: 'https://uid.drayker.org' },
+  { k: 'IDENTITY', t: 'UID', d: 'Meant to carry contribution history. Federative points are provisional evidence; how delivery history relates to UID’s record — and how that record participates in contextual reputation — is unspecified, an open function.', href: 'https://uid.drayker.org' },
   { k: 'REVIEW', t: 'advices', d: 'The proposed council layer. Neither the composition of a council nor its authority over a proposal is specified anywhere.', href: 'https://advices.drayker.org' },
   { k: 'THE PORTAL', t: 'drayker.org', d: 'Every project, what each one is missing, and the board of functions small enough for one person to finish.', href: 'https://drayker.org' }
 ];
@@ -1454,9 +1454,9 @@ const DAF_TRIGGERS = [
 
 const DAF_OPEN = [
   { t: 'The substrate beyond Phase 0', d: 'Which platform holds the federation when a repository is no longer enough, and what triggers the move.', q: 'Substrate after Phase 0' },
-  { t: 'The transferable instrument', d: 'Earlier drafts describe a claim on the treasury, convertible to local currency and later to the ecosystem unit of value. It is not specified, not issued, and cannot exist on this substrate. It stays out until there is one that can hold it.', q: 'The transferable instrument' },
+  { t: 'The transferable instrument', d: 'Earlier drafts describe a claim on the treasury. It is not specified, not issued, and cannot exist on this substrate. It stays out until there is one that can hold it — and if it ever returned, it would belong to the external interface, not to an internal market between members.', q: 'The transferable instrument' },
   { t: 'Where councils fit', d: 'advices is the proposed council layer. Neither the composition of a council nor its authority over a proposal is specified anywhere.', q: 'Council composition and authority' },
-  { t: 'The relationship to UID', d: 'Federative points are meant to convert into contribution history in UID. No conversion is specified.', q: 'How federative points convert into UID' }
+  { t: 'The relationship to UID', d: 'Federative points are provisional evidence; how delivery history relates to UID contribution history is open. No mechanical conversion of points into reputation is assumed.', q: 'How federative-point evidence relates to UID' }
 ];
 
 const DAF_SOURCES = [

@@ -147,9 +147,9 @@ Funding is granted per function or per module, in sequence. The next grant is ev
 
 ### 6.1 What is not in scope here
 
-The earlier drafts describe a second, **transferable** instrument representing a claim on the treasury, convertible to local currency and later to the ecosystem's unit of value. That design is not specified in this document and is not issued. It cannot exist on the current substrate, and a transferable claim on pooled funds is a financial instrument with obligations the federation is not in a position to carry. It stays out until there is a substrate that can hold it and a review that says it may exist. The drafts are preserved. They are not in force.
+The earlier drafts describe a second, **transferable** instrument representing a claim on the treasury. That design is not specified in this document and is not issued. It cannot exist on the current substrate, and a transferable claim on pooled funds is a financial instrument with obligations the federation is not in a position to carry. It stays out until there is a substrate that can hold it and a review that says it may exist. The drafts are preserved. They are not in force. If it ever returned, it would belong to Drayker's external interface — money and contracts with the outside — not to an internal market between members.
 
-Federative points are the only instrument this constitution creates, and they are not tradable.
+Federative points are the only instrument this constitution creates, and they are not tradable. They are provisional evidence inside this draft federation, not a mechanism that mechanically becomes reputation: reputation is contextual, multidimensional memory, and delivery history is only one of its inputs.
 
 ## 7. Joining, penalties, and leaving
 
@@ -172,7 +172,7 @@ Where a rule is unspecified, the federation says so rather than filling the gap 
 - **The substrate beyond Phase 0.** [DAF-001](./daf-001-phase-0-github-federation.md) runs on a repository, and names ICP as the direction. What that migration actually costs, what it carries, and which of the conditions in DAF-001 §7 triggers it are not settled.
 - **The transferable instrument** (§6.1).
 - **Where councils fit.** [`advices`](https://advices.drayker.org) is the proposed council layer, and specialist review before a federation vote is described across the drafts. Neither the composition of a council nor its authority over a proposal is specified anywhere.
-- **The relationship to UID.** [`uid`](https://uid.drayker.org) is meant to carry contribution history, and federative points are meant to convert into it. No conversion is specified.
+- **The relationship to UID.** [`uid`](https://uid.drayker.org) is meant to carry contribution history. Federative points are provisional evidence inside this federation; how delivery history relates to UID's contribution record — and how that record participates in Drayker's contextual, multidimensional reputation — remains open. No mechanical conversion of points into reputation is assumed.
 
 These are open functions, not oversights. Anyone can write them.
 

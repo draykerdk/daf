@@ -1,6 +1,6 @@
 # Drayker DAF
 
-> The Decentralized Autonomous Federation of Drayker: a preliminary and auditable governance MVP running on a public GitHub repository.
+> A transitional and auditable federation scaffold for autonomous units while Drayker's member constitution and PAP are not operational.
 
 ## Current operational boundary
 
@@ -8,6 +8,8 @@
 - Delivered functions create non-transferable points and voting weight under the published DAF-000 and DAF-001 rules.
 - No blockchain, token, treasury custody, anonymous participation or automated evaluation is running here.
 - The public repository is the ledger; decisions must be recomputable from its history.
+- These points are provisional federation mechanics, not membership, human worth or permanent constitutional rights.
+- DAF is not Drayker's final constitution; PAP, councils and member governance are intended to absorb durable functions as they are specified and proven.
 
 ## Canonical resources
 

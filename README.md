@@ -1,18 +1,22 @@
-DAF is the alliance basis between Drayker's DAOs and DACs. The organizational and governance layer of the ecosystem, and the reason Drayker has no head office.
+DAF is the alliance basis between Drayker's DAOs and DACs: a transitional federation scaffold for testing coordination, governance and shared-resource rules while the broader member constitution and PAP mature.
 
 ## Why this exists
 
-Drayker is a way of working where people keep creating, discovering and learning while intelligence carries the rest, and what results reaches the work that produced it. DAF is the organizational half of that: how decisions and resources move when there is no head office to move them.
+Drayker is a way of working where people keep creating, discovering and learning while intelligence carries the rest, and what results reaches the work that produced it. DAF is an early organizational experiment inside that direction: a way to make decisions and resource rules inspectable before the durable environment exists.
+
+DAF is not Drayker's final constitution and is not the permanent reason the system has no head office. Functions that prove useful here are expected to migrate into [PAP](https://pap.drayker.org), member governance and specialized councils. DAF may therefore become progressively thinner or functionally dissolve rather than survive for its own sake.
+
+If DAF reaches a phase with a token economy, **ICP is only a probable provisional substrate**, not a final dependency or the destination of Drayker's infrastructure. That phase is meant to help build and test Drayker's own infrastructure and system inside DAF. When PAP exists at the required maturity, DAF's useful functions and that transitional infrastructure are expected to be absorbed into PAP; DAF dissolves into the durable environment rather than remaining a parallel institution.
 
 The argument in full is on the [manifesto](https://drayker.org/manifesto/). The [economy page](https://drayker.org/economy/) states plainly what contributing here earns and what it does not.
 
 ## How a unit joins
 
-Anyone, a person, a team, a project or an initiative, can link their own unit to the federation. Over time, units accumulate **federative points** and voting power over federation resources and federation decisions.
+Anyone, a person, a team, a project or an initiative, can link their own unit to the federation. During this experiment, units may accumulate **federative points** and voting weight over decisions inside DAF's bounded scope.
 
 The federation's shared interface and public record are maintained in English so every assembly has one auditable reference. A unit may organize around a particular language, region or nationality, and may work internally in that language. It only needs to submit its unit record, claims, requests and assembly evidence to the federation in English. Language or nationality never changes how points are earned or how a vote is weighted.
 
-Weight follows delivered work. It is not appointed, and it cannot be bought. A point records one delivered [function](https://dfmp.drayker.org), it is non-transferable, and it does not decay. Influence moves only as other people deliver.
+Weight follows delivered work. It is not appointed, and it cannot be bought. A point records one delivered [function](https://dfmp.drayker.org), it is non-transferable, and it does not decay. These points are a ledger for the federation experiment: they are not the member's general reputation, do not measure human value and do not automatically determine support, access or resource allocation elsewhere in Drayker.
 
 The mechanics are specified in [DAF-000](./dafp/daf-000-federation-constitution.md).
 
@@ -26,9 +30,9 @@ It is also enforceable rather than decorative: a request that does not say what 
 
 ## How it fits the whole
 
-DAF is where the ecosystem's autonomous units cooperate without being absorbed into one organization: [projects](https://dfmpproject.drayker.org), [councils](https://advices.drayker.org), initiatives and the [volunteers portal](https://drayker.org) all connect through it, while keeping their own scope and their own decisions.
+DAF is an early place where autonomous units can test cooperation without being absorbed into one organization. [Projects](https://dfmpproject.drayker.org), [councils](https://advices.drayker.org), initiatives and the [volunteers portal](https://drayker.org) can connect through it while its useful functions are learned and transferred to more durable layers.
 
-It sits above the same layers everything else does. Contribution is attributable through [UID](https://uid.drayker.org) — federative points record delivered work, and identity is what makes a point non-transferable. The [value unit](https://value.drayker.org) overlaps the federative points, and the funds of the [economy](https://drayker.org/economy/) feed the resources the federation governs. Councils validate what enters; the federation decides how shared resources are held. Drayker has no head office, and DAF is the reason: a federation of autonomous units can outgrow whoever started it without anyone owning it.
+Contribution is attributable through [UID](https://uid.drayker.org), while federative points remain separate from the broader, contextual reputation model. [Dktron and the value-unit family](https://value.drayker.org) are distinct resource and economic instruments, not another name for those points. Councils can validate proposals; DAF can test limited shared-resource decisions and, provisionally, the infrastructure for a token-economy phase. Drayker has no head office because intelligence, projects, knowledge and member governance are designed to be distributed — not because one transitional federation owns that role forever.
 
 ## The specification
 
@@ -43,7 +47,7 @@ The record itself lives in [`federation/`](./federation): unit records, assembly
 
 The point mechanics and the voting procedure are now specified, as drafts open to argument, and the structure that would hold the record exists. **Nothing is running in it**: no unit is recorded, no points have been issued, no assembly has been held, and there is no deployed contract. Phase 0 begins at the first assembly that records a real delivery, not at the commit that created the folders.
 
-Several things are still unspecified on purpose. The substrate beyond Phase 0 is decided — **ICP** (Internet Computer Protocol) — but the transferable instrument the earlier drafts describe, the authority of councils, and how federative points convert into [`uid`](https://uid.drayker.org) reputation remain open. They are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle). Anyone can write them.
+Several things are still unspecified on purpose. The substrate beyond Phase 0 was identified as **ICP** (Internet Computer Protocol), but no migration has occurred. The authority of councils, the migration of useful DAF functions into PAP and member governance, and the limits of federative points remain open. Federative points should not be converted wholesale into [`uid`](https://uid.drayker.org) reputation; at most, verified DAF history may become one contextual input among several. These questions are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle).
 
 ## Contributing
 

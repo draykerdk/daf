@@ -1,19 +1,21 @@
-# DAF-000. Minimal constitution of the federation
+# DAF-000. Minimal constitution of the transitional federation
 
 **Status:** draft · **Type:** process · **Created:** 2026-08-11 · **License:** CC BY 4.0
 **Discussion:** https://github.com/draykerdk/daf/issues/1
 
 ## Abstract
 
-The DAF README states that units accumulate federative points and voting power over federation resources and decisions. This document specifies what a unit is, how a point is earned, how a decision is taken, and how a resource request is judged against the rule that federation support is a last resort.
+The DAF README describes a transitional federation scaffold in which units may accumulate federative points and voting weight over decisions inside a bounded experiment. This document specifies what a unit is, how a point is earned, how a decision is taken, and how a resource request is judged against the rule that federation support is a last resort.
 
-It is a proposal. Nothing here is deployed, and no part of it overrides [`draykerdk/.github/GOVERNANCE.md`](https://github.com/draykerdk/.github/blob/master/GOVERNANCE.md), which describes the governance actually in force during the founding phase. Where this document and that file disagree, that file wins.
+It is a proposal. Nothing here is deployed, and no part of it overrides [`draykerdk/.github/GOVERNANCE.md`](https://github.com/draykerdk/.github/blob/master/GOVERNANCE.md), which describes the governance actually in force during the founding phase. It is not Drayker's final member constitution. Where this document and the current governance file disagree, that file wins.
 
 The rules below are substrate-independent: they say what has to be true, not which platform enforces it. [DAF-001](./daf-001-phase-0-github-federation.md) specifies how they run today, on a repository, with no chain and no token.
 
 ## 1. What the federation is
 
-The federation is the layer where autonomous units cooperate on Drayker's main projects without being absorbed into one organization. It has no head office and no staff. It holds shared resources, it recognizes delivered work, and it decides what it funds.
+The federation is a transitional layer where autonomous units can test cooperation on Drayker's main projects without being absorbed into one organization. It has no head office and no staff. Within this experiment it may record shared resources, recognize delivered work, and decide what it supports.
+
+Useful functions are expected to migrate into PAP, member governance and specialized councils as those layers mature. The federation may become progressively thinner or functionally dissolve; institutional survival is not one of its purposes.
 
 It is not a company, not a legal person, and not a fund with a return. Contribution earns recognition and voting weight inside the federation. It does not earn a wage, equity, or a claim on anything outside the federation.
 
@@ -31,7 +33,7 @@ A unit exists in the federation from the moment its record is accepted (§7) and
 
 ## 3. Federative points
 
-Points are the record of delivered work. They are **non-transferable**: they represent the history of an identity, personal or collective, and cannot be bought, sold, delegated, or moved between holders.
+Points are the record of delivered work inside DAF. They are **non-transferable**: they represent the history of an identity, personal or collective, and cannot be bought, sold, delegated, or moved between holders. They are not general member reputation, do not measure human value and do not automatically determine support, access or resource allocation outside this federation experiment.
 
 ### 3.1 What counts as delivered work
 
@@ -169,10 +171,11 @@ Where a rule is unspecified, the federation says so rather than filling the gap 
 
 ## 9. What this document does not settle
 
-- **The substrate beyond Phase 0.** [DAF-001](./daf-001-phase-0-github-federation.md) runs on a repository, and names ICP as the direction. What that migration actually costs, what it carries, and which of the conditions in DAF-001 §7 triggers it are not settled.
+- **The substrate beyond Phase 0.** [DAF-001](./daf-001-phase-0-github-federation.md) runs on a repository and names ICP only as a probable provisional substrate for a token-economy DAF phase. What that migration costs, what it carries, which condition triggers it, and how the phase builds Drayker's own infrastructure before being absorbed into PAP are not settled.
 - **The transferable instrument** (§6.1).
 - **Where councils fit.** [`advices`](https://advices.drayker.org) is the proposed council layer, and specialist review before a federation vote is described across the drafts. Neither the composition of a council nor its authority over a proposal is specified anywhere.
-- **The relationship to UID.** [`uid`](https://uid.drayker.org) is meant to carry contribution history, and federative points are meant to convert into it. No conversion is specified.
+- **The relationship to UID.** [`uid`](https://uid.drayker.org) is meant to preserve identity and attributable contribution history. DAF points must remain a distinct ledger; verified history may inform contextual reputation, but no wholesale conversion or cross-system authority is specified.
+- **The transition into PAP and member governance.** DAF is expected to dissolve into PAP once the durable environment can absorb its useful functions and transitional infrastructure. The evidence, sequence and safeguards for that transition are not specified.
 
 These are open functions, not oversights. Anyone can write them.
 

@@ -954,7 +954,8 @@
       raf = requestAnimationFrame(loop);
     }
     paint(0); // primeiro quadro sincronizado: nunca fica em branco (print, aba oculta)
-    if (opts.animate && !ringDef.flat) { running = true; raf = requestAnimationFrame(loop); }
+    var prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (opts.animate && !ringDef.flat && !prefersReducedMotion) { running = true; raf = requestAnimationFrame(loop); }
 
     return {
       svg: svg, ctx: ctx, opts: opts, paint: paint,

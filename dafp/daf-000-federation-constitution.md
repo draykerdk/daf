@@ -176,6 +176,7 @@ Where a rule is unspecified, the federation says so rather than filling the gap 
 - **Where councils fit.** [`advices`](https://advices.drayker.org) is the proposed council layer, and specialist review before a federation vote is described across the drafts. Neither the composition of a council nor its authority over a proposal is specified anywhere.
 - **The relationship to UID.** [`uid`](https://uid.drayker.org) is meant to preserve identity and attributable contribution history. DAF points must remain a distinct ledger; verified history may inform contextual reputation, but no wholesale conversion or cross-system authority is specified.
 - **The transition into PAP and member governance.** DAF is expected to dissolve into PAP once the durable environment can absorb its useful functions and transitional infrastructure. The evidence, sequence and safeguards for that transition are not specified.
+- **The dissolution protocol.** A future proposal must define the technical and constitutional criteria that show PAP and the member constitution can absorb DAF's useful functions, the decision procedure that formally ends DAF, and the migration record that preserves attribution. At that transition, federative points must be frozen and archived as historical evidence rather than carried into PAP as permanent voting weight, inherited privilege or dynastic authority.
 
 These are open functions, not oversights. Anyone can write them.
 

@@ -1,8 +1,18 @@
-DAF is the alliance basis between Drayker's DAOs and DACs: a transitional federation scaffold for testing coordination, governance and shared-resource rules while the broader member constitution and PAP mature.
+> A transitional framework for shared decisions and resources.
+
+DAF explores coordination among participating groups while the broader member constitution and Projects & Applications develop. It provides a place to test federative rules in public.
+
+Documented proposals examine decision rules, a distinct federative points ledger and review procedures. Useful functions can later migrate into PAP and member governance.
+
+DAF serves the development of durable coordination. Its functions may migrate or dissolve as the wider system becomes able to carry them.
+
+## A practical example
+
+A group could propose a shared activity, document its resource commitments and review the outcome, distinguishing honest failure from misconduct. This is an illustration of the proposed design.
 
 ## Why this exists
 
-Drayker is a way of working where people keep creating, discovering and learning while intelligence carries the rest, and what results reaches the work that produced it. DAF is an early organizational experiment inside that direction: a way to make decisions and resource rules inspectable before the durable environment exists.
+DAF is an early organizational experiment inside that direction: a way to make decisions and resource rules inspectable before the durable environment exists.
 
 DAF is not Drayker's final constitution and is not the permanent reason the system has no head office. Functions that prove useful here are expected to migrate into [PAP](https://pap.drayker.org), member governance and specialized councils. DAF may therefore become progressively thinner or functionally dissolve rather than survive for its own sake.
 

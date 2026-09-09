@@ -28,6 +28,8 @@ That rule is published on purpose. A federation that treats its shared resources
 
 It is also enforceable rather than decorative: a request that does not say what was tried first is returned unjudged, and funding is granted one function at a time, each grant evaluated against the evidence of the last.
 
+**Protection of honest failure vs. bad-faith penalties:** In accordance with the epistemology established in *Do animal à superinteligência*, genuine technological and cognitive exploration entails uncertainty. An honest failure to complete a committed function does not deduct previously earned points; it simply concludes the cycle without awarding new points, and any unspent project resources revert to the common capacity reserve. Penalties (point forfeiture, balance deduction, or expulsion) are strictly bounded to proven bad-faith actions: falsification of delivery evidence, cryptographic fraud, malicious collusion, or unwithdrawn resource hoarding. Inactivity is never penalized.
+
 ## How it fits the whole
 
 DAF is an early place where autonomous units can test cooperation without being absorbed into one organization. [Projects](https://dfmpproject.drayker.org), [councils](https://advices.drayker.org), initiatives and the [volunteers portal](https://drayker.org) can connect through it while its useful functions are learned and transferred to more durable layers.
@@ -47,7 +49,7 @@ The record itself lives in [`federation/`](./federation): unit records, assembly
 
 The point mechanics and the voting procedure are now specified, as drafts open to argument, and the structure that would hold the record exists. **Nothing is running in it**: no unit is recorded, no points have been issued, no assembly has been held, and there is no deployed contract. Phase 0 begins at the first assembly that records a real delivery, not at the commit that created the folders.
 
-Several things are still unspecified on purpose. The substrate beyond Phase 0 was identified as **ICP** (Internet Computer Protocol), but no migration has occurred. The authority of councils, the migration of useful DAF functions into PAP and member governance, and the limits of federative points remain open. A dissolution protocol must define the technical and constitutional criteria for ending DAF, preserve the attribution record and freeze federative points as historical evidence instead of importing them into PAP as permanent authority. Federative points should not be converted wholesale into [`uid`](https://uid.drayker.org) reputation; at most, verified DAF history may become one contextual input among several. These questions are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle).
+Several things are still unspecified on purpose. The substrate beyond Phase 0 was identified as **ICP** (Internet Computer Protocol), but no migration has occurred. The authority of councils, the migration of useful DAF functions into PAP and member governance, and the limits of federative points remain open. Federative points should not be converted wholesale into [`uid`](https://uid.drayker.org) reputation; at most, verified DAF history may become one contextual input among several. These questions are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle).
 
 ## Contributing
 

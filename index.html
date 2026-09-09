@@ -121,7 +121,7 @@
           <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#3FA9FF;margin-bottom:22px">Decentralized Autonomous Federation</div>
             <h1 style="font-size:clamp(40px,5.8vw,80px);line-height:0.96;letter-spacing:-0.04em;font-weight:700;margin:0 0 26px;max-width:15ch;text-wrap:balance">Weight follows delivered work.</h1>
-            <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);max-width:54ch;margin:0;text-wrap:pretty">DAF is the organizational half of Drayker: how decisions and resources move when there is no head office to move them. A point records one delivered function. It cannot be appointed, it cannot be bought, it cannot be transferred, and it does not decay — influence moves only as other people deliver.</p>
+            <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);max-width:54ch;margin:0;text-wrap:pretty">DAF explores coordination among participating groups while the broader member constitution and Projects & Applications develop. It provides a place to test federative rules in public. Federative points record delivered functions within this experiment and remain separate from member identity and contextual reputation.</p>
           </div>
 
           <div style="display:flex;flex-direction:column;align-items:center;gap:18px">
@@ -336,8 +336,8 @@
             </div>
             <div style="background:var(--bg);padding:28px 24px;display:flex;flex-direction:column;gap:10px;min-height:220px">
               <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--tx3)">WHERE IT GOES</div>
-              <div style="font-size:20px;font-weight:600;letter-spacing:-0.02em">ICP, when there is something worth the guarantee</div>
-              <p style="font-size:14.5px;line-height:1.62;color:var(--tx2);margin:0;flex:1;text-wrap:pretty">ICP (Internet Computer Protocol) is the stated direction, on conditions: migrate when there is value whose guarantee justifies a chain, and carry a real history into the migration instead of a whitepaper. Deliberately deferred: the transferable instrument, councils, automated function evaluation, anonymous participation.</p>
+              <div style="font-size:20px;font-weight:600;letter-spacing:-0.02em">A future substrate, selected on evidence</div>
+              <p style="font-size:14.5px;line-height:1.62;color:var(--tx2);margin:0;flex:1;text-wrap:pretty">ICP is a possible provisional substrate for a later phase. Any migration needs an explicit case for its costs, security properties and governance, together with a plan to preserve the existing record. The transferable instrument and automated evaluation require separate specifications.</p>
             </div>
           </div>
           <p style="font-size:14.5px;line-height:1.66;color:var(--tx3);margin:22px 0 0;max-width:64ch;text-wrap:pretty">The right-hand column of the phase map is not a roadmap and carries no dates. It is a record of what was deliberately left out, so that Phase 0 is not mistaken for the whole design and the rest is not mistaken for work in progress. Detail in <a href="https://github.com/draykerdk/daf/blob/master/dafp/daf-001-phase-0-github-federation.md" style="color:#3FA9FF">DAF-001</a>.</p>
@@ -1418,14 +1418,14 @@ const PHASE_MAP = [
   { k: 'Voting', now: 'Declared votes on the assembly pull request, tallied in the open.', later: 'Enforced by the substrate.' },
   { k: 'Treasury', now: 'None held. Requests are decided and recorded; any disbursement happens outside and is reported.', later: 'Federation-held funds under the decided rules.' },
   { k: 'Transferable instrument', now: 'Does not exist.', later: 'Out of scope until a substrate and a review permit it.' },
-  { k: 'Automated evaluation', now: 'None. Humans judge, in public.', later: 'Proposed for the Dk platform; not specified anywhere.' },
+  { k: 'Automated evaluation', now: 'None. Humans judge, in public.', later: 'Proposed for the Dk platform; procedures remain to be specified.' },
   { k: 'Anonymous participation', now: 'Not supported. Participation is a public account.', later: 'Open problem across the drafts; unsolved.' },
   { k: 'Councils', now: 'Not represented. Review is public and open to anyone.', later: 'advices, unspecified.' }
 ];
 
 const NEIGHBOURS = [
   { k: 'THE METHOD', t: 'DFM / DFMP', d: 'What a function is, and how a proposal is validated. The federation counts what the method defines.', href: 'https://dfmp.drayker.org' },
-  { k: 'IDENTITY', t: 'UID', d: 'Meant to carry contribution history. How federative points convert into it is unspecified — an open function.', href: 'https://uid.drayker.org' },
+  { k: 'IDENTITY', t: 'UID', d: 'Preserves identity and contextual contribution history. Federative points remain a distinct ledger; their evidence may inform a record without automatic conversion.', href: 'https://uid.drayker.org' },
   { k: 'REVIEW', t: 'advices', d: 'The proposed council layer. Neither the composition of a council nor its authority over a proposal is specified anywhere.', href: 'https://advices.drayker.org' },
   { k: 'THE PORTAL', t: 'drayker.org', d: 'Every project, what each one is missing, and the board of functions small enough for one person to finish.', href: 'https://drayker.org' }
 ];
@@ -1456,7 +1456,7 @@ const DAF_OPEN = [
   { t: 'The substrate beyond Phase 0', d: 'Which platform holds the federation when a repository is no longer enough, and what triggers the move.', q: 'Substrate after Phase 0' },
   { t: 'The transferable instrument', d: 'Earlier drafts describe a claim on the treasury, convertible to local currency and later to the ecosystem unit of value. It is not specified, not issued, and cannot exist on this substrate. It stays out until there is one that can hold it.', q: 'The transferable instrument' },
   { t: 'Where councils fit', d: 'advices is the proposed council layer. Neither the composition of a council nor its authority over a proposal is specified anywhere.', q: 'Council composition and authority' },
-  { t: 'The relationship to UID', d: 'Federative points are meant to convert into contribution history in UID. No conversion is specified.', q: 'How federative points convert into UID' }
+  { t: 'The relationship to UID', d: 'Specify how verified contribution evidence can inform UID while keeping federative points distinct and preserving their context.', q: 'How contribution evidence relates to UID' }
 ];
 
 const DAF_SOURCES = [
@@ -1480,7 +1480,7 @@ const DAF_EX = {
     { h: 'a-participant', f: 'Ledger reading notes for a first-time holder', d: 'issue #9', r: 'pull request #11', p: '1' }
   ],
   module: { h: 'river-unit', m: 'The federation record, readable end to end', f: '#7, #12, #13', b: '3' },
-  penalty: { h: 'slow-unit', c: 'Vote tally script, committed in #6', w: 'Not delivered and not withdrawn; the cycle was counted by hand.', p: '−1' },
+  penalty: { h: 'slow-unit', c: 'Vote tally script, committed in #6', w: 'A documented commitment was misrepresented; the reviewed finding established misconduct.', p: '−1' },
   records: [{ h: 'river-unit', k: 'unit', f: 'pull request #8' }, { h: 'a-participant', k: 'participant', f: 'pull request #11' }],
   request: { f: 'requests/1-translation-sprint.md', a: '180 EUR', dec: 'returned', why: 'Section 1 empty. What was tried first is the section most requests fail, and a request missing it is not judged on merit.' },
   vote: { active: '9', cast: '6', part: '67%', split: '5 / 0 / 1', out: 'passed' },

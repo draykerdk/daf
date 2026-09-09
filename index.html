@@ -273,7 +273,7 @@
         <div style="max-width:1320px;margin:0 auto;padding:clamp(38px,5.5vw,76px) clamp(16px,4vw,44px)">
           <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#3FA9FF;margin-bottom:16px">The mechanism</div>
           <h2 style="font-size:clamp(26px,3.2vw,44px);line-height:1.06;letter-spacing:-0.035em;font-weight:600;margin:0 0 18px;max-width:22ch;text-wrap:balance">How a finished piece of work becomes voting weight.</h2>
-          <p style="font-size:16px;line-height:1.66;color:var(--tx2);margin:0 0 32px;max-width:64ch;text-wrap:pretty">Six steps, and no discretion anywhere in them. Each one answers to a written rule, each rule is a line you can open and argue with, and each step is an ordinary thing on the platform the federation already runs on.</p>
+          <p style="font-size:16px;line-height:1.66;color:var(--tx2);margin:0 0 32px;max-width:64ch;text-wrap:pretty">Select a step to follow a declared function through delivery, review and recorded voting weight. Each explanation links to the draft rule and shows how the corresponding action would be recorded on GitHub.</p>
           <div style="display:grid;grid-template-columns:{{ threeCol }};gap:1px">
             <sc-for list="{{ dafPipe }}" as="p" hint-placeholder-count="6">
               <div role="button" tabindex="0" onClick="{{ p.pick }}" style="background:{{ p.bg }};padding:20px 18px;cursor:pointer;display:flex;flex-direction:column;gap:8px;border-bottom:2px solid {{ p.line }};outline:1px solid var(--line)" style-hover="background:var(--surf2)">
@@ -384,14 +384,14 @@
                   <label style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:var(--tx3)">LOOSE FUNCTIONS DELIVERED</label>
                   <span style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#3FA9FF">{{ calcFns }}</span>
                 </div>
-                <input type="range" min="0" max="20" value="{{ calcFns }}" onChange="{{ onCalcFns }}" style="width:100%;accent-color:#3FA9FF" />
+                <input type="range" aria-label="Loose functions delivered" min="0" max="20" value="{{ calcFns }}" onChange="{{ onCalcFns }}" style="width:100%;accent-color:#3FA9FF" />
               </div>
               <div>
                 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:10px">
                   <label style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:var(--tx3)">FUNCTIONS IN ONE DECLARED MODULE</label>
                   <span style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#3FA9FF">{{ calcMod }}</span>
                 </div>
-                <input type="range" min="0" max="12" value="{{ calcMod }}" onChange="{{ onCalcMod }}" style="width:100%;accent-color:#3FA9FF" />
+                <input type="range" aria-label="Functions in one declared module" min="0" max="12" value="{{ calcMod }}" onChange="{{ onCalcMod }}" style="width:100%;accent-color:#3FA9FF" />
               </div>
               <div role="button" tabindex="0" onClick="{{ toggleModDone }}" style="border:1px solid {{ calcModLine }};padding:16px 18px;cursor:pointer;display:flex;gap:14px;align-items:center" style-hover="border-color:#3FA9FF">
                 <div style="width:12px;height:12px;border:1px solid {{ calcModLine }};background:{{ calcModLine }};flex-shrink:0"></div>
@@ -402,7 +402,7 @@
                   <label style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:var(--tx3)">POINTS HELD BY EVERYONE ELSE</label>
                   <span style="font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--tx2)">{{ calcOthers }}</span>
                 </div>
-                <input type="range" min="0" max="300" value="{{ calcOthers }}" onChange="{{ onCalcOthers }}" style="width:100%;accent-color:#3FA9FF" />
+                <input type="range" aria-label="Points held by everyone else" min="0" max="300" value="{{ calcOthers }}" onChange="{{ onCalcOthers }}" style="width:100%;accent-color:#3FA9FF" />
               </div>
             </div>
             <div style="background:var(--bg);padding:clamp(24px,3vw,36px);display:flex;flex-direction:column;gap:20px;outline:1px solid var(--line)">
@@ -462,27 +462,27 @@
                   <label style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:var(--tx3)">ACTIVE POINTS</label>
                   <span style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#3FA9FF">{{ qActive }}</span>
                 </div>
-                <input type="range" min="1" max="200" value="{{ qActive }}" onChange="{{ onQActive }}" style="width:100%;accent-color:#3FA9FF" />
+                <input type="range" aria-label="Active points" min="1" max="200" value="{{ qActive }}" onChange="{{ onQActive }}" style="width:100%;accent-color:#3FA9FF" />
               </div>
               <div>
                 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:10px">
                   <label style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:var(--tx3)">DORMANT POINTS · OUT OF THE DENOMINATOR</label>
                   <span style="font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--tx2)">{{ qDormant }}</span>
                 </div>
-                <input type="range" min="0" max="200" value="{{ qDormant }}" onChange="{{ onQDormant }}" style="width:100%;accent-color:#3FA9FF" />
+                <input type="range" aria-label="Dormant points excluded from quorum" min="0" max="200" value="{{ qDormant }}" onChange="{{ onQDormant }}" style="width:100%;accent-color:#3FA9FF" />
               </div>
               <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
                 <div>
                   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3);margin-bottom:8px">FOR · {{ qYes }}</div>
-                  <input type="range" min="0" max="200" value="{{ qYes }}" onChange="{{ onQYes }}" style="width:100%;accent-color:#3FA9FF" />
+                  <input type="range" aria-label="Votes for" min="0" max="200" value="{{ qYes }}" onChange="{{ onQYes }}" style="width:100%;accent-color:#3FA9FF" />
                 </div>
                 <div>
                   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3);margin-bottom:8px">AGAINST · {{ qNo }}</div>
-                  <input type="range" min="0" max="200" value="{{ qNo }}" onChange="{{ onQNo }}" style="width:100%;accent-color:#3FA9FF" />
+                  <input type="range" aria-label="Votes against" min="0" max="200" value="{{ qNo }}" onChange="{{ onQNo }}" style="width:100%;accent-color:#3FA9FF" />
                 </div>
                 <div>
                   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3);margin-bottom:8px">ABSTAIN · {{ qAbs }}</div>
-                  <input type="range" min="0" max="200" value="{{ qAbs }}" onChange="{{ onQAbs }}" style="width:100%;accent-color:#3FA9FF" />
+                  <input type="range" aria-label="Abstaining votes" min="0" max="200" value="{{ qAbs }}" onChange="{{ onQAbs }}" style="width:100%;accent-color:#3FA9FF" />
                 </div>
               </div>
               <div style="font-size:13px;line-height:1.6;color:var(--tx3);text-wrap:pretty">{{ qDormantNote }}</div>
@@ -1287,7 +1287,7 @@
 <div ref="{{ markFooter }}" style="width:26px;height:26px;flex:none"></div>
           <span style="font-size:15px;font-weight:600;letter-spacing:-0.02em">DAF</span>
         </div>
-        <div style="font-size:13.5px;line-height:1.62;color:var(--tx2);max-width:34ch">The organizational layer of Drayker, and the reason it has no head office. A preliminary MVP designed to run on GitHub, with nothing recorded in it yet.</div>
+        <div style="font-size:13.5px;line-height:1.62;color:var(--tx2);max-width:34ch">A transitional federation for testing coordination and resource rules. Phase 0 is designed around a public GitHub record, with no assembly held yet.</div>
       </div>
       <div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.16em;color:var(--tx3);margin-bottom:14px">THE SPECIFICATION</div>
@@ -1426,7 +1426,7 @@ const PHASE_MAP = [
 const NEIGHBOURS = [
   { k: 'THE METHOD', t: 'DFM / DFMP', d: 'What a function is, and how a proposal is validated. The federation counts what the method defines.', href: 'https://dfmp.drayker.org' },
   { k: 'IDENTITY', t: 'UID', d: 'Preserves identity and contextual contribution history. Federative points remain a distinct ledger; their evidence may inform a record without automatic conversion.', href: 'https://uid.drayker.org' },
-  { k: 'REVIEW', t: 'advices', d: 'The proposed council layer. Neither the composition of a council nor its authority over a proposal is specified anywhere.', href: 'https://advices.drayker.org' },
+  { k: 'REVIEW', t: 'advices', d: 'The proposed council layer. The public proposal separates technical councils from independent member review; selection and case procedures remain to be specified.', href: 'https://advices.drayker.org' },
   { k: 'THE PORTAL', t: 'drayker.org', d: 'Every project, what each one is missing, and the board of functions small enough for one person to finish.', href: 'https://drayker.org' }
 ];
 
@@ -1455,7 +1455,7 @@ const DAF_TRIGGERS = [
 const DAF_OPEN = [
   { t: 'The substrate beyond Phase 0', d: 'Which platform holds the federation when a repository is no longer enough, and what triggers the move.', q: 'Substrate after Phase 0' },
   { t: 'The transferable instrument', d: 'Earlier drafts describe a claim on the treasury, convertible to local currency and later to the ecosystem unit of value. It is not specified, not issued, and cannot exist on this substrate. It stays out until there is one that can hold it.', q: 'The transferable instrument' },
-  { t: 'Where councils fit', d: 'advices is the proposed council layer. Neither the composition of a council nor its authority over a proposal is specified anywhere.', q: 'Council composition and authority' },
+  { t: 'Where councils fit', d: 'advices is the proposed council layer. The public proposal separates technical councils from independent member review; selection and case procedures remain to be specified.', q: 'Council composition and authority' },
   { t: 'The relationship to UID', d: 'Specify how verified contribution evidence can inform UID while keeping federative points distinct and preserving their context.', q: 'How contribution evidence relates to UID' }
 ];
 

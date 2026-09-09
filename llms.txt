@@ -1,6 +1,6 @@
 # Drayker DAF
 
-> The Decentralized Autonomous Federation of Drayker: a preliminary and auditable governance MVP running on a public GitHub repository.
+> DAF explores coordination among participating groups while the broader member constitution and Projects & Applications develop. It provides a place to test federative rules in public.
 
 ## Current operational boundary
 

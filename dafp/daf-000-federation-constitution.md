@@ -145,7 +145,7 @@ A resource request is evaluated only if it states:
 
 A request missing any of these is not judged on merit. It is returned.
 
-Funding is granted per function or per module, in sequence. The next grant is evaluated against the evidence of the last one. Undelivered work does not merely fail to earn points. It degrades every proposal that references it.
+Funding is granted per function or per module, in sequence. The next grant is evaluated against the evidence of the last one. Undelivered work does not earn points. Later proposals must account for its outcome and any dependencies that remain unresolved.
 
 ### 6.1 What is not in scope here
 
@@ -157,7 +157,7 @@ Federative points are the only instrument this constitution creates, and they ar
 
 **Joining.** A participant or unit submits a record, who it is, its founding function, how to reach it, and delivers a first function. The record and the first award are accepted in the same assembly. There is no fee and no invitation.
 
-**Penalties.** A unit that commits to a function and does not deliver it loses points, in proportion to what was committed and what the federation had already granted. Where collusion or fraud is established, the holder loses its accumulated points entirely. A member's failure is the unit's failure: how a unit distributes that internally is its own affair, and units that govern themselves well are visibly the ones whose proposals keep passing.
+**Penalties.** Honest failure to deliver is reviewed as an outcome and does not by itself remove points. The review records what was committed, what was attempted, the evidence available and any resources to be returned. Sanctions concern established misconduct, including collusion or fraud; where either is established, the holder loses its accumulated points. Responsibility and any sanction must be justified against the documented conduct and reviewed through the applicable decision procedure.
 
 Every penalty is proposed, justified against a specific commitment, and voted like anything else. Absence of activity is never a penalty. A dormant holder loses no points (§3.4).
 

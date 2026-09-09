@@ -47,4 +47,4 @@ component:
   source_of_truth:
     repository: https://github.com/draykerdk/daf
     path: README.md
-  last_reviewed: "2026-08-20"
+  last_reviewed: "2026-09-08"

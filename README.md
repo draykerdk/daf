@@ -38,7 +38,7 @@ That rule is published on purpose. A federation that treats its shared resources
 
 It is also enforceable rather than decorative: a request that does not say what was tried first is returned unjudged, and funding is granted one function at a time, each grant evaluated against the evidence of the last.
 
-**Protection of honest failure vs. bad-faith penalties:** In accordance with the epistemology established in *Do animal à superinteligência*, genuine technological and cognitive exploration entails uncertainty. An honest failure to complete a committed function does not deduct previously earned points; it simply concludes the cycle without awarding new points, and any unspent project resources revert to the common capacity reserve. Penalties (point forfeiture, balance deduction, or expulsion) are strictly bounded to proven bad-faith actions: falsification of delivery evidence, cryptographic fraud, malicious collusion, or unwithdrawn resource hoarding. Inactivity is never penalized.
+**Protection of honest failure vs. bad-faith penalties:** Genuine technological and cognitive exploration entails uncertainty. An honest failure to complete a committed function does not deduct previously earned points; it simply concludes the cycle without awarding new points, and any unspent project resources revert to the common capacity reserve. Penalties (point forfeiture, balance deduction, or expulsion) are strictly bounded to proven bad-faith actions: falsification of delivery evidence, cryptographic fraud, malicious collusion, or unwithdrawn resource hoarding. Inactivity is never penalized.
 
 ## How it fits the whole
 
@@ -71,4 +71,4 @@ Related: [`dfmp`](https://dfmp.drayker.org) (how proposals are validated) · [`u
 
 ---
 
-Drayker is a volunteer, non-profit organization. Content licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Drayker is a non-profit organization, and its work is primarily voluntary. Content licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

@@ -22,7 +22,7 @@ The argument in full is on the [manifesto](https://drayker.org/manifesto/). The 
 
 ## How a unit joins
 
-Anyone, a person, a team, a project or an initiative, can link their own unit to the federation. During this experiment, units may accumulate **federative points** and voting weight over decisions inside DAF's bounded scope.
+Anyone, a person, a team, a project or an initiative, can link their own unit to the federation. During this experiment, units may accumulate **federative points** and voting weight over decisions inside DAF's bounded scope. Voting is transitional. It holds only until the federation can reproduce and test what version 1.0 is designed around: contextual weighing by Dk Global, justified vetoes weighed by their grounds rather than counted, and member councils formed for each question. Each of these mechanisms that is reproduced and tested replaces part of the vote.
 
 The federation's shared interface and public record are maintained in English so every assembly has one auditable reference. A unit may organize around a particular language, region or nationality, and may work internally in that language. It only needs to submit its unit record, claims, requests and assembly evidence to the federation in English. Language or nationality never changes how points are earned or how a vote is weighted.
 

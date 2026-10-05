@@ -9,7 +9,7 @@ The DAF README describes a transitional federation scaffold in which units may a
 
 It is a proposal. Nothing here is deployed, and no part of it overrides [`draykerdk/.github/GOVERNANCE.md`](https://github.com/draykerdk/.github/blob/master/GOVERNANCE.md), which describes the governance actually in force during the founding phase. It is not Drayker's final member constitution. Where this document and the current governance file disagree, that file wins.
 
-The rules below are substrate-independent: they say what has to be true, not which platform enforces it. [DAF-001](./daf-001-phase-0-github-federation.md) specifies how they run today, on a repository, with no chain and no token.
+The rules below are substrate-independent: they say what has to be true, not which platform enforces it. [DAF-001](./daf-001-phase-0-github-federation.md) specifies how they run today, on a repository, with no chain and no unit of account.
 
 ## 1. What the federation is
 
@@ -171,7 +171,7 @@ Where a rule is unspecified, the federation says so rather than filling the gap 
 
 ## 9. What this document does not settle
 
-- **The substrate beyond Phase 0.** [DAF-001](./daf-001-phase-0-github-federation.md) runs on a repository and names ICP only as a probable provisional substrate for a token-economy DAF phase. What that migration costs, what it carries, which condition triggers it, and how the phase builds Drayker's own infrastructure before being absorbed into PAP are not settled.
+- **The substrate beyond Phase 0.** [DAF-001](./daf-001-phase-0-github-federation.md) runs on a repository and names ICP only as a probable provisional substrate for a DAF phase that experiments with units of account. What that migration costs, what it carries, which condition triggers it, and how the phase builds Drayker's own infrastructure before being absorbed into PAP are not settled.
 - **The transferable instrument** (§6.1).
 - **Where councils fit.** [`advices`](https://advices.drayker.org) is the proposed council layer, and specialist review before a federation vote is described across the drafts. Neither the composition of a council nor its authority over a proposal is specified anywhere.
 - **The relationship to UID.** [`uid`](https://uid.drayker.org) is meant to preserve identity and attributable contribution history. DAF points must remain a distinct ledger; verified history may inform contextual reputation, but no wholesale conversion or cross-system authority is specified.

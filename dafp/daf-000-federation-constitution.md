@@ -17,6 +17,8 @@ The federation is a transitional layer where autonomous units can test cooperati
 
 Useful functions are expected to migrate into PAP, member governance and specialized councils as those layers mature. The federation may become progressively thinner or functionally dissolve; institutional survival is not one of its purposes.
 
+Voting is transitional. It holds only until the federation can reproduce and test what version 1.0 is designed around: contextual weighing by Dk Global, justified vetoes weighed by their grounds rather than counted, and member councils formed for each question. Each of these mechanisms that is reproduced and tested replaces part of the vote.
+
 It is not a company, not a legal person, and not a fund with a return. Contribution earns recognition and voting weight inside the federation. It does not earn a wage, equity, or a claim on anything outside the federation.
 
 ## 2. Participants and units
@@ -69,6 +71,8 @@ Influence still moves, by dilution: as new work is delivered, new points are iss
 Points are removed only as a penalty (§6).
 
 ### 3.4 Points and voting weight
+
+Counting points as votes is the transitional instrument described in §1, kept until the tested mechanisms of version 1.0 replace it.
 
 One point is one vote. A unit votes with the points it holds. How it decides its own position is internal to the unit and is not the federation's business.
 

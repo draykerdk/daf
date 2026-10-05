@@ -16,7 +16,7 @@ DAF is an early organizational experiment inside that direction: a way to make d
 
 DAF is not Drayker's final constitution and is not the permanent reason the system has no head office. Functions that prove useful here are expected to migrate into [PAP](https://pap.drayker.org), member governance and specialized councils. DAF may therefore become progressively thinner or functionally dissolve rather than survive for its own sake.
 
-If DAF reaches a phase with a token economy, **ICP is only a probable provisional substrate**, not a final dependency or the destination of Drayker's infrastructure. That phase is meant to help build and test Drayker's own infrastructure and system inside DAF. When PAP exists at the required maturity, DAF's useful functions and that transitional infrastructure are expected to be absorbed into PAP; DAF dissolves into the durable environment rather than remaining a parallel institution.
+If DAF reaches a phase that experiments with units of account, **ICP is only a probable provisional substrate**, not a final dependency or the destination of Drayker's infrastructure. That phase is meant to help build and test Drayker's own infrastructure and system inside DAF. When PAP exists at the required maturity, DAF's useful functions and that transitional infrastructure are expected to be absorbed into PAP; DAF dissolves into the durable environment rather than remaining a parallel institution.
 
 The argument in full is on the [manifesto](https://drayker.org/manifesto/). The [economy page](https://drayker.org/economy/) states plainly what contributing here earns and what it does not.
 
@@ -32,7 +32,7 @@ The mechanics are specified in [DAF-000](./dafp/daf-000-federation-constitution.
 
 ## How resources work
 
-The initial DAO is funded by grants and side projects. **All support requests must be made in situations where there are no other alternatives**. Resource efficiency matters here, and the major projects are the priority.
+The initial federation is funded by grants and side projects. **All support requests must be made in situations where there are no other alternatives**. Resource efficiency matters here, and the major projects are the priority.
 
 That rule is published on purpose. A federation that treats its shared resources as a first resort stops being able to fund anything that matters.
 
@@ -44,14 +44,14 @@ It is also enforceable rather than decorative: a request that does not say what 
 
 DAF is an early place where autonomous units can test cooperation without being absorbed into one organization. [Projects](https://dfmpproject.drayker.org), [councils](https://advices.drayker.org), initiatives and the [volunteers portal](https://drayker.org) can connect through it while its useful functions are learned and transferred to more durable layers.
 
-Contribution is attributable through [UID](https://uid.drayker.org), while federative points remain separate from the broader, contextual reputation model. [Dktron and the value-unit family](https://value.drayker.org) are distinct resource and economic instruments, not another name for those points. Councils can validate proposals; DAF can test limited shared-resource decisions and, provisionally, the infrastructure for a token-economy phase. Drayker has no head office because intelligence, projects, knowledge and member governance are designed to be distributed — not because one transitional federation owns that role forever.
+Contribution is attributable through [UID](https://uid.drayker.org), while federative points remain separate from the broader, contextual reputation model. [Dktron and the value-unit family](https://value.drayker.org) are distinct resource and economic instruments, not another name for those points. Councils can validate proposals; DAF can test limited shared-resource decisions and, provisionally, the infrastructure for a unit-of-account phase. Drayker has no head office because intelligence, projects, knowledge and member governance are designed to be distributed — not because one transitional federation owns that role forever.
 
 ## The specification
 
 [`dafp/`](./dafp) holds the proposals that specify the federation.
 
 - **[DAF-000](./dafp/daf-000-federation-constitution.md)**. The minimal constitution, independent of any platform: participants and units, how a point is earned, how points become voting weight, quorum and majority, how a resource request is judged, penalties and exit.
-- **[DAF-001](./dafp/daf-001-phase-0-github-federation.md)**. Phase 0, the initial version: the federation designed to run on this repository, with no chain and no token, and an explicit account of what is deferred to later phases.
+- **[DAF-001](./dafp/daf-001-phase-0-github-federation.md)**. Phase 0, the initial version: the federation designed to run on this repository, with no chain and no unit of account, and an explicit account of what is deferred to later phases.
 
 The record itself lives in [`federation/`](./federation): unit records, assembly reports, resource requests and the ledger, in plain text under version control, so that any claim about who delivered what can be checked by reading.
 

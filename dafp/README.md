@@ -9,7 +9,7 @@ Proposals that specify how the federation works. A proposal here is a document u
 
 **DAF-000** is substrate-independent: participants and units, how a federative point is earned, how points become voting weight, quorum and majority, how a resource request is judged against the last-resort rule, penalties and exit.
 
-**DAF-001** is the initial version, the MVP, running on this repository, with no chain and no token. It also states what is deliberately deferred to later phases, so that the small thing running now is not confused with the whole design.
+**DAF-001** is the initial version, the MVP, running on this repository, with no chain and no unit of account. It also states what is deliberately deferred to later phases, so that the small thing running now is not confused with the whole design.
 
 Both are drafts of the same consolidation, and both leave things open on purpose. What neither settles is listed in [DAF-000 §9](./daf-000-federation-constitution.md#9-what-this-document-does-not-settle).
 

@@ -5,7 +5,7 @@
 
 ## Abstract
 
-[DAF-000](./daf-000-federation-constitution.md) says what has to be true. This document says how it runs in Phase 0: on this repository, with no chain, no token, and no cost to operate.
+[DAF-000](./daf-000-federation-constitution.md) says what has to be true. This document says how it runs in Phase 0: on this repository, with no chain, no unit of account, and no cost to operate.
 
 Phase 0 is the smallest test that could make the transitional federation more than a description. It records real units, real deliveries, and real decisions inside DAF's bounded scope, and it is auditable by anyone with `git`. It buys none of the guarantees a chain buys, does not establish Drayker's final governance, and §6 says so plainly.
 
@@ -23,7 +23,7 @@ What belongs to this MVP, and what is deliberately deferred:
 
 | Concern | Phase 0, this document | Later phases |
 | --- | --- | --- |
-| **Substrate** | This repository. Git history is the ledger. | ICP is a probable provisional substrate for a token-economy DAF phase, on the conditions in §7; it is not the final infrastructure. |
+| **Substrate** | This repository. Git history is the ledger. | ICP is a probable provisional substrate for a DAF phase that experiments with units of account, on the conditions in §7; it is not the final infrastructure. |
 | **Units** | Records in `federation/units/`, one file each. | Linked by contract or canister. |
 | **Points** | Integers in the assembly ledger, recomputable from history. | Non-transferable on-chain records, migrated with their history. |
 | **Voting** | Declared votes on the assembly pull request, tallied in the open. | Enforced by the substrate. |
@@ -98,7 +98,7 @@ Phase 0 should be replaced when it is failing at something specific, not when a 
 
 None of these is reached by adding features. Each is reached by the federation actually working. That is why the migration is a consequence of Phase 0 succeeding, not a prerequisite for starting it. When one is reached, the substrate is chosen against the requirement that caused it, and the history in `federation/` migrates with it.
 
-**The probable provisional substrate is ICP**, for a token-economy phase carrying resource management that a repository cannot carry. It is not a deployment, date, final dependency or destination. The conditions above still decide whether that phase is needed. Its purpose is to let DAF build and test Drayker's own infrastructure and system; as PAP reaches the required maturity, the useful functions and transitional infrastructure are expected to move into PAP and DAF to dissolve into it. Naming ICP early lets the record in `federation/` survive a possible move without confusing a temporary platform with Drayker's eventual substrate.
+**The probable provisional substrate is ICP**, for a unit-of-account phase carrying resource management that a repository cannot carry. It is not a deployment, date, final dependency or destination. The conditions above still decide whether that phase is needed. Its purpose is to let DAF build and test Drayker's own infrastructure and system; as PAP reaches the required maturity, the useful functions and transitional infrastructure are expected to move into PAP and DAF to dissolve into it. Naming ICP early lets the record in `federation/` survive a possible move without confusing a temporary platform with Drayker's eventual substrate.
 
 ## 8. Status
 

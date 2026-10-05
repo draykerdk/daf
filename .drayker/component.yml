@@ -8,8 +8,8 @@ component:
   scope:
     - Public proposal for a transitional federation scaffold.
     - Specification of participation, federative points, decisions and resource evaluation.
-    - A first phase designed to run on a public repository, with no chain and no token.
-    - A probable provisional ICP substrate if DAF reaches a token-economy phase, used to build and test Drayker's own infrastructure.
+    - A first phase designed to run on a public repository, with no chain and no unit of account.
+    - A probable provisional ICP substrate if DAF reaches a phase that experiments with units of account, used to build and test Drayker's own infrastructure.
     - Transition of useful functions and transitional infrastructure into PAP, with DAF expected to dissolve when the durable environment exists.
     - "A public reading surface (daf.drayker.org) for the specification, the record and the instruments: unit record, claim, resource request, cycle and vote."
   non_scope:

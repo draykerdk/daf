@@ -13,7 +13,7 @@ component:
     - Transition of useful functions and transitional infrastructure into PAP, with DAF expected to dissolve when the durable environment exists.
     - "A public reading surface (daf.drayker.org) for the specification, the record and the instruments: unit record, claim, resource request, cycle and vote."
   non_scope:
-    - An operating DAO federation.
+    - An operating federation of autonomous units.
     - A deployed smart contract or an enforced voting procedure.
     - A treasury held by the federation.
     - A transferable instrument, token or claim on pooled funds.

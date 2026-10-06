@@ -102,7 +102,7 @@ Proposals should be small. A participant with a single function is better served
 
 - **Resource requests** (§6).
 - **The monthly ledger**: point awards, penalties, and unit records for the period.
-- **Changes to this constitution** and to the documents it governs.
+- **Changes to this document** and to the documents it governs. A federation vote never changes the members' constitution or the kernel.
 
 ### 5.2 What is not voted on
 
@@ -177,7 +177,7 @@ Where a rule is unspecified, the federation says so rather than filling the gap 
 
 - **The substrate beyond Phase 0.** [DAF-001](./daf-001-phase-0-github-federation.md) runs on a repository and names ICP only as a probable provisional substrate for a DAF phase that experiments with units of account. What that migration costs, what it carries, which condition triggers it, and how the phase builds Drayker's own infrastructure before being absorbed into PAP are not settled.
 - **The transferable instrument** (§6.1).
-- **Where councils fit.** [`advices`](https://advices.drayker.org) is the proposed council layer, and specialist review before a federation vote is described across the drafts. Neither the composition of a council nor its authority over a proposal is specified anywhere.
+- **Where councils fit.** [`advices`](https://advices.drayker.org) is the proposed council layer, and specialist review before a federation vote is described across the drafts. Councils are formed for each question and composed by Dknowledge, as described in advices. Their authority over a federation proposal is not specified.
 - **The relationship to UID.** [`uid`](https://uid.drayker.org) is meant to preserve identity and attributable contribution history. DAF points must remain a distinct ledger; verified history may inform contextual reputation, but no wholesale conversion or cross-system authority is specified.
 - **The transition into PAP and member governance.** DAF is expected to dissolve into PAP once the durable environment can absorb its useful functions and transitional infrastructure. The evidence, sequence and safeguards for that transition are not specified.
 - **The dissolution protocol.** A future proposal must define the technical and constitutional criteria that show PAP and the member constitution can absorb DAF's useful functions, the decision procedure that formally ends DAF, and the migration record that preserves attribution. At that transition, federative points must be frozen and archived as historical evidence rather than carried into PAP as permanent voting weight, inherited privilege or dynastic authority.

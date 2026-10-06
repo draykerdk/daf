@@ -13,7 +13,7 @@ The rules below are substrate-independent: they say what has to be true, not whi
 
 ## 1. What the federation is
 
-The federation is an autonomous, distributed federation of autonomous units: the groups and organizations of people working on different questions and projects in Drayker. It is a transitional layer where those units can test cooperation on Drayker's main projects without being absorbed into one organization. It has no head office and no staff. Within this experiment it may record shared resources, recognize delivered work, and decide what it supports.
+The federation is an autonomous, distributed federation of autonomous units: the groups and organizations of people working on different questions and projects in Drayker. It is our way of implementing, now, a basic and primitive notion of what [PAP](https://pap.drayker.org) will be, and of testing its dynamics as the very way Drayker is built. It is a transitional layer where those units can test cooperation on Drayker's main projects without being absorbed into one organization. It has no head office and no staff. Within this experiment it may record shared resources, recognize delivered work, and decide what it supports.
 
 Useful functions are expected to migrate into PAP, member governance and specialized councils as those layers mature. The federation may become progressively thinner or functionally dissolve; institutional survival is not one of its purposes.
 

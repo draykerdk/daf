@@ -7,6 +7,7 @@ component:
   problem: Describe how autonomous Drayker units can test cooperation and bounded shared-resource governance during the transition to durable member governance and PAP.
   scope:
     - Public proposal for a transitional federation scaffold.
+    - A basic and primitive form of PAP implemented now, whose dynamics are tested as the way Drayker is built.
     - Specification of participation, federative points, decisions and resource evaluation.
     - A first phase designed to run on a public repository, with no chain and no unit of account.
     - A probable provisional ICP substrate if DAF reaches a phase that experiments with units of account, used to build and test Drayker's own infrastructure.

@@ -1,6 +1,6 @@
 > A transitional framework for shared decisions and resources.
 
-DAF is an autonomous, distributed federation of autonomous units: the groups and organizations of people working on different questions and projects in Drayker. It explores coordination among them while the broader member constitution and Projects & Applications develop. It provides a place to test federative rules in public.
+DAF, the Distributed Autonomous Federation, is an autonomous federation of autonomous units, distributed like Dk: the groups and organizations of people working on different questions and projects in Drayker. It is our way of implementing, now, a basic and primitive notion of what [PAP](https://pap.drayker.org) will be, and of testing its dynamics as the very way Drayker is built. It explores coordination among the units while the broader member constitution and Projects & Applications develop. It provides a place to test federative rules in public.
 
 Documented proposals examine decision rules, a distinct federative points ledger and review procedures. Useful functions can later migrate into PAP and member governance.
 

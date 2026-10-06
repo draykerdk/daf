@@ -13,7 +13,7 @@ The rules below are substrate-independent: they say what has to be true, not whi
 
 ## 1. What the federation is
 
-The federation is a transitional layer where autonomous units can test cooperation on Drayker's main projects without being absorbed into one organization. It has no head office and no staff. Within this experiment it may record shared resources, recognize delivered work, and decide what it supports.
+The federation is an autonomous, distributed federation of autonomous units: the groups and organizations of people working on different questions and projects in Drayker. It is a transitional layer where those units can test cooperation on Drayker's main projects without being absorbed into one organization. It has no head office and no staff. Within this experiment it may record shared resources, recognize delivered work, and decide what it supports.
 
 Useful functions are expected to migrate into PAP, member governance and specialized councils as those layers mature. The federation may become progressively thinner or functionally dissolve; institutional survival is not one of its purposes.
 
@@ -25,7 +25,7 @@ It is not a company, not a legal person, and not a fund with a return. Contribut
 
 **A participant** is one person, identified by a public account that can sign work. During the founding phase, that account is a GitHub account. One human, one participant record.
 
-**A unit** is any group that links itself to the federation: a team, a project, a cooperative, a DAO. A unit declares a founding function, the single purpose it exists to serve, and every later contribution of that unit hangs off it. A unit governs itself internally however it wants. The federation judges its deliveries, not its bylaws.
+**A unit** is any group that links itself to the federation: a team, a project, a cooperative or any other organization of people. A DAO can be one, but it is not the default form. A unit declares a founding function, the single purpose it exists to serve, and every later contribution of that unit hangs off it. A unit governs itself internally however it wants. The federation judges its deliveries, not its bylaws.
 
 A unit may be a community organized around a language, region or nationality. Its internal language and cultural scope are its own. The federation's common record, proposals and assembly evidence are maintained in English so decisions remain auditable through one shared interface. Language, residence, citizenship and nationality do not create or reduce federative weight; delivered functions do.
 

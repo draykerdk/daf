@@ -1,11 +1,11 @@
 # Drayker DAF
 
-> DAF explores coordination among participating groups while the broader member constitution and Projects & Applications develop. It provides a place to test federative rules in public.
+> DAF is an autonomous federation of autonomous units and a basic and primitive form of PAP, implemented now on GitHub (Phase 0): its rules, instruments and public record exist. No unit has been recorded and no assembly has been held yet. It provides a place to test federative rules in public.
 
-## Current operational boundary
+## Current state
 
-- Phase 0 runs through public GitHub issues, pull requests, files and history.
-- Delivered functions create non-transferable points and voting weight under the published DAF-000 and DAF-001 rules.
+- Phase 0 is implemented on public GitHub issues, pull requests, files and history.
+- Under the published DAF-000 and DAF-001 rules, delivered functions create non-transferable points and voting weight. No unit has been recorded, no points have been issued and no assembly has been held yet.
 - No blockchain, token, treasury custody, anonymous participation or automated evaluation is running here.
 - The public repository is the ledger; decisions must be recomputable from its history.
 
@@ -15,7 +15,7 @@
 - [DAF repository](https://github.com/draykerdk/daf)
 - [DAF-000 constitution](https://github.com/draykerdk/daf/blob/master/dafp/daf-000-federation-constitution.md)
 - [DAF-001 Phase 0](https://github.com/draykerdk/daf/blob/master/dafp/daf-001-phase-0-github-federation.md)
-- [Drayker organization](https://drayker.com/)
+- [Drayker](https://drayker.com/)
 
 ## Crawling
 

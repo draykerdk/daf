@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>DAF — federation designed to run on a repository</title>
+<title>DAF — federation implemented now on GitHub</title>
 <meta name="description" content="DAF is an autonomous federation of autonomous units in Drayker and a basic and primitive form of PAP implemented now; no assembly has been held yet.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#08080A">
@@ -10,12 +10,12 @@
 <link rel="alternate" type="text/plain" href="/llms.txt" title="AI-readable site summary">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Drayker DAF">
-<meta property="og:title" content="DAF — federation designed to run on a repository">
+<meta property="og:title" content="DAF — federation implemented now on GitHub">
 <meta property="og:description" content="DAF is an autonomous federation of autonomous units in Drayker and a basic and primitive form of PAP implemented now; no assembly has been held yet.">
 <meta property="og:url" content="https://daf.drayker.org/">
 <meta property="og:image" content="https://drayker.org/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="DAF — federation designed to run on a repository">
+<meta name="twitter:title" content="DAF — federation implemented now on GitHub">
 <meta name="twitter:description" content="DAF is an autonomous federation of autonomous units in Drayker and a basic and primitive form of PAP implemented now; no assembly has been held yet.">
 <meta name="twitter:image" content="https://drayker.org/og.png">
 <script type="application/ld+json">
@@ -42,7 +42,7 @@
     {
       "@type": "WebPage",
       "@id": "https://daf.drayker.org/#webpage",
-      "name": "DAF — federation designed to run on a repository",
+      "name": "DAF — federation implemented now on GitHub",
       "url": "https://daf.drayker.org/",
       "description": "DAF is an autonomous federation of autonomous units in Drayker and a basic and primitive form of PAP implemented now, tested in public on GitHub.",
       "isPartOf": { "@id": "https://daf.drayker.org/#website" },
@@ -58,7 +58,7 @@
 <x-dc>
 <helmet>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="DAF, the Distributed Autonomous Federation of Drayker: a federation of autonomous units and a basic and primitive form of PAP, with a preliminary MVP designed to run on GitHub." />
+<meta name="description" content="DAF, the Distributed Autonomous Federation of Drayker: a federation of autonomous units and a basic and primitive form of PAP, implemented now on GitHub (Phase 0). No unit has been recorded and no assembly has been held yet." />
 <link rel="icon" href="https://drayker.org/assets/logo/drayker-icone.svg?v=20260813" type="image/svg+xml" sizes="any" media="(prefers-color-scheme: light)" />
 <link rel="icon" href="https://drayker.org/assets/logo/escuro/drayker-icone.svg?v=20260813" type="image/svg+xml" sizes="any" media="(prefers-color-scheme: dark)" />
 <link rel="icon" href="https://drayker.org/assets/logo/kit/icon-512.png?v=20260813" type="image/png" sizes="512x512" media="(prefers-color-scheme: light)" />
@@ -121,7 +121,7 @@
           <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#3FA9FF;margin-bottom:22px">Distributed Autonomous Federation</div>
             <h1 style="font-size:clamp(40px,5.8vw,80px);line-height:0.96;letter-spacing:-0.04em;font-weight:700;margin:0 0 26px;max-width:15ch;text-wrap:balance">Weight follows delivered work.</h1>
-            <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);max-width:54ch;margin:0;text-wrap:pretty">DAF is an autonomous federation of autonomous units, the groups and organizations of people working on different questions and projects in Drayker, and a basic and primitive form of PAP implemented now. It provides a place to test federative rules in public. Federative points record delivered functions within this experiment and remain separate from member identity and contextual reputation.</p>
+            <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);max-width:54ch;margin:0;text-wrap:pretty">DAF is an autonomous federation of autonomous units, the groups and organizations of people working on different questions and projects in Drayker, and a basic and primitive form of PAP implemented now. It provides a place to test federative rules in public. Federative points record delivered functions within its bounded scope and remain separate from member identity and contextual reputation.</p>
           </div>
 
           <div style="display:flex;flex-direction:column;align-items:center;gap:18px">
@@ -1199,7 +1199,7 @@
             <div style="border:1px solid var(--line);border-top:none;background:var(--bg);padding:clamp(22px,3vw,36px)">
               <sc-if value="{{ asmEmpty }}" hint-placeholder-val="{{ true }}">
                 <div style="border-left:2px solid #3FA9FF;padding:4px 0 4px 18px;max-width:70ch">
-                  <div style="font-size:15px;line-height:1.66;color:var(--tx2);text-wrap:pretty">No assembly has been held. The federation begins at the first one that records real work — the folders and templates are only the place for it to be written down.</div>
+                  <div style="font-size:15px;line-height:1.66;color:var(--tx2);text-wrap:pretty">No assembly has been held yet. The record is first used at the first assembly that records real work, and the folders and templates are where it will be written down.</div>
                   <div role="button" tabindex="0" onClick="{{ goAssembly }}" style="display:inline-block;border:1px solid var(--line3);color:var(--tx);padding:12px 20px;font-size:13.5px;font-weight:500;cursor:pointer;margin-top:18px" style-hover="border-color:#3FA9FF;color:#3FA9FF">Run the first one →</div>
                 </div>
               </sc-if>
@@ -1287,7 +1287,7 @@
 <div ref="{{ markFooter }}" style="width:26px;height:26px;flex:none"></div>
           <span style="font-size:15px;font-weight:600;letter-spacing:-0.02em">DAF</span>
         </div>
-        <div style="font-size:13.5px;line-height:1.62;color:var(--tx2);max-width:34ch">A transitional federation for testing coordination and resource rules. Phase 0 is designed around a public GitHub record, with no assembly held yet.</div>
+        <div style="font-size:13.5px;line-height:1.62;color:var(--tx2);max-width:34ch">An autonomous federation of autonomous units, a basic and primitive form of PAP, implemented now. Phase 0 is a public GitHub record, with no assembly held yet.</div>
       </div>
       <div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.16em;color:var(--tx3);margin-bottom:14px">THE SPECIFICATION</div>
@@ -1350,7 +1350,7 @@ const FORM = (tmpl, params) => {
 };
 
 const ROUTE_META = {
-  home: { t: 'DAF — federation designed to run on a repository', d: 'A federation of autonomous units in Drayker and a basic and primitive form of PAP: weight follows delivered work, and a preliminary MVP is ready to run on GitHub — no chain, no token, no treasury, and no assembly held yet.' },
+  home: { t: 'DAF — federation implemented now on GitHub', d: 'A federation of autonomous units in Drayker and a basic and primitive form of PAP: weight follows delivered work, and it is implemented now on GitHub (Phase 0), with no chain, no token, no treasury, and no assembly held yet.' },
   rules: { t: 'The rules — DAF', d: 'DAF-000 and DAF-001 in short: units, how a point is earned, how points become voting weight, quorum and majority, and what Phase 0 deliberately leaves out.' },
   join: { t: 'Join — DAF', d: 'A record and one delivered function. Compose your unit record and your first claim, and publish both on GitHub under your own account.' },
   assembly: { t: 'The assembly — DAF', d: 'One cycle a month, seven days to argue with it. Open the cycle, draft the report, cast a vote in the format that can be counted mechanically.' },
@@ -2385,7 +2385,7 @@ class Component extends DCLogic {
       states: [
         { k: 'SPECIFIED', d: 'DAF-000 and DAF-001 are written: units, points, quorum, resources, penalties, exit.', bg: 'var(--surf)', fg: '#3FA9FF' },
         { k: 'STRUCTURED', d: 'federation/ exists with its templates, so the first delivery has somewhere to be written down.', bg: 'var(--surf)', fg: '#3FA9FF' },
-        { k: 'NOT YET OPERATING', d: 'No unit recorded, no points issued, no assembly held. That gap is the invitation.', bg: 'var(--bg)', fg: 'var(--tx3)' }
+        { k: 'NOT YET USED', d: 'No unit recorded, no points issued, no assembly held. That gap is the invitation.', bg: 'var(--bg)', fg: 'var(--tx3)' }
       ],
 
       dafStats: [

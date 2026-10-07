@@ -102,11 +102,11 @@ None of these is reached by adding features. Each is reached by the federation a
 
 ## 8. Status
 
-The structure in §3 exists, at [`federation/`](../federation), with the templates for a unit record, a resource request and an assembly report. **Nothing is running in it.** No unit is recorded, no points have been issued, and no assembly has been held.
+Phase 0 is implemented now: the structure in §3 exists, at [`federation/`](../federation), with the templates for a unit record, a resource request and an assembly report. **No unit has been recorded and no assembly has been held yet.** No points have been issued.
 
 The next function is the first assembly: open the cycle, claim a delivery that already happened, and take the record through the procedure in §4 to see where it breaks. It is deliberately small, because the point is to find out what these rules cost to operate before anyone else is asked to live under them.
 
-The federation begins at that assembly, not at the commit that created the folders.
+The record is first used at that assembly.
 
 ---
 

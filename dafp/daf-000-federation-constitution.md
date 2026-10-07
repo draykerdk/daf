@@ -5,15 +5,15 @@
 
 ## Abstract
 
-The DAF README describes a transitional federation scaffold in which units may accumulate federative points and voting weight over decisions inside a bounded experiment. This document specifies what a unit is, how a point is earned, how a decision is taken, and how a resource request is judged against the rule that federation support is a last resort.
+The DAF README describes an autonomous federation of autonomous units, a basic and primitive form of PAP implemented now, in which units may accumulate federative points and voting weight over decisions inside a bounded scope. This document specifies what a unit is, how a point is earned, how a decision is taken, and how a resource request is judged against the rule that federation support is a last resort.
 
-It is a proposal. Nothing here is deployed, and no part of it overrides [`draykerdk/.github/GOVERNANCE.md`](https://github.com/draykerdk/.github/blob/master/GOVERNANCE.md), which describes the governance actually in force during the founding phase. It is not Drayker's final member constitution. Where this document and the current governance file disagree, that file wins.
+Its rules are drafts open to argument, no contract is deployed, and no part of it overrides [`draykerdk/.github/GOVERNANCE.md`](https://github.com/draykerdk/.github/blob/master/GOVERNANCE.md), which describes the governance actually in force during the founding phase. It is not Drayker's final member constitution. Where this document and the current governance file disagree, that file wins.
 
 The rules below are substrate-independent: they say what has to be true, not which platform enforces it. [DAF-001](./daf-001-phase-0-github-federation.md) specifies how they run today, on a repository, with no chain and no unit of account.
 
 ## 1. What the federation is
 
-The federation is an autonomous, distributed federation of autonomous units: the groups and organizations of people working on different questions and projects in Drayker. It is our way of implementing, now, a basic and primitive notion of what [PAP](https://pap.drayker.org) will be, and of testing its dynamics as the very way Drayker is built. It is a transitional layer where those units can test cooperation on Drayker's main projects without being absorbed into one organization. It has no head office and no staff. Within this experiment it may record shared resources, recognize delivered work, and decide what it supports.
+The federation is an autonomous, distributed federation of autonomous units: the groups and organizations of people working on different questions and projects in Drayker. It is our way of implementing, now, a basic and primitive notion of what [PAP](https://pap.drayker.org) will be, and of testing its dynamics as the very way Drayker is built. It is a transitional layer where those units can test cooperation on Drayker's main projects without being absorbed into one organization. It has no head office and no staff. Within its bounded scope it may record shared resources, recognize delivered work, and decide what it supports.
 
 Useful functions are expected to migrate into PAP, member governance and specialized councils as those layers mature. The federation may become progressively thinner or functionally dissolve; institutional survival is not one of its purposes.
 

@@ -1,6 +1,6 @@
-> A transitional framework for shared decisions and resources.
+> An autonomous federation of autonomous units, a basic and primitive form of PAP, implemented now.
 
-DAF, the Distributed Autonomous Federation, is an autonomous federation of autonomous units, distributed like Dk: the groups and organizations of people working on different questions and projects in Drayker. It is our way of implementing, now, a basic and primitive notion of what [PAP](https://pap.drayker.org) will be, and of testing its dynamics as the very way Drayker is built. It explores coordination among the units while the broader member constitution and Projects & Applications develop. It provides a place to test federative rules in public.
+DAF, the Distributed Autonomous Federation, is an autonomous federation of autonomous units, distributed like Dk: the groups and organizations of people working on different questions and projects in Drayker. It is a basic and primitive form of [PAP](https://pap.drayker.org), implemented now on GitHub (Phase 0): its rules, instruments and public record exist. No unit has been recorded and no assembly has been held yet. Its dynamics are tested as the very way Drayker is built. It explores coordination among the units while the broader member constitution and Projects & Applications develop. It provides a place to test federative rules in public.
 
 Documented proposals examine decision rules, a distinct federative points ledger and review procedures. Useful functions can later migrate into PAP and member governance.
 
@@ -12,7 +12,7 @@ A group could propose a shared activity, document its resource commitments and r
 
 ## Why this exists
 
-DAF is an early organizational experiment inside that direction: a way to make decisions and resource rules inspectable before the durable environment exists.
+DAF is implemented early and kept simple inside that direction: a way to make decisions and resource rules inspectable before the durable environment exists.
 
 DAF is not Drayker's final constitution and is not the permanent reason the system has no head office. Functions that prove useful here are expected to migrate into [PAP](https://pap.drayker.org), member governance and specialized councils. DAF may therefore become progressively thinner or functionally dissolve rather than survive for its own sake.
 
@@ -22,11 +22,11 @@ The argument in full is on the [manifesto](https://drayker.org/manifesto/). The 
 
 ## How a unit joins
 
-Anyone, a person, a team, a project or an initiative, can link their own unit to the federation. During this experiment, units may accumulate **federative points** and voting weight over decisions inside DAF's bounded scope. Voting is transitional. It holds only until the federation can reproduce and test what version 1.0 is designed around: contextual weighing by Dk Global, justified vetoes weighed by their grounds rather than counted, and member councils formed for each question. Each of these mechanisms that is reproduced and tested replaces part of the vote.
+Anyone, a person, a team, a project or an initiative, can link their own unit to the federation. During this phase, units may accumulate **federative points** and voting weight over decisions inside DAF's bounded scope. Voting is transitional. It holds only until the federation can reproduce and test what version 1.0 is designed around: contextual weighing by Dk Global, justified vetoes weighed by their grounds rather than counted, and member councils formed for each question. Each of these mechanisms that is reproduced and tested replaces part of the vote.
 
 The federation's shared interface and public record are maintained in English so every assembly has one auditable reference. A unit may organize around a particular language, region or nationality, and may work internally in that language. It only needs to submit its unit record, claims, requests and assembly evidence to the federation in English. Language or nationality never changes how points are earned or how a vote is weighted.
 
-Weight follows delivered work. It is not appointed, and it cannot be bought. A point records one delivered [function](https://dfmp.drayker.org), it is non-transferable, and it does not decay. These points are a ledger for the federation experiment: they are not the member's general reputation, do not measure human value and do not automatically determine support, access or resource allocation elsewhere in Drayker.
+Weight follows delivered work. It is not appointed, and it cannot be bought. A point records one delivered [function](https://dfmp.drayker.org), it is non-transferable, and it does not decay. These points are a ledger for the federation: they are not the member's general reputation, do not measure human value and do not automatically determine support, access or resource allocation elsewhere in Drayker.
 
 The mechanics are specified in [DAF-000](./dafp/daf-000-federation-constitution.md).
 
@@ -57,7 +57,7 @@ The record itself lives in [`federation/`](./federation): unit records, assembly
 
 ## State of this documentation
 
-The point mechanics and the voting procedure are now specified, as drafts open to argument, and the structure that would hold the record exists. **Nothing is running in it**: no unit is recorded, no points have been issued, no assembly has been held, and there is no deployed contract. Phase 0 begins at the first assembly that records a real delivery, not at the commit that created the folders.
+DAF is implemented now on GitHub (Phase 0): its rules, instruments and public record exist. The point mechanics and the voting procedure are specified as drafts open to argument. **No unit has been recorded and no assembly has been held yet.** No points have been issued, and there is no deployed contract. The record is first used at the first assembly that records a real delivery.
 
 Several things are still unspecified on purpose. The substrate beyond Phase 0 was identified as **ICP** (Internet Computer Protocol), but no migration has occurred. The authority of councils, the migration of useful DAF functions into PAP and member governance, and the limits of federative points remain open. Federative points should not be converted wholesale into [`uid`](https://uid.drayker.org) reputation; at most, verified DAF history may become one contextual input among several. These questions are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle).
 

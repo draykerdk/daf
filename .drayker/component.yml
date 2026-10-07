@@ -6,15 +6,15 @@ component:
   artifact_type: governance-proposal
   problem: Describe how autonomous Drayker units can test cooperation and bounded shared-resource governance during the transition to durable member governance and PAP.
   scope:
-    - Public proposal for a transitional federation scaffold.
+    - "An autonomous federation of autonomous units, implemented now on GitHub (Phase 0): its rules, instruments and public record exist."
     - A basic and primitive form of PAP implemented now, whose dynamics are tested as the way Drayker is built.
     - Specification of participation, federative points, decisions and resource evaluation.
-    - A first phase designed to run on a public repository, with no chain and no unit of account.
+    - A first phase implemented on a public repository, with no chain and no unit of account.
     - A probable provisional ICP substrate if DAF reaches a phase that experiments with units of account, used to build and test Drayker's own infrastructure.
     - Transition of useful functions and transitional infrastructure into PAP, with DAF expected to dissolve when the durable environment exists.
     - "A public reading surface (daf.drayker.org) for the specification, the record and the instruments: unit record, claim, resource request, cycle and vote."
   non_scope:
-    - An operating federation of autonomous units.
+    - Recorded units, issued points or held assemblies. None exist yet.
     - A deployed smart contract or an enforced voting procedure.
     - A treasury held by the federation.
     - A transferable instrument, token or claim on pooled funds.
@@ -26,8 +26,8 @@ component:
     - advices
     - uid
   implementation:
-    level: none
-    scope: The points and voting mechanics are specified as drafts; no unit is recorded, no assembly has been held and no contract is deployed. The site is a reading and composing surface over the repository, not an operating federation.
+    level: prototype
+    scope: "Implemented now on GitHub (Phase 0): its rules, instruments and public record exist. No unit has been recorded and no assembly has been held yet. The points and voting mechanics are specified as drafts, no points have been issued and no contract is deployed."
     evidence:
       - type: document
         ref: README.md
@@ -35,6 +35,8 @@ component:
         ref: dafp/daf-000-federation-constitution.md
       - type: document
         ref: dafp/daf-001-phase-0-github-federation.md
+      - type: prototype
+        ref: federation/
       - type: deployment
         ref: https://daf.drayker.org/
   risks:
@@ -48,4 +50,4 @@ component:
   source_of_truth:
     repository: https://github.com/draykerdk/daf
     path: README.md
-  last_reviewed: "2026-09-08"
+  last_reviewed: "2026-10-07"

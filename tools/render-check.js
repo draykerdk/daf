@@ -255,6 +255,116 @@ async function loadWith(fetchImpl) {
   check(odd.renderVals().states[2].k === 'NOT YET USED', 'Malformed optional keys must not change the empty state.');
   check(offline.state.dafData.ledger === null && offline.renderVals().states[2].k === 'NOT YET USED', 'Offline, the empty state stands.');
 
+  // site-1: the audit sums only reports that passed, and reads a ### heading.
+  const passedReport = idle.parseAssembly([
+    '# Assembly 2026-02', '', '## Deliveries', '',
+    '| Holder | Function | Declared in | Delivered | Points |', '| --- | --- | --- | --- | --- |',
+    '| `delta` | Last function | #22 | https://github.com/draykerdk/daf/pull/7 | 1 |',
+    '| `cedar` | A review | #23 | https://github.com/draykerdk/daf/pull/8 | 1 |', '',
+    '### Module completions', '',
+    '| Holder | Module | Functions in it | Bonus |', '| --- | --- | --- | --- |',
+    '| `delta` | The module | #21, #22 | 2 |', '',
+    '## Penalties', '', '| Holder | Commitment | What happened | Points removed |', '| --- | --- | --- | --- |',
+    '| `river` | A task | Established in the thread | −1 |', '',
+    '## The vote', '', '| | |', '| --- | --- |', '| **Outcome** | **passed** |', ''
+  ].join('\n'), { name: '2026-02.md', url: '' });
+  check(passedReport.modules.length === 1 && passedReport.modules[0].bonus === 2 && passedReport.net.delta === 3
+    && passedReport.penalties.length === 1 && passedReport.net.river === -1, 'Module completions under a ### heading must be counted.');
+  const failedReport = idle.parseAssembly([
+    '# Assembly 2026-03', '', '## Deliveries', '',
+    '| Holder | Function | Declared in | Delivered | Points |', '| --- | --- | --- | --- | --- |',
+    '| `cedar` | In a failed assembly | #31 | https://github.com/draykerdk/daf/pull/9 | 1 |', '',
+    '**Module completions**', '', '| Holder | Module | Functions in it | Bonus |', '| --- | --- | --- | --- |', '',
+    '## The vote', '', '| | |', '| --- | --- |', '| **Outcome** | **failed** |', ''
+  ].join('\n'), { name: '2026-03.md', url: '' });
+  check(failedReport.outcome === 'failed' && failedReport.net.cedar === 1, 'A failed report still parses.');
+  const auditor = makeComponent();
+  auditor.setState({ deepState: 'ready', deep: { units: [], assemblies: [passedReport, failedReport],
+    ledger: [{ id: 'delta', kind: 'unit', points: 3, active: true, joined: '2026-02' },
+      { id: 'cedar', kind: 'participant', points: 1, active: true, joined: '2026-02' },
+      { id: 'river', kind: 'unit', points: -1, active: true, joined: '2026-01' }] } });
+  const audit = auditor.auditRecord();
+  check(audit.clean && audit.counted === 1 && audit.assemblies === 2, 'Only passed reports are summed; a failed one adds nothing.');
+  check(audit.notCounted.length === 1 && audit.notCounted[0].month === '2026-03' && audit.notCounted[0].outcome === 'failed',
+    'A failed report is listed as not counted.');
+  auditor.setState({ recTab: 'audit' });
+  const auditView = auditor.renderVals();
+  check(auditView.auditCount === '1' && auditView.auditHasSkipped && auditView.auditSkipped === '2026-03 (failed)'
+    && auditView.auditVerdict === 'THE LEDGER MATCHES THE ASSEMBLIES', 'The audit tab shows what it summed and what it left out.');
+
+  // site-2: the pull-request panel links to the pull request on GitHub, never to the forum.
+  const tallied = makeComponent();
+  tallied.setState({ tallyState: 'ready', tally: { rows: [], unknown: [], yes: 0, no: 0, abs: 0, cast: 0, active: 0, pr: '14', found: 0, comments: 0 } });
+  const tallyView = tallied.renderVals();
+  check(tallyView.tallyPrUrl === 'https://github.com/draykerdk/daf/pull/14' && safeHref(tallyView.tallyPrUrl) === tallyView.tallyPrUrl,
+    'The pull-request link points to github.com/draykerdk/daf/pull/.');
+  check(!('tallyPrForum' in tallyView) && !('tallyHasForum' in tallyView) && !html.includes('tallyPrForum') && !html.includes('tallyHasForum'),
+    'The pull-request panel has no forum link.');
+  check(Object.values(tallyView).every((v) => typeof v !== 'string' || !/forum\.drayker\.org\/t\/daf\/14\//.test(v)),
+    'No value points to a forum page for the pull request.');
+
+  // site-3: "no assembly has been held" only while that is true.
+  check(html.includes('INVENTED · NOT A REAL ASSEMBLY') && !html.includes('NO ASSEMBLY HAS BEEN HELD'), 'The example badge says it is not a real assembly.');
+  check(html.split('<!-- Update in the pull request that records the first assembly. -->').length === 5,
+    'Each static description carries the note to update it with the first assembly.');
+  empty.setState({ deepState: 'ready', deep: { units: [], assemblies: [], ledger: [] } });
+  const emptyLedger = empty.renderVals();
+  check(emptyLedger.ledgerEmpty && emptyLedger.ledgerEmptyLine.includes('because no assembly has been held'),
+    'With no assembly held, the empty ledger says so.');
+  const heldNone = await loadWith(async (url) => ({
+    ok: String(url) === './data/federation.json',
+    json: async () => ({ units: [], assemblies: [{ name: '2026-09.md', url: 'https://github.com/draykerdk/daf/blob/master/federation/assemblies/2026-09.md' }],
+      requests: [], issues: [], ledger: { asOf: '2026-09', holders: [], totals: { holders: 0, points: 0, activePoints: 0, assemblies: 1 } } })
+  }));
+  heldNone.setState({ deepState: 'ready', deep: { units: [], assemblies: [], ledger: [] } });
+  const heldNoneView = heldNone.renderVals();
+  check(heldNoneView.ledgerEmpty && heldNoneView.ledgerEmptyLine.includes('Assemblies were held, and none of them awarded points.')
+    && !heldNoneView.ledgerEmptyLine.includes('no assembly has been held'), 'Once an assembly is held, the empty ledger stops saying none was.');
+
+  // site-5: unit-record links render as links only for https:// addresses.
+  const unitsView = makeComponent();
+  unitsView.setState({ recTab: 'units', deepState: 'ready', deep: { units: [{ id: 'river', name: 'river', kind: 'unit', fn: 'x', joined: '2026-09', url: '',
+    who: ['https://github.com/river', 'javascript:alert(1)'], work: ['http://example.test/repo', 'https://example.test/repo'] }], assemblies: [], ledger: [] } });
+  const unitRow = unitsView.renderVals().unitRows[0];
+  check(unitRow.who[0].isLink && unitRow.who[0].href === 'https://github.com/river' && !unitRow.who[1].isLink && unitRow.who[1].isText
+    && unitRow.who[1].href === '' && unitRow.who[1].text === 'javascript:alert(1)', 'A speaks_for entry links only when it starts with https://.');
+  check(!unitRow.work[0].isLink && unitRow.work[0].text === 'http://example.test/repo' && unitRow.work[1].isLink,
+    'A work entry links only when it starts with https://.');
+
+  // site-6: a null entry in the snapshot lists is dropped once, before caching.
+  const holes = await loadWith(async (url) => ({
+    ok: String(url) === './data/federation.json',
+    json: async () => ({ units: [null], assemblies: [], requests: [7], issues: [null, { num: 4, title: 'A question', url: 'https://github.com/draykerdk/daf/issues/4', pr: false }] })
+  }));
+  check(holes.state.dafState === 'ready' && holes.state.dafData.issues.length === 1 && holes.state.dafData.units.length === 0
+    && holes.state.dafData.requests.length === 0, 'Entries that are not objects are dropped when the record is loaded.');
+  check(JSON.parse(store.get('daf-record-v2')).d.issues.length === 1, 'The cached record holds no null entry.');
+  const holesView = holes.renderVals();
+  check(holesView.dafHasThreads && holesView.dafThreads.length === 1, 'A null issue entry does not break the thread list.');
+
+  // Cycle issues: the current month first, then a title with no month (the form's default).
+  const month = new Date().toISOString().slice(0, 7);
+  const cycleWith = async (issues) => {
+    context.fetch = async () => ({ ok: false, status: 404, json: async () => null });
+    const c = new Component();
+    c.loadDeep = async () => {};
+    c.setState({ dafState: 'ready', dafData: { units: [], assemblies: [], requests: [], issues } });
+    await c.loadCycle();
+    return c.state.cycle;
+  };
+  const cyc1 = await cycleWith([
+    { num: 31, title: '[Cycle] Assembly 2020-01', url: 'https://github.com/draykerdk/daf/issues/31', pr: false },
+    null,
+    { num: 30, title: '[Cycle] Assembly ', url: 'https://github.com/draykerdk/daf/issues/30', pr: false },
+    { num: 25, title: '[Cycle] Assembly ' + month, url: 'https://github.com/draykerdk/daf/issues/25', pr: false }
+  ]);
+  check(cyc1 && cyc1.num === 25, 'A [Cycle] issue naming the current month is preferred.');
+  const cyc2 = await cycleWith([
+    { num: 31, title: '[Cycle] Assembly 2020-01', url: 'https://github.com/draykerdk/daf/issues/31', pr: false },
+    { num: 30, title: '[Cycle] Assembly ', url: 'https://github.com/draykerdk/daf/issues/30', pr: false }
+  ]);
+  check(cyc2 && cyc2.num === 30, 'A [Cycle] issue left with the form’s default title is found.');
+
   console.log(`${checks} DAF contract checks passed`);
 })().catch((error) => {
   console.error(error.stack || error);

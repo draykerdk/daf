@@ -28,9 +28,9 @@ on:
 
 permissions: {}
 
-concurrency:
-  group: github-pages
-  cancel-in-progress: false
+# No workflow-level concurrency: a run whose build is skipped (an issue event the
+# filter below drops) must never enter the Pages group, or it could replace a
+# pending deploy. Only the deploy job queues, and it never cancels another.
 
 jobs:
   build:
@@ -46,11 +46,11 @@ jobs:
       issues: read
       pull-requests: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
 
@@ -78,11 +78,14 @@ jobs:
           find _site -type f | sort
 
       - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
         with:
           path: _site
 
   deploy:
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -95,7 +98,7 @@ jobs:
       # Here rather than in build: it reads the Pages settings, and only this job
       # holds a Pages permission.
       - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5

@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>DAF — federation implemented now on GitHub</title>
+<!-- Update in the pull request that records the first assembly. -->
 <meta name="description" content="DAF is an autonomous federation of autonomous units in Drayker and a basic and primitive form of PAP implemented now; no assembly has been held yet.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#08080A">
@@ -11,11 +12,13 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Drayker DAF">
 <meta property="og:title" content="DAF — federation implemented now on GitHub">
+<!-- Update in the pull request that records the first assembly. -->
 <meta property="og:description" content="DAF is an autonomous federation of autonomous units in Drayker and a basic and primitive form of PAP implemented now; no assembly has been held yet.">
 <meta property="og:url" content="https://daf.drayker.org/">
 <meta property="og:image" content="https://drayker.org/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="DAF — federation implemented now on GitHub">
+<!-- Update in the pull request that records the first assembly. -->
 <meta name="twitter:description" content="DAF is an autonomous federation of autonomous units in Drayker and a basic and primitive form of PAP implemented now; no assembly has been held yet.">
 <meta name="twitter:image" content="https://drayker.org/og.png">
 <script type="application/ld+json">
@@ -58,6 +61,7 @@
 <x-dc>
 <helmet>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- Update in the pull request that records the first assembly. -->
 <meta name="description" content="DAF, the Distributed Autonomous Federation of Drayker: a federation of autonomous units and a basic and primitive form of PAP, implemented now on GitHub (Phase 0). No unit has been recorded and no assembly has been held yet." />
 <link rel="icon" href="https://drayker.org/assets/logo/drayker-icon.svg?v=20260813" type="image/svg+xml" sizes="any" media="(prefers-color-scheme: light)" />
 <link rel="icon" href="https://drayker.org/assets/logo/dark/drayker-icon.svg?v=20260813" type="image/svg+xml" sizes="any" media="(prefers-color-scheme: dark)" />
@@ -828,9 +832,6 @@
                     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3)">{{ tallyFound }} VOTES FOUND IN {{ tallyComments }} COMMENTS</div>
                     <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em">
                       <a href="{{ tallyPrUrl }}" target="_blank" rel="noreferrer">PULL REQUEST #{{ tallyPrNum }} →</a>
-                      <sc-if value="{{ tallyHasForum }}" hint-placeholder-val="{{ true }}">
-                        <a href="{{ tallyPrForum }}" target="_blank" rel="noreferrer">read on the forum →</a>
-                      </sc-if>
                     </div>
                     <div style="display:flex;flex-direction:column;gap:1px">
                       <sc-for list="{{ tallyRows }}" as="v" hint-placeholder-count="0">
@@ -867,7 +868,7 @@
         <div style="max-width:1320px;margin:0 auto;padding:clamp(38px,5vw,72px) clamp(16px,4vw,44px)">
           <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:16px">
             <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#3FA9FF">An assembly, filled in</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#0A0A0C;background:#3FA9FF;padding:4px 10px">INVENTED · NO ASSEMBLY HAS BEEN HELD</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#0A0A0C;background:#3FA9FF;padding:4px 10px">INVENTED · NOT A REAL ASSEMBLY</div>
           </div>
           <h2 style="font-size:clamp(24px,2.9vw,38px);line-height:1.08;letter-spacing:-0.03em;font-weight:600;margin:0 0 16px;max-width:26ch;text-wrap:balance">What the record looks like once it is running.</h2>
           <p style="font-size:15.5px;line-height:1.66;color:var(--tx2);margin:0 0 30px;max-width:64ch;text-wrap:pretty">Every holder, delivery, penalty and figure below is invented, and describes no real person, unit or work. It is here because the shape of the record is easier to learn from a filled page than from a template — and because the first real one has to be written by someone who has seen one.</p>
@@ -1163,7 +1164,7 @@
               </sc-if>
               <sc-if value="{{ ledgerEmpty }}" hint-placeholder-val="{{ true }}">
                 <div style="border-left:2px solid #3FA9FF;padding:4px 0 4px 18px;max-width:70ch">
-                  <div style="font-size:15px;line-height:1.66;color:var(--tx2);text-wrap:pretty">The ledger has no holders. Nothing has been awarded, because no assembly has been held — so there is no weight in the federation at all, and the first delivery to be accepted will be the whole of it.</div>
+                  <div style="font-size:15px;line-height:1.66;color:var(--tx2);text-wrap:pretty">{{ ledgerEmptyLine }}</div>
                   <div style="font-size:13.5px;line-height:1.6;color:var(--tx3);margin-top:12px;text-wrap:pretty">When it fills, each row states a holder, its kind, its points, whether it is active, and the assembly it joined at. Weight is that number and nothing else — no appointment, no seniority, no purchase.</div>
                 </div>
               </sc-if>
@@ -1207,7 +1208,12 @@
                         <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.14em;color:var(--tx3);margin-bottom:6px">SPEAKS FOR IT</div>
                         <div style="display:flex;flex-direction:column;gap:4px">
                           <sc-for list="{{ u.who }}" as="w" hint-placeholder-count="1">
-                            <a href="{{ w }}" target="_blank" rel="noreferrer" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;word-break:break-all">{{ w }}</a>
+                            <sc-if value="{{ w.isLink }}" hint-placeholder-val="{{ true }}">
+                              <a href="{{ w.href }}" target="_blank" rel="noreferrer" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;word-break:break-all">{{ w.text }}</a>
+                            </sc-if>
+                            <sc-if value="{{ w.isText }}" hint-placeholder-val="{{ false }}">
+                              <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;word-break:break-all;color:var(--tx2)">{{ w.text }}</span>
+                            </sc-if>
                           </sc-for>
                         </div>
                       </div>
@@ -1217,7 +1223,12 @@
                         <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.14em;color:var(--tx3);margin-bottom:6px">WHERE THE WORK IS</div>
                         <div style="display:flex;flex-direction:column;gap:4px">
                           <sc-for list="{{ u.work }}" as="k" hint-placeholder-count="1">
-                            <a href="{{ k }}" target="_blank" rel="noreferrer" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;word-break:break-all">{{ k }}</a>
+                            <sc-if value="{{ k.isLink }}" hint-placeholder-val="{{ true }}">
+                              <a href="{{ k.href }}" target="_blank" rel="noreferrer" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;word-break:break-all">{{ k.text }}</a>
+                            </sc-if>
+                            <sc-if value="{{ k.isText }}" hint-placeholder-val="{{ false }}">
+                              <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;word-break:break-all;color:var(--tx2)">{{ k.text }}</span>
+                            </sc-if>
                           </sc-for>
                         </div>
                       </div>
@@ -1271,7 +1282,10 @@
               <div style="border:1px solid {{ auditFg }};padding:24px 26px;margin-bottom:24px">
                 <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;color:{{ auditFg }};margin-bottom:12px">{{ auditVerdict }}</div>
                 <div style="font-size:14.5px;line-height:1.64;color:var(--tx2);max-width:74ch;text-wrap:pretty">{{ auditWhy }}</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3);margin-top:14px">{{ auditCount }} ASSEMBLY REPORTS SUMMED · AWARDS + MODULE BONUSES − PENALTIES</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3);margin-top:14px">{{ auditCount }} PASSED ASSEMBLY REPORTS SUMMED · AWARDS + MODULE BONUSES − PENALTIES</div>
+                <sc-if value="{{ auditHasSkipped }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3);margin-top:8px">NOT COUNTED · {{ auditSkipped }}</div>
+                </sc-if>
               </div>
               <div style="display:flex;flex-direction:column;gap:1px">
                 <sc-for list="{{ auditRows }}" as="r" hint-placeholder-count="0">
@@ -1364,18 +1378,23 @@ const DAF_001 = DAF_R + '/blob/master/dafp/daf-001-phase-0-github-federation.md'
 const DAF_REC = DAF_R + '/tree/master/federation';
 
 const FORUM_SITE = 'https://forum.drayker.org';
-// The forum publishes every public issue and pull request of this repository
-// at a page named by its number, so the link is built from the number alone.
+// The General Forum publishes this repository's issues at /t/daf/<number>/; pull requests have no page there.
+// Forum links are built for issues only.
 const FORUM_DAF = FORUM_SITE + '/t/daf/';
 
-// Links that come from data (the snapshot, the GitHub API) are rendered only
-// when they point where the record lives: this organisation on GitHub, the
-// generated data beside this page, or the forum page of one of its threads.
+// Issue, claim and cycle links that come from data (the snapshot, the GitHub
+// API) are rendered only when they point where the record lives: this
+// organisation on GitHub, the generated data beside this page, or the forum
+// page of one of its issues. The links in unit records (speaks_for, work) are
+// not covered by this list: they are rendered as links only when they start
+// with https://, and as plain text otherwise (httpsHref below).
 const HREF_OK = ['https://github.com/draykerdk/', './data/', FORUM_DAF];
 const safeHref = (u) => (typeof u === 'string' && HREF_OK.some((p) => u.startsWith(p))
   && !u.includes('..') && !/[\s"'<>\\]/.test(u)) ? u : '';
 const issueNum = (n) => (Number.isSafeInteger(n) && n > 0 ? n : null);
 const forumHref = (n) => (issueNum(n) ? FORUM_DAF + n + '/' : '');
+const httpsHref = (u) => (typeof u === 'string' && u.startsWith('https://') && !/[\s"'<>\\]/.test(u)) ? u : '';
+const unitLink = (u) => { const href = httpsHref(u); return { text: String(u), href, isLink: !!href, isText: !href }; };
 const issueHref = (i) => safeHref(i && i.url) || (issueNum(i && i.num) ? DAF_R + '/issues/' + i.num : DAF_R + '/issues');
 
 const NAV = [
@@ -1519,7 +1538,7 @@ const DAF_SOURCES = [
 ];
 
 // An invented assembly, used only to teach the shape of the record. Marked as an
-// illustration everywhere it appears: no assembly has been held, and these rows
+// illustration everywhere it appears: it is not a real assembly, and these rows
 // describe no real person, unit or delivery.
 const DAF_EX = {
   month: '2026-09', window: 'opens 2026-09-01 · closes 2026-09-08 (seven days)',
@@ -1651,15 +1670,22 @@ class Component extends DCLogic {
     };
   };
 
+  // Entries of the four lists that are not objects are dropped once, here, so
+  // every reader below can take each entry as an object.
+  dafClean = (d) => {
+    const objs = (a) => (Array.isArray(a) ? a.filter((x) => !!x && typeof x === 'object' && !Array.isArray(x)) : []);
+    return { ...d, units: objs(d.units), assemblies: objs(d.assemblies), requests: objs(d.requests), issues: objs(d.issues) };
+  };
+
   loadDAF = async (force) => {
     if (this.state.dafState === 'loading') return;
     if (!force) {
       try {
         const c = JSON.parse(localStorage.getItem(this.DAF_CACHE) || 'null');
-        if (c && Date.now() - c.t < 18e5) {
+        if (c && c.d && typeof c.d === 'object' && Date.now() - c.t < 18e5) {
           // Cache hit still has to trigger the file reads and the cycle lookup, or
           // the record and the open cycle stay blank for the whole 30 minutes.
-          this.setState({ dafData: c.d, dafAt: c.t, dafState: 'ready' }, () => { this.loadDeep(); this.loadCycle(); });
+          this.setState({ dafData: this.dafClean(c.d), dafAt: c.t, dafState: 'ready' }, () => { this.loadDeep(); this.loadCycle(); });
           return;
         }
       } catch (e) {}
@@ -1696,6 +1722,7 @@ class Component extends DCLogic {
         } catch (e) {}
         d = { units, assemblies, requests, issues, src: 'api', ...this.snapExtras(null) };
       }
+      d = this.dafClean(d);
       const t = Date.now();
       try { localStorage.setItem(this.DAF_CACHE, JSON.stringify({ t, d })); } catch (e) {}
       this.setState({ dafData: d, dafAt: t, dafState: 'ready' }, () => {
@@ -1780,15 +1807,21 @@ class Component extends DCLogic {
   // total by hand: the deliveries table, the module bonus, and the penalties.
   parseAssembly = (md, meta) => {
     if (!md) return null;
-    // A section starts at its heading, or, where the template writes it as a bold
-    // label (**Module completions**), at that label.
+    // A section starts at its heading (## or ###, as tools/lib/assembly.js reads
+    // it), or, where the template writes it as a bold label (**Module
+    // completions**), at that label. It ends at the next heading of the same or a
+    // higher level; a bold label ends at the next ## heading.
     const rows = (heading, cols) => {
+      let level = 2;
       let i = md.search(new RegExp('^#+\\s*' + heading, 'im'));
-      if (i < 0) i = md.search(new RegExp('^\\*\\*' + heading + '\\*\\*\\s*$', 'im'));
+      if (i >= 0) level = Math.max(2, /^#+/.exec(md.slice(i))[0].length);
+      else i = md.search(new RegExp('^\\*\\*' + heading + '\\*\\*\\s*$', 'im'));
       if (i < 0) return [];
       const rest = md.slice(i);
-      const stop = rest.slice(1).search(/^##\s/m);
-      const chunk = stop < 0 ? rest : rest.slice(0, stop + 1);
+      // The search starts after the heading line, so the heading never stops itself.
+      const nl = rest.indexOf('\n');
+      const stop = nl < 0 ? -1 : rest.slice(nl + 1).search(new RegExp('^#{1,' + level + '}\\s', 'm'));
+      const chunk = stop < 0 ? rest : rest.slice(0, nl + 1 + stop);
       return chunk.split('\n').map((l) => l.split('|').map((x) => x.trim()))
         .filter((c) => c.length >= cols + 2 && !/^-+$/.test(c[1]) && !/^(holder|request)$/i.test(c[1]) && c[1])
         .map((c) => c.slice(1, -1));
@@ -1820,19 +1853,24 @@ class Component extends DCLogic {
 
   // ---- the audit -----------------------------------------------------------
   // "A decision that cannot be recomputed from the public record did not happen."
-  // So: sum every assembly and compare against LEDGER.md, naming any divergence.
+  // So: sum every assembly that passed and compare against LEDGER.md, naming any
+  // divergence. A failed or pending report awards nothing (DAF-002, and
+  // tools/lib/ledger.js): it is listed, not counted.
   auditRecord = () => {
     const d = this.state.deep;
     if (!d) return null;
     const summed = {};
-    d.assemblies.forEach((a) => Object.keys(a.net).forEach((h) => { summed[h] = (summed[h] || 0) + a.net[h]; }));
+    const passed = d.assemblies.filter((a) => /^passed$/i.test(String(a.outcome || '').trim()));
+    passed.forEach((a) => Object.keys(a.net).forEach((h) => { summed[h] = (summed[h] || 0) + a.net[h]; }));
+    const notCounted = d.assemblies.filter((a) => passed.indexOf(a) < 0)
+      .map((a) => ({ month: a.month, outcome: String(a.outcome || '').trim().toLowerCase() || 'not stated' }));
     const ledger = {};
     d.ledger.forEach((r) => { ledger[r.id] = r.points; });
     const ids = Object.keys(summed).concat(Object.keys(ledger).filter((k) => !(k in summed)));
     const rows = ids.map((id) => ({ id, summed: summed[id] || 0, stated: ledger[id] == null ? null : ledger[id] }))
       .map((r) => ({ ...r, ok: r.stated === r.summed }));
     return { rows, clean: rows.every((r) => r.ok), n: rows.length,
-      assemblies: d.assemblies.length, hasLedger: d.ledger.length > 0 };
+      assemblies: d.assemblies.length, counted: passed.length, notCounted, hasLedger: d.ledger.length > 0 };
   };
 
   // ==========================================================================
@@ -1891,13 +1929,19 @@ class Component extends DCLogic {
   // ---- the open cycle ------------------------------------------------------
   // A cycle is an issue whose title starts with [Cycle]. Its window is seven days
   // from the date written in the body; what the page shows is time left, and the
-  // claims already made in the thread.
+  // claims already made in the thread. A title naming the current month is
+  // preferred; next, one that names no month, as the cycle form's default title
+  // ("[Cycle] Assembly ") does; then any other [Cycle] issue.
   loadCycle = async () => {
     if (this.state.cycleState !== 'idle') return;
     this.setState({ cycleState: 'loading' });
     try {
       const d = this.state.dafData;
-      const cyc = ((d && d.issues) || []).filter((i) => !i.pr && /^\s*\[cycle\]/i.test(i.title))[0];
+      const cycles = ((d && d.issues) || []).filter((i) => i && !i.pr && /^\s*\[cycle\]/i.test(String(i.title || '')));
+      const month = new Date().toISOString().slice(0, 7);
+      const cyc = cycles.filter((i) => String(i.title).includes(month))[0]
+        || cycles.filter((i) => !/\d{4}-\d{2}/.test(String(i.title)))[0]
+        || cycles[0];
       if (!cyc) { this.setState({ cycleState: 'none' }); return; }
       const r = await fetch('https://api.github.com/repos/draykerdk/daf/issues/' + cyc.num,
         { headers: { Accept: 'application/vnd.github+json' } });
@@ -2379,7 +2423,7 @@ class Component extends DCLogic {
           // otherwise.
           ...(() => {
             const rows = snapLedger ? snapLedger.holders : (ready ? deep.ledger : null);
-            if (!rows) return { ledgerRows: [], ledgerEmpty: false, ledgerTotal: '0', ledgerActive: '0' };
+            if (!rows) return { ledgerRows: [], ledgerEmpty: false, ledgerEmptyLine: '', ledgerTotal: '0', ledgerActive: '0' };
             const total = rows.reduce((a, x) => a + x.points, 0);
             return {
               ledgerRows: rows.map((r) => ({ id: r.id, kind: r.kind, points: String(r.points), joined: r.joined,
@@ -2388,6 +2432,10 @@ class Component extends DCLogic {
                 share: ((r.points / (total || 1)) * 100).toFixed(1) + '%',
                 bar: Math.max(1, (r.points / (total || 1)) * 100).toFixed(1) + '%' })),
               ledgerEmpty: rows.length === 0,
+              // "No assembly has been held" only while that is true.
+              ledgerEmptyLine: held === 0
+                ? 'The ledger has no holders. Nothing has been awarded, because no assembly has been held — so there is no weight in the federation at all, and the first delivery to be accepted will be the whole of it.'
+                : 'The ledger has no holders. Assemblies were held, and none of them awarded points. There is no weight in the federation yet, and the first delivery to be accepted will be the whole of it.',
               ledgerTotal: String(total),
               ledgerActive: String(rows.filter((r) => r.active).reduce((a, x) => a + x.points, 0))
             };
@@ -2403,6 +2451,8 @@ class Component extends DCLogic {
           eventsHref: safeHref('./data/events.json'),
 
           unitRows: ready ? deep.units.map((u) => ({ ...u,
+            // A link only for an https:// address; anything else is shown as text.
+            who: u.who.map(unitLink), work: u.work.map(unitLink),
             kindLabel: (u.kind || 'unit').toUpperCase(),
             fnText: u.fn || 'No founding function stated in the record.',
             hasWho: u.who.length > 0, hasWork: u.work.length > 0,
@@ -2435,10 +2485,12 @@ class Component extends DCLogic {
           auditWhy: !audit ? '' : (audit.assemblies === 0
             ? 'No assembly report exists, so there is nothing to sum. This check is the reason the ledger is a convenience file rather than the source: the moment a report exists, this page adds it up independently.'
             : (audit.clean
-              ? 'Every holder\u2019s stated balance equals the sum of the awards, bonuses and penalties written into the reports. Nothing in the ledger came from anywhere else.'
-              : 'A stated balance does not equal the sum of the reports. The assemblies are the record — so the ledger is what needs correcting, and the divergence belongs in an issue.')),
+              ? 'Every holder\u2019s stated balance equals the sum of the awards, bonuses and penalties written into the reports that passed. A failed or pending report awards nothing, so it is listed and not counted. Nothing in the ledger came from anywhere else.'
+              : 'A stated balance does not equal the sum of the reports that passed. The assemblies are the record — so the ledger is what needs correcting, and the divergence belongs in an issue.')),
           auditFg: !audit || audit.clean ? '#3FA9FF' : '#FF5500',
-          auditCount: audit ? String(audit.assemblies) : '0',
+          auditCount: audit ? String(audit.counted) : '0',
+          auditHasSkipped: !!(audit && audit.notCounted.length),
+          auditSkipped: audit ? audit.notCounted.map((a) => (a.month || '?') + ' (' + a.outcome + ')').join(' · ') : '',
 
           // ---- the tally --------------------------------------------------
           tallyPr: s.tallyPr,
@@ -2471,8 +2523,6 @@ class Component extends DCLogic {
           tallyComments: t ? String(t.comments) : '0',
           tallyPrNum: t ? String(t.pr) : '',
           tallyPrUrl: t && issueNum(Number(t.pr)) ? DAF_R + '/pull/' + Number(t.pr) : DAF_R + '/pulls',
-          tallyPrForum: t ? forumHref(Number(t.pr)) : '',
-          tallyHasForum: !!(t && forumHref(Number(t.pr))),
 
           // ---- the open cycle ----------------------------------------------
           cycleOpen: s.cycleState === 'ready' && !!cyc,
@@ -2541,7 +2591,7 @@ class Component extends DCLogic {
       dafEmpty: ready && nU === 0 && nA === 0,
       dafThreads: ready ? dd.issues.filter((i) => i && !i.pr).slice(0, 6).map((i) => ({ num: String(i.num), title: String(i.title || ''),
         url: issueHref(i), forum: forumHref(i.num), hasForum: !!forumHref(i.num) })) : [],
-      dafHasThreads: ready && dd.issues.filter((i) => !i.pr).length > 0,
+      dafHasThreads: ready && dd.issues.filter((i) => i && !i.pr).length > 0,
 
       dafPipe: DAF_PIPE.map((st2, i) => {
         const on = s.dafStep === i;

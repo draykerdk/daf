@@ -2,10 +2,14 @@ name: Federation tally
 
 # A computation aid that a person runs by hand (Actions > Federation tally >
 # Run workflow) on an assembly pull request. It reads the pull request's votes
-# (comments, reviews and review comments), reads the record at the pull
-# request's head as data only, and runs `node tools/daf.js tally` from the
-# default branch. With `post` off it writes the tally to the run summary; with
-# `post` on it keeps one comment on the pull request up to date.
+# (comments, reviews and review comments) and runs `node tools/daf.js tally`
+# from the default branch, against the record of the default branch: units,
+# parameters, earlier assemblies and the ledger all come from this checkout.
+# From the pull request it takes one file, as data only: the report it adds,
+# federation/assemblies/<cycle>.md. Anything else the pull request changes is
+# not used, and is named in the result so a reader can see it. With `post` off
+# it writes the tally to the run summary; with `post` on it keeps one comment
+# on the pull request up to date.
 #
 # It never merges, never approves, never labels and never edits the report.
 # The vote table in the report is still written and merged by a person.
@@ -82,32 +86,55 @@ jobs:
             exit 1
           fi
           cycle="${BASH_REMATCH[1]}"
+          # Every other file the pull request changes, besides the report,
+          # federation/LEDGER.md and added unit records. None of it is used by
+          # the tally; it is only named in the result. Characters outside a
+          # plain path are shown as "?".
+          jq -r --arg report "$report" '
+            [ .[][]
+              | ( select(((.filename == $report and .status == "added")
+                          or .filename == "federation/LEDGER.md"
+                          or (.status == "added" and (.filename | test("^federation/units/[^/]+\\.yml$")))) | not)
+                  | .filename ),
+                (.previous_filename // empty)
+              | gsub("[^A-Za-z0-9._/@+-]"; "?") ]
+            | unique | map("`" + . + "`") | join(", ")' \
+            "$RUNNER_TEMP/files.json" > "$RUNNER_TEMP/also.txt"
           echo "Pull request #$PR is $state; head $head; report $report; cycle $cycle."
           {
             echo "head=$head"
             echo "state=$state"
             echo "cycle=$cycle"
+            echo "report=$report"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Fetch the pull request head as data
+      - name: Take the report from the pull request head, as data
         env:
           PR: ${{ inputs.pr }}
           HEAD: ${{ steps.pr.outputs.head }}
+          REPORT: ${{ steps.pr.outputs.report }}
         run: |
           set -euo pipefail
+          if ! [[ "$REPORT" =~ ^federation/assemblies/[0-9]{4}-(0[1-9]|1[0-2])\.md$ ]]; then
+            echo "::error::unexpected report path"
+            exit 1
+          fi
           git fetch --no-tags --depth=1 origin "refs/pull/$PR/head"
           fetched="$(git rev-parse FETCH_HEAD)"
           if [ "$fetched" != "$HEAD" ]; then
             echo "::error::the pull request moved while this ran (API head $HEAD, fetched $fetched); run it again"
             exit 1
           fi
-          mkdir -p "$RUNNER_TEMP/prhead"
-          git archive FETCH_HEAD federation dafp | tar -x -C "$RUNNER_TEMP/prhead"
-          # Files only: a symbolic link could make the tools read outside the record.
-          if [ -n "$(find "$RUNNER_TEMP/prhead" -type l -print -quit)" ]; then
-            echo "::error::the pull request head holds a symbolic link under federation/ or dafp/; refusing to read it"
+          # A regular file only (mode 100644): not a symbolic link, not a
+          # submodule, not a directory.
+          entry="$(git ls-tree FETCH_HEAD -- "$REPORT")"
+          if ! [[ "$entry" =~ ^100644\ blob\ [0-9a-f]{40}$'\t'"$REPORT"$ ]]; then
+            echo "::error::$REPORT in the pull request head is not a regular file; refusing to read it"
             exit 1
           fi
+          # Only this one file is read from the pull request. The record the tally
+          # weighs it against is the default branch, checked out above.
+          git show "FETCH_HEAD:$REPORT" > "$RUNNER_TEMP/report.md"
 
       - name: Read the votes
         env:
@@ -126,11 +153,16 @@ jobs:
           CYCLE: ${{ steps.pr.outputs.cycle }}
         run: |
           set -euo pipefail
-          node tools/daf.js tally --cycle "$CYCLE" --record "$RUNNER_TEMP/prhead" \
+          # The record is this checkout of the default branch; the report is the
+          # one file taken from the pull request head.
+          node tools/daf.js tally --cycle "$CYCLE" --report "$RUNNER_TEMP/report.md" \
             --comments "$RUNNER_TEMP/comments.json" \
             --reviews "$RUNNER_TEMP/reviews.json" \
             --review-comments "$RUNNER_TEMP/review-comments.json" \
             --pr "$PR" --head "$HEAD" > "$RUNNER_TEMP/tally.md"
+          if [ -s "$RUNNER_TEMP/also.txt" ]; then
+            printf '\nAlso changed in this pull request (not used by the tally): %s\n' "$(cat "$RUNNER_TEMP/also.txt")" >> "$RUNNER_TEMP/tally.md"
+          fi
 
       - name: Write the summary or the comment
         env:

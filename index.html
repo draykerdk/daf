@@ -853,6 +853,9 @@
                     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3)">{{ tallyFound }} VOTES FOUND IN {{ tallyComments }} COMMENTS</div>
                     <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em">
                       <a href="{{ tallyPrUrl }}" target="_blank" rel="noreferrer">PULL REQUEST #{{ tallyPrNum }} →</a>
+                      <sc-if value="{{ tallyHasForum }}" hint-placeholder-val="{{ false }}">
+                        <a href="{{ tallyForum }}" target="_blank" rel="noreferrer">READ ON THE FORUM →</a>
+                      </sc-if>
                     </div>
                     <div style="display:flex;flex-direction:column;gap:1px">
                       <sc-for list="{{ tallyRows }}" as="v" hint-placeholder-count="0">
@@ -1405,7 +1408,9 @@ const ASSEMBLY_TITLE = /^Assembly \d{4}-(0[1-9]|1[0-2])$/;
 const DAF_REC = DAF_R + '/tree/master/federation';
 
 const FORUM_SITE = 'https://forum.drayker.org';
-// The General Forum publishes this repository's issues at /t/daf/<number>/; pull requests have no page there.
+// The General Forum publishes this repository's issues at /t/daf/<number>/, and its
+// assembly reports (pull requests titled "Assembly YYYY-MM") while open and after
+// they are merged into master; other pull requests have no page there.
 // Forum links are built for issues only.
 const FORUM_DAF = FORUM_SITE + '/t/daf/';
 
@@ -1921,6 +1926,10 @@ class Component extends DCLogic {
       if (!pr.ok) throw new Error(pr.status === 404 ? 'No pull request #' + n + ' in the repository.' : 'GitHub answered ' + pr.status + '.');
       const prInfo = await pr.json();
       const assembly = ASSEMBLY_TITLE.test(String((prInfo && prInfo.title) || ''));
+      // The General Forum publishes an assembly report while it is open, and after
+      // it is merged into master; a closed, unmerged one has no page there.
+      const onForum = assembly && (prInfo.state === 'open'
+        || (!!prInfo.merged_at && !!prInfo.base && prInfo.base.ref === 'master'));
       // Every page of comments, 100 at a time, so a long thread is read whole.
       const comments = [];
       for (let page = 1; page <= 50; page++) {
@@ -1956,7 +1965,7 @@ class Component extends DCLogic {
       });
       rows.sort((a, b) => b.weight - a.weight);
       const cast = yes + no + abs;
-      this.setState({ tallyState: 'ready', tally: { rows, unknown, yes, no, abs, cast, active, pr: n, assembly,
+      this.setState({ tallyState: 'ready', tally: { rows, unknown, yes, no, abs, cast, active, pr: n, assembly, onForum,
         found: Object.keys(last).length, comments: (comments || []).length } });
     } catch (e) {
       this.setState({ tallyState: 'error', tallyMsg: String(e.message || e) });
@@ -2576,6 +2585,8 @@ class Component extends DCLogic {
           tallyComments: t ? String(t.comments) : '0',
           tallyPrNum: t ? String(t.pr) : '',
           tallyPrUrl: t && issueNum(Number(t.pr)) ? DAF_R + '/pull/' + Number(t.pr) : DAF_R + '/pulls',
+          tallyForum: t && t.onForum === true ? forumHref(Number(t.pr)) : '',
+          tallyHasForum: !!(t && t.onForum === true && forumHref(Number(t.pr))),
 
           // ---- the open cycle ----------------------------------------------
           cycleOpen: s.cycleState === 'ready' && !!cyc,

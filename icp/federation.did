@@ -1,0 +1,38 @@
+type Result = 
+ variant {
+   err: text;
+   ok: record {
+         head: text;
+         seq: nat;
+       };
+ };
+type EventV1 = 
+ record {
+   "blob": text;
+   cycle: text;
+   evidence: vec text;
+   holder: text;
+   kind: text;
+   points: int;
+   prev: text;
+   ref: text;
+   seq: nat;
+   value: text;
+ };
+service : {
+  append: (batch: vec EventV1) -> (Result);
+  events: (from: nat, limit: nat) -> (vec EventV1) query;
+  head: () -> (record {
+                 certificate: opt blob;
+                 head: text;
+                 seq: nat;
+               }) query;
+  ledger: () ->
+   (vec record {
+          active: bool;
+          id: text;
+          joined: text;
+          kind: text;
+          points: int;
+        }) query;
+}

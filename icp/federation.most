@@ -1,0 +1,22 @@
+// Version: 1.0.0
+type EventV1__925833239 =
+  {
+    blob : Text;
+    cycle : Text;
+    evidence : [Text];
+    holder : Text;
+    kind : Text;
+    points : Int;
+    prev : Text;
+    ref : Text;
+    seq : Nat;
+    value : Text
+  };
+type List__51365705<T> = ?(T, List__51365705<T>);
+type Stored__30262051 = {#v1 : EventV1__925833239};
+actor {
+  stable var appender : ?Principal;
+  stable var count : Nat;
+  stable var currentHead : Text;
+  stable var log : ?(Stored__30262051, List__51365705<Stored__30262051>)
+};

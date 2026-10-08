@@ -1,0 +1,13 @@
+schema_version: 1
+unit:
+  id: example-river
+  name: Example River
+  kind: participant
+  founding_function: >-
+    A fictional participant used only by the tests,
+    with a folded description.
+  speaks_for:
+    - https://github.com/example-river-gh
+  work:
+    - https://github.com/example-org/example-repo
+  joined: 2026-01

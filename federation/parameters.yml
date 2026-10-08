@@ -1,0 +1,14 @@
+# Starting values of the transitional federation. They are the numbers written
+# in DAF-000 and DAF-001, kept here so the tools read them from one place.
+# They change only by the procedure in DAF-000 §5, in the same pull request that
+# changes the text of DAF-000 or DAF-001. `node tools/daf.js check` fails when
+# this file and those documents disagree.
+schema_version: 1
+parameters:
+  points_per_function: 1          # DAF-000 §3.2
+  module_bonus_per_function: 1    # DAF-000 §3.2
+  quorum_percent: 30              # DAF-000 §5.3
+  quorum_base: active             # DAF-000 §5.3 and §3.4: active | total
+  majority: simple                # DAF-000 §5.3: more than half of the votes cast
+  window_days: 7                  # DAF-001 §4
+  dormant_after_assemblies: 3     # DAF-000 §3.4

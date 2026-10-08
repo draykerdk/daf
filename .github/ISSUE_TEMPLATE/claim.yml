@@ -17,6 +17,17 @@ body:
       placeholder: river-unit
     validations:
       required: true
+  - type: dropdown
+    id: record
+    attributes:
+      label: Record
+      description: Whether the holder already has a record in federation/units/. A record is accepted in the same assembly as its first delivery.
+      options:
+        - I already have a record
+        - First delivery, as a participant (one person)
+        - First delivery, as a unit (a group)
+    validations:
+      required: false
   - type: textarea
     id: what
     attributes:

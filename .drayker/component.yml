@@ -13,6 +13,7 @@ component:
     - A probable provisional ICP substrate if DAF reaches a phase that experiments with units of account, used to build and test Drayker's own infrastructure.
     - Transition of useful functions and transitional infrastructure into PAP, with DAF expected to dissolve when the durable environment exists.
     - "A public reading surface (daf.drayker.org) for the specification, the record and the instruments: unit record, claim, resource request, cycle and vote."
+    - "Instruments that check the record's structure and arithmetic, regenerate the ledger, draft assembly reports, compute the arithmetic of a vote and export the record as a replayable event log, without judging or deciding."
   non_scope:
     - Recorded units, issued points or held assemblies. None exist yet.
     - A deployed smart contract or an enforced voting procedure.
@@ -37,6 +38,10 @@ component:
         ref: dafp/daf-001-phase-0-github-federation.md
       - type: prototype
         ref: federation/
+      - type: prototype
+        ref: tools/daf.js
+      - type: test
+        ref: tools/test/
       - type: deployment
         ref: https://daf.drayker.org/
   risks:
@@ -50,4 +55,4 @@ component:
   source_of_truth:
     repository: https://github.com/draykerdk/daf
     path: README.md
-  last_reviewed: "2026-10-07"
+  last_reviewed: "2026-10-08"

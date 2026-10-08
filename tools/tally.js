@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+'use strict';
 /**
  * tally.js — count the votes on an assembly pull request.
  *
@@ -7,128 +8,113 @@
  *     VOTE: for | against | abstain
  *     AS: <unit-id or participant-id>
  *
- * Anything else in the comment is discussion. A holder's LAST comment of this form
- * is the one that counts, so a vote can be changed by voting again before the window
- * closes. Weight comes from the ledger as it stood at the PREVIOUS assembly, so the
- * awards under vote cannot change the votes that approve them — which is why this
- * script reads the ledger from a git ref, not from the working tree.
+ * Anything else in the comment is discussion. A holder's LAST valid comment of
+ * this form is the one that counts. Weight comes from the assemblies held before
+ * the cycle under vote (DAF-001 §4.5). Unit records, parameters and earlier
+ * assemblies are read from the record in the working tree, which should be the
+ * default branch (DAF-002 §5); with --report <file>, only the report under vote
+ * is read from that file, as `node tools/daf.js tally --report` does.
  *
- * The tally is still merged by a person, and the pull request is still argued by
- * people. This only removes the arithmetic.
+ * This is a thin wrapper: it fetches the comments with the GitHub CLI and hands
+ * them to tools/lib/tally.js, the same arithmetic as `node tools/daf.js tally`,
+ * with the same refusals: a record holding a closed report whose outcome cannot
+ * be recomputed (the founding case) is not folded without --allow-undetermined,
+ * as `close` and `ledger --write` do not fold it. An undetermined outcome for
+ * the report under vote is printed, and `close` will not write it.
+ * The tally is still written into the report and merged by a person.
  *
  * Usage:
- *   node tools/tally.js <pr-number> [--ledger-ref <git-ref>]
+ *   node tools/tally.js <pr-number> [--cycle <YYYY-MM>] [--root <dir>]
+ *                       [--report <file>] [--allow-undetermined]
  *
- * Requires: the GitHub CLI (`gh`), authenticated, and `git`. No dependencies.
+ * Requires: the GitHub CLI (`gh`), authenticated. No dependencies.
  */
 
-const { execFileSync } = require('child_process');
+const path = require('node:path');
+const { execFileSync } = require('node:child_process');
+const { loadRecord, withReport } = require('./lib/record');
+const { computeTally, requireDetermined } = require('./lib/tally');
+const { renderTally } = require('./lib/render');
 
-const args = process.argv.slice(2);
-const pr = args[0];
-if (!pr || /^-/.test(pr)) {
-  console.error('usage: node tools/tally.js <pr-number> [--ledger-ref <git-ref>]');
-  process.exit(1);
-}
-const refIdx = args.indexOf('--ledger-ref');
-const ledgerRef = refIdx >= 0 ? args[refIdx + 1] : 'HEAD';
+const USAGE = 'usage: node tools/tally.js <pr-number> [--cycle <YYYY-MM>] [--root <dir>] [--report <file>] [--allow-undetermined]';
 
-const sh = (cmd, list) => execFileSync(cmd, list, { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
-
-// ---- the ledger: holder -> { points, active } -------------------------------
-// LEDGER.md is a convenience file summed from the assemblies. If it ever disagrees
-// with them, the assemblies are right — check before trusting a surprising tally.
-function readLedger(ref) {
-  let md;
-  try {
-    md = sh('git', ['show', ref + ':federation/LEDGER.md']);
-  } catch (e) {
-    console.error('could not read federation/LEDGER.md at ' + ref);
-    process.exit(1);
+function main(argv) {
+  const args = argv.slice();
+  if (!args.length || args.includes('--help') || args.includes('-h')) {
+    (args.length ? process.stdout : process.stderr).write(USAGE + '\n');
+    return args.length ? 0 : 1;
   }
-  const holders = new Map();
-  md.split('\n').forEach((line) => {
-    const cells = line.split('|').map((c) => c.trim());
-    // | Holder | Kind | Points | Active | Joined |
-    if (cells.length < 7) return;
-    const id = cells[1].replace(/`/g, '');
-    const pts = parseInt(cells[3], 10);
-    if (!id || id === '—' || /^holder$/i.test(id) || /^-+$/.test(id) || isNaN(pts)) return;
-    holders.set(id, { points: pts, active: /^(yes|active|true)$/i.test(cells[4]) });
-  });
-  return holders;
+  const take = (flag) => {
+    const i = args.indexOf(flag);
+    if (i < 0) return undefined;
+    const v = args[i + 1];
+    args.splice(i, 2);
+    return v;
+  };
+  if (args.includes('--ledger-ref')) {
+    take('--ledger-ref');
+    process.stderr.write('note: --ledger-ref is ignored. Weights now come from the assemblies before the cycle under vote (DAF-001 §4.5), folded from the record in the working tree.\n');
+  }
+  const allowUndetermined = args.includes('--allow-undetermined');
+  if (allowUndetermined) args.splice(args.indexOf('--allow-undetermined'), 1);
+  const cycleArg = take('--cycle');
+  const reportArg = take('--report');
+  const root = path.resolve(take('--root') || path.resolve(__dirname, '..'));
+  const pr = args[0];
+  if (cycleArg !== undefined && !/^\d{4}-(0[1-9]|1[0-2])$/.test(cycleArg)) {
+    process.stderr.write(USAGE + '\n');
+    return 1;
+  }
+  if (!pr || !/^\d+$/.test(pr) || args.length > 1) {
+    process.stderr.write(USAGE + '\n');
+    return 1;
+  }
+
+  const gh = (list) => execFileSync('gh', list, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] });
+  const ghJson = (list) => JSON.parse(gh(list));
+  const repo = 'repos/{owner}/{repo}/';
+
+  try {
+    const comments = ghJson(['api', '--paginate', '--slurp', repo + 'issues/' + pr + '/comments']);
+    let reviews = [];
+    let reviewComments = [];
+    let head = null;
+    let cycle = cycleArg;
+    try {
+      reviews = ghJson(['api', '--paginate', '--slurp', repo + 'pulls/' + pr + '/reviews']);
+      reviewComments = ghJson(['api', '--paginate', '--slurp', repo + 'pulls/' + pr + '/comments']);
+      head = gh(['api', repo + 'pulls/' + pr, '--jq', '.head.sha']).trim() || null;
+      if (!cycle) {
+        const files = ghJson(['api', '--paginate', '--slurp', repo + 'pulls/' + pr + '/files']).flat();
+        const reports = [...new Set(files.map((f) => /^federation\/assemblies\/(\d{4}-\d{2})\.md$/.exec(f.filename)).filter(Boolean).map((m) => m[1]))];
+        if (reports.length === 1) cycle = reports[0];
+        else throw new Error('the pull request changes ' + reports.length + ' assembly reports; give the cycle with --cycle YYYY-MM');
+      }
+    } catch (e) {
+      if (!cycle) throw e;
+      process.stderr.write('note: ' + String(e.message || e).split('\n')[0] + '\n');
+    }
+    let local = null;
+    try { local = execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch (e) { /* not a git checkout */ }
+    if (head && local && local === head && !reportArg) process.stderr.write('note: the working tree is the pull request head; unit records, parameters and earlier assemblies are read from it. DAF-002 §5 reads them from the default branch: run this from a checkout of it, with --report <the report file>.\n');
+    else if (head && local && local !== head) process.stderr.write('note: the working tree is at ' + local.slice(0, 7) + ', the pull request head is ' + head.slice(0, 7) + '; weights and speakers are read from the working tree.\n');
+
+    let record = loadRecord(root);
+    if (!record.parameters) throw new Error('federation/parameters.yml is missing or invalid');
+    for (const w of requireDetermined(record, record.parameters, allowUndetermined, 'tally ' + cycle, cycle)) process.stderr.write('WARNING: ' + w + '\n');
+    if (reportArg) record = withReport(record, path.resolve(reportArg), cycle);
+    const report = record.assemblies.find((a) => a.cycle === cycle);
+    if (report) for (const p of report.problems) process.stderr.write('WARNING: ' + p + '\n');
+    const t = computeTally({ record, cycle, comments, reviews, reviewComments, pr, head });
+    if (t.outcome === 'undetermined') process.stderr.write('NOTE: the outcome is undetermined; `close` will not write it.\n');
+    process.stdout.write(renderTally(t));
+    return 0;
+  } catch (e) {
+    process.stderr.write('error: ' + String(e.message || e).trim() + '\n');
+    return 1;
+  }
 }
 
-// ---- the comments -----------------------------------------------------------
-function readVotes(number) {
-  const raw = sh('gh', ['api', '--paginate', 'repos/{owner}/{repo}/issues/' + number + '/comments',
-    '--jq', '.[] | {user: .user.login, at: .created_at, body: .body}']);
-  const last = new Map(); // holder -> { choice, user, at }
-  raw.split('\n').filter(Boolean).forEach((line) => {
-    let c;
-    try { c = JSON.parse(line); } catch (e) { return; }
-    const vote = /^\s*VOTE:\s*(for|against|abstain)\s*$/im.exec(c.body || '');
-    const as = /^\s*AS:\s*`?([a-z0-9-]+)`?\s*$/im.exec(c.body || '');
-    if (!vote || !as) return;
-    last.set(as[1], { choice: vote[1].toLowerCase(), user: c.user, at: c.at });
-  });
-  return last;
-}
+if (require.main === module) process.exitCode = main(process.argv.slice(2));
 
-const ledger = readLedger(ledgerRef);
-const votes = readVotes(pr);
-
-let activePoints = 0;
-ledger.forEach((h) => { if (h.active) activePoints += h.points; });
-
-const rows = [];
-let cast = 0, yes = 0, no = 0, abstain = 0;
-const unknown = [];
-
-votes.forEach((v, id) => {
-  const h = ledger.get(id);
-  if (!h) { unknown.push(id + ' (' + v.user + ')'); return; }
-  const w = h.points;
-  rows.push({ id: id, choice: v.choice, weight: w, user: v.user });
-  cast += w;
-  if (v.choice === 'for') yes += w;
-  else if (v.choice === 'against') no += w;
-  else abstain += w;
-});
-
-rows.sort((a, b) => b.weight - a.weight || a.id.localeCompare(b.id));
-
-const participation = activePoints > 0 ? (cast / activePoints) * 100 : 0;
-const quorum = participation >= 30;
-const majority = cast > 0 && yes * 2 > cast;
-const passed = quorum && majority;
-
-const pct = participation.toFixed(0) + '%';
-
-console.log('## The vote');
-console.log('');
-console.log('Weight from the ledger at `' + ledgerRef + '`.');
-console.log('');
-console.log('| | |');
-console.log('| --- | --- |');
-console.log('| Active points | ' + activePoints + ' |');
-console.log('| Votes cast | ' + cast + ' |');
-console.log('| Participation | ' + pct + ' (quorum 30%) |');
-console.log('| For / against / abstain | ' + yes + ' / ' + no + ' / ' + abstain + ' |');
-console.log('| **Outcome** | **' + (passed ? 'passed' : 'failed') + '** |');
-console.log('');
-if (!quorum) {
-  console.log('Failed for lack of participation: below the 30% floor nothing passes, whatever the split.');
-  console.log('');
-}
-console.log('**Votes**');
-console.log('');
-console.log('| Holder | Vote | Weight |');
-console.log('| --- | --- | --- |');
-rows.forEach((r) => console.log('| `' + r.id + '` | ' + r.choice + ' | ' + r.weight + ' |'));
-
-if (unknown.length) {
-  console.log('');
-  console.log('> Not counted — no record in the ledger at this ref: ' + unknown.join(', ') + '.');
-  console.log('> A holder exists in the federation from the assembly that accepts its record.');
-}
+module.exports = { main, USAGE };

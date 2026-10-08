@@ -1,0 +1,14 @@
+schema_version: 1
+unit:
+  id: example-delta
+  name: Example Delta
+  kind: unit
+  founding_function: >-
+    A fictional unit used only by the tests,
+    with a folded description.
+  speaks_for:
+    - https://github.com/example-delta-gh
+    - https://github.com/Example-Delta-Two-GH
+  work:
+    - https://github.com/example-org/example-repo
+  joined: 2026-01

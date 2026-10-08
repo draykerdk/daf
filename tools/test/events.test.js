@@ -10,7 +10,9 @@ const { FIX, ROOT, tmpCopy, read, write } = require('./helpers');
 
 // Computed once from tools/test/fixtures/basic and written here, so that any
 // change to the derivation, or to the fixture's bytes, fails this test.
-const GOLDEN_HEAD = '4e0553ad0fb2621a95df6c8423d65f077a0977613cb0326c00888324074199f9';
+// Before request.decided carried an empty holder (audit DAF-C3) it was
+// 4e0553ad0fb2621a95df6c8423d65f077a0977613cb0326c00888324074199f9.
+const GOLDEN_HEAD = '65c6a3a9446a70174761d475f3ef0f7ec0ce94077c20c2b5758217959e73cbd7';
 
 test('events: golden head of the basic fixture', () => {
   const d = deriveEvents(loadRecord(path.join(FIX, 'basic')));
@@ -26,7 +28,8 @@ test('events: golden head of the basic fixture', () => {
   assert.equal(penalty.points, -1);
   assert.match(penalty.preimage, /\npoints=-1\n/);
   const req = d.events.find((e) => e.kind === 'request.decided');
-  assert.deepEqual([req.holder, req.value, req.ref], ['example-delta', 'approved', 'federation/requests/1-example-tooling.md']);
+  // The requester is not read from the request file, which can change after the decision.
+  assert.deepEqual([req.holder, req.value, req.ref], ['', 'approved', 'federation/requests/1-example-tooling.md']);
   const closed = d.events[7];
   assert.equal(closed.preimage, [
     'daf-event/1', 'seq=8', 'kind=assembly.closed', 'cycle=2026-01', 'holder=', 'points=0', 'value=passed',

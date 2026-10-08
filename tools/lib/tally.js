@@ -27,6 +27,8 @@ const VOTE_RE = /^\s*VOTE:\s*(for|against|abstain)\s*$/im;
 const AS_RE = /^\s*AS:\s*`?([a-z0-9-]+)`?\s*$/im;
 
 const FOUNDING = 'No holder had weight before this assembly. DAF-000 and DAF-001 do not specify how the founding assembly is decided; the outcome cannot be computed.';
+/** The line a tally prints while the window is still open. */
+const PROVISIONAL = 'The window is still open: this count is provisional.';
 const NO_BASE = 'No points counted toward the quorum base before this assembly. DAF-000 and DAF-001 do not specify how participation is computed against a base of zero; the outcome cannot be computed.';
 const BELOW_ZERO = 'DAF-000 §7 says a sanctioned holder loses its accumulated points; points below zero are not specified';
 /** The check message for a closed report decided before any holder had weight. */
@@ -106,7 +108,11 @@ const ts = (s) => { const t = Date.parse(s); return isNaN(t) ? null : t; };
 
 /**
  * computeTally({ record, cycle, comments, reviews, reviewComments, params,
- * masterRecord, pr, head }) -> result object (see renderTally).
+ * masterRecord, pr, head, now }) -> result object (see renderTally).
+ *
+ * With masterRecord, speaks_for is read from its unit records only. `now`
+ * (milliseconds, default the current time) marks the result provisional while
+ * it is before the close of the window.
  */
 function computeTally(input) {
   const record = input.record;
@@ -125,9 +131,13 @@ function computeTally(input) {
   const window = report.window;
   const opens = window ? Date.parse(window.opens + 'T00:00:00Z') : null;
   const closes = window ? Date.parse(window.closes + 'T00:00:00Z') : null;
+  const now = input.now == null ? Date.now() : input.now;
+  if (typeof now !== 'number' || isNaN(now)) throw new Error('now must be a time in milliseconds');
 
+  // Who may speak for a holder: from the default branch's unit records when
+  // they are given, so a pull request cannot add an account to speaks_for.
   const speakers = (id) => {
-    const u = record.units.get(id) || (input.masterRecord && input.masterRecord.units.get(id));
+    const u = input.masterRecord ? input.masterRecord.units.get(id) : record.units.get(id);
     return u ? u.logins : null;
   };
 
@@ -197,6 +207,7 @@ function computeTally(input) {
     participation: null, quorumMet: null, majority: null, outcome: null,
     sentences: [], concentration: [], votes, notCounted,
     commentsCount: comments.length + reviews.length + reviewComments.length,
+    provisional: closes !== null && !isNaN(closes) && now < closes,
     prior
   };
   t.cast = t.for + t.against + t.abstain;
@@ -230,4 +241,4 @@ function computeTally(input) {
   return t;
 }
 
-module.exports = { computeTally, flattenPages, readVote, voteBase, undeterminedReports, requireDetermined, noWeight, belowZero, FOUNDING, FOUNDING_CHECK, NO_BASE, BELOW_ZERO, VOTE_RE, AS_RE };
+module.exports = { computeTally, flattenPages, readVote, voteBase, undeterminedReports, requireDetermined, noWeight, belowZero, FOUNDING, FOUNDING_CHECK, NO_BASE, PROVISIONAL, BELOW_ZERO, VOTE_RE, AS_RE };

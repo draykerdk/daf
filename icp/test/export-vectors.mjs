@@ -26,7 +26,8 @@ const fakeBlob = (s) => createHash('sha1').update('synthetic ' + s).digest('hex'
 /**
  * A second, synthetic record in the shape loadRecord returns, covering what
  * the basic fixture does not: dormancy and return, a failed assembly whose
- * delivery rows are not events, a request without a requester (empty holder),
+ * delivery rows are not events, request events (whose holder is always empty,
+ * since the request file is mutable),
  * an assembly without a cycle issue (no evidence), a later record of a holder
  * at 0 points who is active in that assembly (example-fern), a later record
  * of a holder with points who was active in an earlier closed assembly but

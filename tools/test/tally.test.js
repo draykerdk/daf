@@ -182,14 +182,15 @@ test('render: user strings are inline code, defused and capped', () => {
 test('tally: T2 a dormant holder whose vote is counted joins the base; participation never exceeds 100%', () => {
   const fs = require('node:fs');
   const path = require('node:path');
-  const { run, read } = require('./helpers');
+  const { run, read, commitAll } = require('./helpers');
   const dir = tmpCopy('basic');
   const RIVER_ROW = '| `example-river` | A fictional delivery under vote | #41 | https://github.com/example-org/example-repo/pull/10 | 1 |\n';
   const close = (cycle, comments) => {
+    const base = commitAll(dir); // the default branch: every earlier report merged
     write(dir, 'federation/assemblies/' + cycle + '.md', pendingReport({ cycle }).replace(RIVER_ROW, ''));
     const file = path.join(dir, 'c-' + cycle + '.json');
     fs.writeFileSync(file, JSON.stringify(comments));
-    const r = run(['close', cycle, '--root', dir, '--comments', file, '--allow-undetermined']);
+    const r = run(['close', cycle, '--root', dir, '--comments', file, '--base-ref', base, '--allow-undetermined']);
     assert.equal(r.code, 0, r.err);
     return read(dir, 'federation/assemblies/' + cycle + '.md');
   };
@@ -199,6 +200,7 @@ test('tally: T2 a dormant holder whose vote is counted joins the base; participa
   assert.match(close('2026-04', cedarFor), /\*\*failed\*\*/);
   assert.match(close('2026-05', cedarFor), /\*\*failed\*\*/);
   assert.match(close('2026-06', cedarFor), /\| Active points \| 1 \|[\s\S]*\*\*passed\*\*/);
+  const base7 = commitAll(dir);
   write(dir, 'federation/assemblies/2026-07.md', pendingReport({ cycle: '2026-07' }).replace(RIVER_ROW, ''));
   const record = loadRecord(dir);
   const t7 = (comments) => computeTally({ record, cycle: '2026-07', comments });
@@ -236,7 +238,7 @@ test('tally: T2 a dormant holder whose vote is counted joins the base; participa
   // close writes the same base, and check recomputes it from the Votes table.
   const file = path.join(dir, 'c-2026-07.json');
   fs.writeFileSync(file, JSON.stringify([delta, cedarAgainst]));
-  assert.equal(run(['close', '2026-07', '--root', dir, '--comments', file, '--allow-undetermined']).code, 0);
+  assert.equal(run(['close', '2026-07', '--root', dir, '--comments', file, '--base-ref', base7, '--allow-undetermined']).code, 0);
   assert.match(read(dir, 'federation/assemblies/2026-07.md'), /\| Active points \| 5 \|\n\| Votes cast \| 5 \|\n\| Participation \| 100% \(quorum 30%\) \|/);
   const check = run(['check', '--root', dir, '--allow-undetermined']);
   assert.equal(check.code, 0, check.err);

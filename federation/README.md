@@ -34,10 +34,10 @@ Nothing in this directory is edited directly on `master`. Every change arrives a
 
 ## Running an assembly
 
-1. **Open the cycle** with the [cycle form](https://github.com/draykerdk/daf/issues/new?template=cycle.yml). The window is seven days.
+1. **Open the cycle** with the [cycle form](https://github.com/draykerdk/daf/issues/new?template=cycle.yml). The window is seven full days: it opens at 00:00 UTC of the opening day and closes at 00:00 UTC of the closing day.
 2. **Claim deliveries** with the [claim form](https://github.com/draykerdk/daf/issues/new?template=claim.yml), one issue per function or module. A holder without a record says so in the claim.
 3. **Draft the report**: `node tools/daf.js draft YYYY-MM`. It writes `assemblies/YYYY-MM.md` with a row for each well-formed claim of the cycle, a record stub in `units/` for each new holder, and the outcome left `pending`. Claims it could not draft are listed at the top of the file. Fill in the prose, check every row against its claim, and complete every line marked `TODO(person)`.
-4. **Open the report as a pull request** titled `Assembly YYYY-MM`. It stays open for the whole window, and anyone can argue any line of it.
+4. **Open the report as a pull request** titled `Assembly YYYY-MM`, whose description starts with `Cycle issue: #N`, so the cycle thread links to it. It stays open for the whole window, and anyone can argue any line of it.
 5. **Vote.** Each holder votes with one conversation comment on that pull request, posted from an account its record lists under `speaks_for`:
 
    ```text
@@ -46,7 +46,7 @@ Nothing in this directory is edited directly on `master`. Every change arrives a
    ```
 
    A holder's last comment of this form counts. Votes written in a review or on a line of the diff are not counted.
-6. **Compute the tally** whenever it helps, by running the **Federation tally** workflow from the Actions tab with the pull-request number. It writes the arithmetic to the run summary, or to one comment on the pull request when `post` is ticked. It merges and labels nothing.
+6. **Compute the tally** whenever it helps, by running the **Federation tally** workflow from the Actions tab with the pull-request number. It takes the unit records, parameters and earlier assemblies from `master` and only the report from the pull request, and writes the arithmetic to the run summary, or to one comment on the pull request when `post` is ticked. It merges and labels nothing.
 7. **Close** after the window:
 
    ```bash
@@ -56,7 +56,7 @@ Nothing in this directory is edited directly on `master`. Every change arrives a
 
    This writes the vote tables and the outcome into the report, sets `joined` on the records the assembly accepts and regenerates `LEDGER.md`. Review the diff, push it to the pull request, and merge. A failed assembly is merged too, and recorded as failed.
 
-The first assembly cannot be closed yet. Weight comes from the assemblies before it, and before the first there are none, so no participation can be computed. DAF-000 and DAF-001 do not say how a founding assembly is decided, and the tally reports that case as undetermined until they do ([DAF-002 §7](../dafp/daf-002-phase-0-instruments.md#7-what-stays-unspecified)).
+The first assembly cannot be recorded yet. Weight comes from the assemblies before it, and before the first there are none, so no participation can be computed. DAF-000 and DAF-001 do not say how a founding assembly is decided: the tally reports that case as undetermined, `close` does not write it, and `check` stops on a report that records it, until DAF-001 §4 says how ([DAF-002 §7](../dafp/daf-002-phase-0-instruments.md#7-what-stays-unspecified)).
 
 ## State
 

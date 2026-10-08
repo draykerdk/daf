@@ -52,7 +52,7 @@ Contribution is attributable through [UID](https://uid.drayker.org), while feder
 
 - **[DAF-000](./dafp/daf-000-federation-constitution.md)**. The minimal constitution, independent of any platform: participants and units, how a point is earned, how points become voting weight, quorum and majority, how a resource request is judged, penalties and exit.
 - **[DAF-001](./dafp/daf-001-phase-0-github-federation.md)**. Phase 0, the initial version: the federation designed to run on this repository, with no chain and no unit of account, and an explicit account of what is deferred to later phases.
-- **[DAF-002](./dafp/daf-002-phase-0-instruments.md)** (proposal). The instruments that keep the record in Phase 0: they check its structure and arithmetic, regenerate the ledger, draft assembly reports and compute the arithmetic of a vote, and export the record as an event log a later substrate can replay. They never judge, merge or decide.
+- **[DAF-002](./dafp/daf-002-phase-0-instruments.md)** (draft). The instruments that keep the record in Phase 0: they check its structure and arithmetic, regenerate the ledger, draft assembly reports and compute the arithmetic of a vote, and export the record as an event log a later substrate can replay. They never judge, merge or decide.
 
 The record itself lives in [`federation/`](./federation): unit records, assembly reports, resource requests and the ledger, in plain text under version control, so that any claim about who delivered what can be checked by reading.
 
@@ -68,7 +68,7 @@ Open an issue. Issues small enough for one person to finish carry the `open-func
 
 Run `node --test tools/test` and `node tools/daf.js check` before opening a change to the record or the tools, and `node tools/render-check.js` before opening a site change. The render check exercises the empty, snapshot, malformed-snapshot and offline states without sending any external action.
 
-Every issue and pull request of this repository can also be read, with its replies, on the [General Forum](https://forum.drayker.org/), which brings the public threads of all Drayker repositories into one place. Replies are still written here, on GitHub.
+The issues of this repository can also be read, with their replies, on the [General Forum](https://forum.drayker.org/), the reading surface for public threads across Drayker. Replies are still written here, on GitHub.
 
 Related: [`dfmp`](https://dfmp.drayker.org) (how proposals are validated) · [`uid`](https://uid.drayker.org) (identity and contribution) · [`advices`](https://advices.drayker.org) (councils)
 

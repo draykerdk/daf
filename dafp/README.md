@@ -6,7 +6,7 @@ Proposals that specify how the federation works. A proposal here is a document u
 | --- | --- | --- |
 | [DAF-000](./daf-000-federation-constitution.md) | Minimal constitution of the federation | draft |
 | [DAF-001](./daf-001-phase-0-github-federation.md) | Phase 0: the federation on a repository | draft |
-| [DAF-002](./daf-002-phase-0-instruments.md) | Phase 0 instruments: recomputation, drafting and a portable record | proposal |
+| [DAF-002](./daf-002-phase-0-instruments.md) | Phase 0 instruments: recomputation, drafting and a portable record | draft |
 
 **DAF-000** is substrate-independent: participants and units, how a federative point is earned, how points become voting weight, quorum and majority, how a resource request is judged against the last-resort rule, penalties and exit.
 

@@ -1,7 +1,6 @@
 # DAF-002. Phase 0 instruments: recomputation, drafting and a portable record
 
-**Status:** proposal · **Type:** process · **Created:** 2026-10-08 · **License:** CC BY 4.0
-**Discussion:** https://github.com/draykerdk/daf/issues/2
+**Status:** draft · **Type:** process · **Created:** 2026-10-08 · **License:** CC BY 4.0
 
 ## Abstract
 
@@ -19,7 +18,7 @@ They are also how the record stays portable. DAF-001 §7 expects the history in 
 
 - **They do not judge.** Whether a delivery happened, whether it is one function or several, and whether a request is justified are argued by people, in public (DAF-001 §2).
 - **They do not decide.** No instrument merges, labels, closes or approves anything. The vote table in an assembly report is still written by a person and merged by a person.
-- **They do not run on their own.** The tally is a workflow someone dispatches for one pull request. Checks run on pull requests and report. Nothing reacts to a comment by itself.
+- **They never act on the record by themselves.** The tally runs only when a person dispatches it for one pull request. The checks and the site snapshot run on pushes, pull requests, changes to federation issues and a daily schedule, and they only read and report. Nothing reacts to a comment by itself.
 - **They do not vote.** A vote is posted by the holder, or by someone the holder's record lists as able to speak for it. A tool, or anyone acting on another's behalf, never casts one.
 
 ## 3. The instruments
@@ -48,11 +47,14 @@ The file is not a second constitution. `check` fails whenever it disagrees with 
 
 DAF-001 leaves a few operational details implicit. The instruments need an answer to run, so they apply the readings below. Each is a proposal of this document, and each can be changed the same way as any other rule.
 
-- **The window** opens at 00:00:00 UTC of the day it opens and closes at 23:59:59 UTC of the day it closes, so both days count.
+- **The window** opens at 00:00 UTC of the day it opens and closes at 00:00 UTC of the day it closes. The cycle form sets the closing day seven days after the opening day, so the window is seven full days.
 - **Who can vote for a holder.** A vote counts when its author is listed in the holder's `speaks_for`. GitHub logins are compared without regard to case. A vote by anyone else is listed, with the reason, and not counted.
 - **Edited votes.** A vote comment edited after the window closes is listed and not counted.
 - **Where votes go.** Votes are conversation comments on the report's pull request. A vote written in a review or on a line of the diff is listed and not counted.
 - **Weight** comes from the assemblies held before the cycle, which is the ledger as it stood at the previous assembly (DAF-001 §4, step 5).
+- **What the tally reads.** Unit records, parameters and earlier assemblies come from `master`; only the report under vote comes from its pull request. A pull request therefore cannot change who may vote or what a vote weighs. Anything else it changes is listed next to the tally and not used.
+- **Dormant holders who vote.** DAF-000 §3.4 says a dormant holder becomes active again by voting. Its points therefore join the base of the vote in which it votes, so participation never exceeds the whole.
+- **Points below zero** are not specified: DAF-000 §7 says a sanctioned holder loses its accumulated points. `check` stops when a penalty would take a holder below zero.
 - **A failed assembly** awards nothing: its deliveries, bonuses, penalties and new records do not enter the ledger. Its votes still count as activity, because DAF-000 §3.4 makes a holder active when it casts a vote.
 - **Concentration is stated.** The tally shows each holder's share of the base, and says so when one holder alone reaches the quorum or the majority. DAF-000 §5.4 already says the founding steward's share is a majority while the total is small; the tally says it at the moment it decides something.
 
@@ -112,13 +114,15 @@ The log carries the assemblies. It does not carry vetoes or any other record tha
 
 The instruments stop where the documents stop. Two such places matter now.
 
-**The founding assembly.** Weight comes from the assemblies before the cycle, and before the first assembly there are none. No holder has weight, so no participation can be computed. DAF-000 and DAF-001 do not say how the first assembly is decided. The tally reports the outcome of that case as *undetermined*, lists the votes it found, and stops. The decision belongs to a change in DAF-001 §4, not to a tool.
+**The founding assembly.** Weight comes from the assemblies before the cycle, and before the first assembly there are none. No holder has weight, so no participation can be computed. DAF-000 and DAF-001 do not say how the first assembly is decided. The tally reports the outcome of that case as *undetermined* and lists the votes it found. `close` does not write it, and `check` stops with an error on any report whose passed or failed outcome cannot be recomputed this way, because a decision that cannot be recomputed from the record did not happen (DAF-000 §8). The tests use a fictional founding assembly through an option meant only for them. The decision belongs to a change in DAF-001 §4, not to a tool.
 
 **Corrections.** The record's README says a mistake in a past assembly is corrected by a later assembly, not by editing the original. `check` warns when a merged report is modified and names the file, and it does not block the change. Whether that should become a hard rule is left to the federation.
 
 ## 8. What merging this proposal decides
 
 That the instruments of §3 become the way the record is checked and maintained in Phase 0; that `federation/parameters.yml` holds the numbers and must agree with the documents; that the readings of §5 apply until changed; and that the event log of §6, in version 1, is the portable form of the record. Nothing else in DAF-000 or DAF-001 changes.
+
+Two sentences of DAF-001 read differently once the instruments exist, and are left for the federation to reword. §6 says the tally is computed by a person: a person still runs the computation and writes the table, and the arithmetic is the tool's. §7 names "participation outgrows the manual tally" as a reason to leave Phase 0: with the arithmetic automated, that condition would show as decisions made late for other reasons, such as reviewing claims, rather than as late counting.
 
 ---
 

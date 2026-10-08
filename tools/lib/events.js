@@ -10,7 +10,7 @@
  *   seq=<n>
  *   kind=<kind>
  *   cycle=<YYYY-MM>
- *   holder=<id or empty>
+ *   holder=<id or empty; always empty for request.decided>
  *   points=<0 | -?[1-9][0-9]*>
  *   value=<token or empty>
  *   ref=<repo-relative path>
@@ -27,6 +27,12 @@
  * It is EMPTY for unit.recorded and request.decided, whose ref files (unit
  * records, requests) can change legitimately after acceptance — `joined`, a
  * later `speaks_for` — and must not rewrite every later hash.
+ *
+ * For the same reason, holder is EMPTY for request.decided. The request file
+ * names its requester (**From:**), but the file can be edited or deleted after
+ * the decision; nothing read from it enters the preimage. The decision is
+ * identified by the report row (cycle, value) and the file path (ref). That a
+ * passed report's request file still exists is checked by `daf.js check`.
  */
 
 const crypto = require('node:crypto');
@@ -81,7 +87,6 @@ function shapeError(e) {
 function deriveEvents(record) {
   const events = [];
   let prev = ZERO;
-  const requestsByPath = new Map((record.requests || []).map((r) => [r.path, r]));
 
   const emit = (where, fields) => {
     if (fields.points == null || !Number.isSafeInteger(fields.points)) {
@@ -123,10 +128,7 @@ function deriveEvents(record) {
       for (const r of a.deliveries) emit(row(r), { kind: 'function.delivered', cycle, holder: r.holder, points: r.points, value: '', ref, blob, evidence: [r.declared, r.delivered] });
       for (const r of a.modules) emit(row(r), { kind: 'module.completed', cycle, holder: r.holder, points: r.bonus, value: '', ref, blob, evidence: r.functions });
       for (const r of a.penalties) emit(row(r), { kind: 'penalty', cycle, holder: r.holder, points: r.points, value: '', ref, blob, evidence: r.commitmentRefs });
-      for (const r of a.resources) {
-        const req = requestsByPath.get(r.request);
-        emit(row(r), { kind: 'request.decided', cycle, holder: req && req.from ? req.from : '', points: 0, value: r.decision, ref: 'federation/' + r.request, blob: '', evidence: [] });
-      }
+      for (const r of a.resources) emit(row(r), { kind: 'request.decided', cycle, holder: '', points: 0, value: r.decision, ref: 'federation/' + r.request, blob: '', evidence: [] });
     }
     for (const r of a.votes) emit(row(r), { kind: 'vote.cast', cycle, holder: r.holder, points: r.weight, value: r.vote, ref, blob, evidence: [] });
     if (a.steward && !a.steward.none) emit(a.file + ' section Steward intervention', { kind: 'steward.intervention', cycle, holder: '', points: 0, value: '', ref, blob, evidence: a.steward.links });

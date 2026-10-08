@@ -3,6 +3,7 @@
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { execFileSync } = require('node:child_process');
 const { main } = require('../daf');
 
 const ROOT = path.resolve(__dirname, '..', '..');
@@ -23,6 +24,22 @@ function tmpCopy(name) {
     }
   }
   return dir;
+}
+
+/** git in a test directory, with a fixed fictional identity and no signing. */
+function git(dir, ...args) {
+  return execFileSync('git', ['-C', dir, '-c', 'user.name=example-test', '-c', 'user.email=example-test@example.invalid', '-c', 'commit.gpgsign=false', '-c', 'core.autocrlf=false', ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+}
+
+/**
+ * Commit everything in `dir` (a git repository is made on first use) and
+ * return the commit: the default branch that `close --base-ref` reads.
+ */
+function commitAll(dir) {
+  if (!fs.existsSync(path.join(dir, '.git'))) git(dir, 'init', '-q');
+  git(dir, 'add', '-A');
+  git(dir, 'commit', '-q', '--allow-empty', '-m', 'base');
+  return git(dir, 'rev-parse', 'HEAD').trim();
 }
 
 /** Run the CLI in-process and capture its output. */
@@ -113,4 +130,4 @@ Fictional.
 `;
 }
 
-module.exports = { ROOT, FIX, tmpCopy, run, read, write, comment, vote, pendingReport };
+module.exports = { ROOT, FIX, tmpCopy, run, read, write, comment, vote, pendingReport, git, commitAll };

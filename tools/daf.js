@@ -9,6 +9,7 @@
  */
 
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 
@@ -36,24 +37,35 @@ Commands:
       Validate the record: units, parameters (against DAF-000 and DAF-001),
       assembly reports, requests, LEDGER.md and the event log. With --base,
       warn about assembly reports, unit records and parameters changed rather
-      than added since <git-sha>.
+      than added since <git-sha>, and about requests already decided by an
+      assembly that were changed or deleted since then.
   ledger [--write] [--before <YYYY-MM>] [--allow-undetermined]
       Print LEDGER.md as folded from the assemblies, or write it.
   tally --cycle <YYYY-MM> --comments <file> [--reviews <file>]
         [--review-comments <file>] [--record <dir>] [--master-record <dir>]
-        [--report <file>] [--pr <n>] [--head <sha>] [--json]
+        [--report <file>] [--pr <n>] [--head <sha>] [--json] [--now <ISO>]
         [--allow-undetermined]
       Count the votes for the report of <cycle>. Comment files are JSON from
       \`gh api --paginate --slurp\` (array of pages) or a flat array. With
       --report, units, parameters and earlier assemblies come from the record
       (--record or --root, the default branch) and only the report under vote
       comes from <file>, read in memory as federation/assemblies/<cycle>.md.
+      Before the close of the window (now, or --now) the count is marked
+      provisional.
   draft <YYYY-MM> [--issues <file>]
       Write federation/assemblies/<YYYY-MM>.md from the template, the open
       [Cycle] issue and the [Claim] issues of that cycle. Outcome: pending.
-  close <YYYY-MM> --comments <file> [same inputs as tally]
-      Write the tally into the report (vote table, Votes, Outcome), set joined
-      on new records when passed, and regenerate LEDGER.md. Never commits.
+  close <YYYY-MM> --comments <file> [--reviews <file>]
+        [--review-comments <file>] [--pr <n>] [--head <sha>]
+        [--base-ref <ref>] [--now <ISO>] [--allow-undetermined]
+      Count the votes as the tally workflow does: unit records, parameters and
+      earlier assemblies come from <ref> (default origin/master, extracted with
+      git archive), and only the report under vote from the working tree. Then
+      write the tally into the working tree's report (vote table, Votes,
+      Outcome), set joined on the records it accepts when passed, and
+      regenerate LEDGER.md. Refuses before the window closes. Warns about
+      unit records, parameters and assemblies the working tree changed versus
+      <ref>. Never commits.
   snapshot --out <dir> [--issues <file>] [--commit <sha>] [--allow-undetermined]
       Write <dir>/federation.json, <dir>/events.json and <dir>/events.log.
   events --out <dir> [--allow-undetermined]
@@ -70,7 +82,7 @@ Options for every command:
   --help         print this text
 `;
 
-const VALUE_FLAGS = new Set(['root', 'base', 'before', 'cycle', 'comments', 'reviews', 'review-comments', 'record', 'master-record', 'report', 'pr', 'head', 'issues', 'out', 'commit']);
+const VALUE_FLAGS = new Set(['root', 'base', 'base-ref', 'before', 'cycle', 'comments', 'reviews', 'review-comments', 'record', 'master-record', 'report', 'pr', 'head', 'issues', 'out', 'commit', 'now']);
 const BOOL_FLAGS = new Set(['write', 'json', 'allow-pending', 'allow-undetermined', 'help']);
 
 class UsageError extends Error {}
@@ -101,6 +113,14 @@ function parseArgs(argv) {
 
 const CYCLE_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
 const needCycle = (c) => { if (!CYCLE_RE.test(String(c || ''))) throw new UsageError('a cycle is YYYY-MM'); return c; };
+
+/** --now as milliseconds: an ISO 8601 date or UTC time; the current time when absent. */
+function parseNow(value) {
+  if (value === undefined) return Date.now();
+  const t = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2}))?$/.test(value) ? Date.parse(value) : NaN;
+  if (isNaN(t)) throw new UsageError('--now must be an ISO 8601 time, as 2026-04-08T00:00:00Z');
+  return t;
+}
 
 function readJson(file) {
   let text;
@@ -171,6 +191,12 @@ function runCheck(root, opts) {
       if (m.bonus !== null && m.bonus !== want) errors.push(a.file + ':' + m.line + ': module bonus must be ' + m.functions.length + ' functions x ' + params.module_bonus_per_function + ' = ' + want + ', found ' + m.bonus);
     }
     if (outcome === 'passed') {
+      // A decided request stays where the assembly found it: the event log
+      // names it by path, and the report is the only other trace of it.
+      for (const r of a.resources) {
+        if (!/^requests\/\d+-[a-z0-9]+(-[a-z0-9]+)*\.md$/.test(r.request)) continue; // already a problem
+        if (!fs.existsSync(path.join(rec.root, 'federation', r.request))) errors.push(a.file + ':' + r.line + ': Resource decisions names federation/' + r.request + ', which does not exist; a decided request is kept, not deleted or renamed');
+      }
       for (const r of a.newRecords) {
         if (!rec.units.has(r.holder)) errors.push(a.file + ':' + r.line + ': new record `' + r.holder + '` has no file federation/units/' + r.holder + '.yml');
         if (recordedIn.has(r.holder)) warnings.push(a.file + ':' + r.line + ': `' + r.holder + '` was already recorded in assembly ' + recordedIn.get(r.holder));
@@ -220,8 +246,9 @@ function runCheck(root, opts) {
       const want = renderLedger(fold, params);
       const file = path.join(rec.root, 'federation', 'LEDGER.md');
       const have = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null;
+      // CRLF and LF are the same file: a checkout with core.autocrlf=true has CRLF.
       if (have === null) errors.push('federation/LEDGER.md: not found');
-      else if (have !== want) errors.push('federation/LEDGER.md: differs from the fold of the assemblies at line ' + firstDiffLine(have, want) + '; regenerate it with `node tools/daf.js ledger --write`');
+      else if (have.replace(/\r\n/g, '\n') !== want) errors.push('federation/LEDGER.md: differs from the fold of the assemblies at line ' + firstDiffLine(have, want) + '; regenerate it with `node tools/daf.js ledger --write`');
     } catch (e) { errors.push('ledger: ' + e.message); }
   }
 
@@ -231,8 +258,15 @@ function runCheck(root, opts) {
   if (opts.base) {
     let out = '';
     try {
-      out = execFileSync('git', ['-C', rec.root, 'diff', '--name-status', opts.base, 'HEAD', '--', 'federation/assemblies/', 'federation/units/', 'federation/parameters.yml'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+      out = execFileSync('git', ['-C', rec.root, 'diff', '--name-status', opts.base, 'HEAD', '--', 'federation/assemblies/', 'federation/units/', 'federation/parameters.yml', 'federation/requests/'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
     } catch (e) { errors.push('--base ' + opts.base + ': git diff failed: ' + String(e.stderr || e.message).trim()); }
+    // Requests named in Resource decisions of a closed report: already decided.
+    const decided = new Map();
+    for (const a of rec.assemblies) {
+      const o = a.vote && a.vote.outcome;
+      if (o !== 'passed' && o !== 'failed') continue;
+      for (const r of a.resources) if (!decided.has('federation/' + r.request)) decided.set('federation/' + r.request, a.file);
+    }
     for (const line of out.split('\n').filter(Boolean)) {
       const parts = line.split('\t');
       const status = parts[0];
@@ -241,6 +275,10 @@ function runCheck(root, opts) {
       if (files.every((f) => f.startsWith('federation/assemblies/'))) {
         if (status === 'A') continue;
         warnings.push(files.join(' -> ') + ': ' + status + ' since ' + opts.base + '. federation/README.md: "' + README_QUOTE + '".');
+      } else if (files.every((f) => f.startsWith('federation/requests/'))) {
+        const by = files.map((f) => decided.get(f)).find(Boolean);
+        if (!by) continue;
+        warnings.push(files.join(' -> ') + ': ' + status + ' since ' + opts.base + '. This request was already decided in ' + by + '; a decided request is kept as the assembly decided it, and a change is asked for in a new request.');
       } else if (files.some((f) => f === 'federation/parameters.yml')) {
         warnings.push(files.join(' -> ') + ': ' + status + ' since ' + opts.base + '. The parameters change only with the text of DAF-000 or DAF-001 (DAF-000 §5); the tally reads them from the default branch, never from a pull request.');
       } else {
@@ -384,6 +422,7 @@ function tallyInputs(opts, cycle, rec) {
   const input = {
     record: rec,
     cycle,
+    now: parseNow(opts.now),
     comments: readJson(opts.comments),
     reviews: opts.reviews ? readJson(opts.reviews) : [],
     reviewComments: opts['review-comments'] ? readJson(opts['review-comments']) : [],
@@ -411,6 +450,7 @@ function tallyRecord(opts, cycle, io) {
 
 function cmdTally(opts, io) {
   const cycle = needCycle(opts.cycle);
+  parseNow(opts.now); // a usage error before anything is read
   const rec = tallyRecord(opts, cycle, io);
   const t = computeTally(tallyInputs(opts, cycle, rec));
   if (t.outcome === 'undetermined') io.err('NOTE: the outcome is undetermined; `close` will not write it.');
@@ -428,18 +468,94 @@ function setJoined(text, cycle) {
   return text.slice(0, m.index) + m[1] + cycle + m[3] + text.slice(m.index + m[0].length);
 }
 
+const BASE_REF = 'origin/master';
+const gitRun = (root, args, encoding) => execFileSync('git', ['-C', root].concat(args), { encoding: encoding || 'utf8', maxBuffer: 256 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] });
+
+/**
+ * Extract federation/ and dafp/ of the commit `ref` into a new temporary
+ * directory (git archive <ref> federation dafp | tar -x) and return it. The
+ * caller removes it. Throws, telling the operator to fetch, when the ref is
+ * missing.
+ */
+const checkRef = (ref) => { if (!ref || ref.startsWith('-') || /\s/.test(ref)) throw new UsageError('--base-ref must be a git ref, as origin/master'); return ref; };
+
+function extractBase(root, ref) {
+  checkRef(ref);
+  try { gitRun(root, ['rev-parse', '--verify', '--quiet', ref + '^{commit}']); } catch (e) {
+    throw new Error('the base ref ' + ref + ' is not in this checkout. close reads unit records, parameters and earlier assemblies from the default branch: run `git fetch origin` (or pass --base-ref <ref>) and close again. Nothing was written.');
+  }
+  const present = (p) => { try { gitRun(root, ['cat-file', '-e', ref + ':' + p]); return true; } catch (e) { return false; } };
+  if (!present('federation')) throw new Error(ref + ' has no federation/ directory; nothing to count against');
+  const paths = ['federation'].concat(present('dafp') ? ['dafp'] : []);
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'daf-base-'));
+  try {
+    const tar = gitRun(root, ['archive', '--format=tar', ref, '--'].concat(paths), 'buffer');
+    execFileSync('tar', ['-x', '-f', '-', '-C', dir], { input: tar, stdio: ['pipe', 'ignore', 'pipe'] });
+  } catch (e) {
+    fs.rmSync(dir, { recursive: true, force: true });
+    throw new Error('cannot extract ' + paths.join(' and ') + ' from ' + ref + ': ' + String(e.stderr || e.message).trim());
+  }
+  return dir;
+}
+
+/**
+ * The working tree's changes versus `ref` that close does not count: unit
+ * records modified or deleted (added ones are the new records), parameters.yml,
+ * and assembly reports other than the added report under vote.
+ */
+function baseChanges(root, ref, cycle) {
+  const scope = ['federation/units/', 'federation/parameters.yml', 'federation/assemblies/'];
+  const rows = gitRun(root, ['diff', '--no-renames', '--name-status', ref, '--'].concat(scope)).split('\n').filter(Boolean).map((l) => l.split('\t'));
+  for (const f of gitRun(root, ['ls-files', '--others', '--exclude-standard', '--'].concat(scope)).split('\n').filter(Boolean)) rows.push(['A', f]);
+  const report = 'federation/assemblies/' + cycle + '.md';
+  const out = [];
+  for (const [status, file] of rows) {
+    if (!file || /\/(TEMPLATE\.|README)/i.test(file)) continue;
+    if (file.startsWith('federation/units/') && status === 'A') continue;
+    if (file === report && status === 'A') continue;
+    out.push(file + ': ' + (status === 'A' ? 'added' : status === 'D' ? 'deleted' : 'modified') + ' in the working tree versus ' + ref + '. close reads unit records, parameters and earlier assemblies from ' + ref + ', so this change is not part of the count.');
+  }
+  return out;
+}
+
 function cmdClose(opts, io) {
   const cycle = needCycle(opts._[1]);
   if (opts.report) throw new UsageError('close writes the report in the working tree; --report does not apply');
+  if (opts.record || opts['master-record']) throw new UsageError('close reads the record from --base-ref <ref> (default ' + BASE_REF + '); --record and --master-record do not apply');
+  const now = parseNow(opts.now);
+  const ref = checkRef(opts['base-ref'] === undefined ? BASE_REF : opts['base-ref']);
+  // The working tree: the report under vote, the unit files close writes, and
+  // the LEDGER.md it regenerates.
   const rec = loadRecord(opts.root);
   const params = needParams(rec);
   // close regenerates LEDGER.md, which folds every closed report.
-  for (const w of requireDetermined(rec, params, opts['allow-undetermined'], 'close ' + cycle)) io.err('WARNING: ' + w);
+  const said = new Set();
+  const warn = (w) => { if (!said.has(w)) { said.add(w); io.err('WARNING: ' + w); } };
+  for (const w of requireDetermined(rec, params, opts['allow-undetermined'], 'close ' + cycle)) warn(w);
   const a = rec.assemblies.find((x) => x.cycle === cycle);
   if (!a) throw new Error('no report federation/assemblies/' + cycle + '.md');
   if (a.problems.length) throw new Error('the report has problems; fix them first:\n  ' + a.problems.join('\n  '));
   if (a.vote.outcome !== 'pending') throw new Error(a.file + ' is already closed (outcome ' + a.vote.outcome + '); a closed report is corrected by a later assembly, not rewritten');
-  const t = computeTally(tallyInputs(opts, cycle, rec));
+  if (!a.window) throw new Error(a.file + ' has no Window line; close needs the window to know that the vote is over');
+  const closesAt = a.window.closes + 'T00:00:00Z';
+  if (now < Date.parse(closesAt)) throw new Error('refusing to close ' + cycle + ': the window closes at ' + closesAt + '; close after it. Nothing was written.');
+
+  // The count: the default branch's record, with only the report under vote
+  // taken from the working tree (as `tally --report` and the tally workflow).
+  let t;
+  const baseDir = extractBase(rec.root, ref);
+  try {
+    for (const w of baseChanges(rec.root, ref, cycle)) warn(w);
+    const master = loadRecord(baseDir);
+    if (!master.parameters) throw new Error(ref + ': federation/parameters.yml is missing or invalid: ' + master.problems.filter((p) => /parameters/.test(p)).join('; '));
+    for (const w of requireDetermined(master, master.parameters, opts['allow-undetermined'], 'close ' + cycle, cycle)) warn(w);
+    const counted = withReport(master, path.join(rec.root, a.file), cycle);
+    const under = counted.assemblies.find((x) => x.cycle === cycle);
+    if (under.problems.length) throw new Error('the report has problems against the parameters of ' + ref + ':\n  ' + under.problems.join('\n  '));
+    t = computeTally(Object.assign(tallyInputs(opts, cycle, counted), { masterRecord: master, now }));
+  } finally {
+    fs.rmSync(baseDir, { recursive: true, force: true });
+  }
   if (t.outcome === 'undetermined') {
     throw new Error('refusing to close ' + cycle + ': the outcome is undetermined. ' + t.sentences.join(' ') + ' The report is left unchanged; a person writes the vote table.');
   }
@@ -461,7 +577,7 @@ function cmdClose(opts, io) {
     }
   }
   fs.writeFileSync(reportPath, after);
-  changes.push('rewrote ' + a.file + ': the vote table, Votes and Outcome (' + t.outcome + ')');
+  changes.push('rewrote ' + a.file + ': the vote table, Votes and Outcome (' + t.outcome + '), counted against ' + ref);
   for (const e of unitEdits) {
     fs.writeFileSync(path.join(rec.root, e.file), e.text);
     changes.push('set joined: ' + cycle + ' in ' + e.file);
@@ -587,6 +703,7 @@ function cmdDraft(opts, io) {
   const newRecords = [];
   const stubs = [];
   const recorded = new Set();
+  const sources = [];
   // A holder needs a New records row until a PASSED assembly has recorded it.
   // A unit file alone does not count: a failed assembly's stub is merged too.
   const accepted = new Set();
@@ -596,6 +713,8 @@ function cmdDraft(opts, io) {
     const f = formFields(c.body);
     if ((f.get('Cycle') || '').trim() !== cycle) continue;
     const skip = (reason) => notDrafted.push('#' + c.number + ' ' + reason);
+    // A claim closed as not planned was withdrawn or turned down in its thread.
+    if (c.state === 'closed' && c.state_reason === 'not_planned') { skip('was closed as not planned'); continue; }
     const holder = (f.get('Claimed as') || '').replace(/`/g, '').trim();
     if (!holder) { skip('has no "Claimed as" id'); continue; }
     if (!ID_RE.test(holder)) { skip('claims as "' + holder.replace(/[^A-Za-z0-9 ._-]/g, '').slice(0, 40) + '", which is not a valid id'); continue; }
@@ -624,6 +743,17 @@ function cmdDraft(opts, io) {
 
     if (isModule) modules.push('| `' + holder + '` | ' + code(what, 120) + ' | ' + fns.urls.join(', ') + ' | ' + fns.urls.length * params.module_bonus_per_function + ' |');
     else deliveries.push('| `' + holder + '` | ' + code(what, 120) + ' | ' + declared.urls[0] + ' | ' + result.urls[0] + ' | ' + params.points_per_function + ' |');
+    sources.push('#' + c.number + ' ' + (isModule ? 'Module completions row ' + modules.length : 'Deliveries row ' + deliveries.length) + ' (`' + holder + '`)');
+    if (c.state === 'closed') {
+      todo.push('TODO(person): claim #' + c.number + ' is closed' + (typeof c.state_reason === 'string' && /^[a-z_]+$/.test(c.state_reason) ? ' (' + c.state_reason + ')' : '') + '; check in its thread that the claim still stands before keeping its row.');
+    }
+    // Claim authorship is not checked against speaks_for (an owner's decision);
+    // a person looks when the author does not speak for an existing holder.
+    const existing = rec.units.get(holder);
+    if (existing && !(typeof author === 'string' && existing.logins.includes(author.toLowerCase()))) {
+      const who = typeof author === 'string' && LOGIN_RE.test(author) ? '`' + author + '`' : 'an account that could not be read';
+      todo.push('TODO(person): claim #' + c.number + ' was filed by ' + who + ', which is not in speaks_for of `' + holder + '`; check in its thread that `' + holder + '` stands behind it.');
+    }
     if (needsRecord) {
       recorded.add(holder);
       // The claim's optional "Record" field says participant or unit; without it,
@@ -646,7 +776,7 @@ function cmdDraft(opts, io) {
     }
   }
 
-  const md = buildDraft(template, { cycle, cyc, win, deliveries, modules, newRecords, notDrafted, todo });
+  const md = buildDraft(template, { cycle, cyc, win, deliveries, modules, newRecords, notDrafted, todo, sources });
   fs.writeFileSync(target, md);
   io.out('wrote federation/assemblies/' + cycle + '.md (outcome pending; ' + deliveries.length + ' deliveries, ' + modules.length + ' modules, ' + newRecords.length + ' new records)');
   for (const s of stubs) { fs.writeFileSync(s.file, s.text); io.out('wrote ' + s.rel + ' (stub; TODO(person) marks what to complete)'); }
@@ -658,6 +788,7 @@ function cmdDraft(opts, io) {
 function buildDraft(template, d) {
   const lines = template.replace(/\r\n/g, '\n').split('\n');
   const out = [];
+  if (d.sources && d.sources.length) out.push('<!-- Rows drafted from claims: ' + d.sources.join('; ').replace(/--+/g, '-').replace(/>/g, '') + '. -->');
   for (const n of d.notDrafted) out.push('<!-- not drafted: ' + n.replace(/--+/g, '-').replace(/>/g, '') + ' -->');
   for (const t of d.todo) out.push('<!-- ' + t.replace(/--+/g, '-').replace(/>/g, '') + ' -->');
   if (out.length) out.push('');

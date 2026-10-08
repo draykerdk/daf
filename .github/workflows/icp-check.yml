@@ -1,0 +1,46 @@
+name: ICP preparation check
+
+# Checks that the Motoko reading of the event log v1 in icp/ still matches the
+# JavaScript reference: same preimages, hashes, head and ledger, and that the
+# canister code compiles with an unchanged Candid interface and stable
+# signature. Nothing is deployed and no network outside GitHub and npm is used.
+
+on:
+  pull_request:
+    paths:
+      - 'icp/**'
+      - 'tools/lib/**'
+      - 'tools/test/fixtures/**'
+      - '.github/workflows/icp-check.yml'
+  push:
+    branches:
+      - master
+    paths:
+      - 'icp/**'
+      - 'tools/lib/**'
+      - 'tools/test/fixtures/**'
+      - '.github/workflows/icp-check.yml'
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        working-directory: icp
+        run: npm ci
+
+      - name: Test
+        working-directory: icp
+        run: npm test

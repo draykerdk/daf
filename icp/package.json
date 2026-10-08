@@ -1,0 +1,11 @@
+{
+  "name": "daf-icp-preparation",
+  "private": true,
+  "description": "Portability checks of the DAF event log v1 in Motoko. Nothing here is deployed.",
+  "scripts": {
+    "test": "node test/run.mjs"
+  },
+  "devDependencies": {
+    "motoko": "5.0.0"
+  }
+}

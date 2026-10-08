@@ -1,0 +1,5 @@
+# Dependencies of the Motoko sources, so that a build with the Motoko package
+# manager resolves mo:core to the same library version that the tests in
+# icp/test use (node-motoko 5.0.0 bundles core 2.6.2). Nothing is deployed.
+[dependencies]
+core = "2.6.2"

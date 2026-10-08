@@ -292,16 +292,27 @@ async function loadWith(fetchImpl) {
   check(auditView.auditCount === '1' && auditView.auditHasSkipped && auditView.auditSkipped === '2026-03 (failed)'
     && auditView.auditVerdict === 'THE LEDGER MATCHES THE ASSEMBLIES', 'The audit tab shows what it summed and what it left out.');
 
-  // site-2: the pull-request panel links to the pull request on GitHub, never to the forum.
-  const tallied = makeComponent();
-  tallied.setState({ tallyState: 'ready', tally: { rows: [], unknown: [], yes: 0, no: 0, abs: 0, cast: 0, active: 0, pr: '14', found: 0, comments: 0 } });
-  const tallyView = tallied.renderVals();
+  // The pull-request panel links to the pull request on GitHub, and to its forum
+  // page only for an assembly report the forum publishes (open, or merged into master).
+  const tallyWith = (extra) => {
+    const c = makeComponent();
+    c.setState({ tallyState: 'ready', tally: Object.assign({ rows: [], unknown: [], yes: 0, no: 0, abs: 0, cast: 0, active: 0, pr: '14', found: 0, comments: 0 }, extra) });
+    return c.renderVals();
+  };
+  const tallyView = tallyWith({ assembly: false, onForum: false });
   check(tallyView.tallyPrUrl === 'https://github.com/draykerdk/daf/pull/14' && safeHref(tallyView.tallyPrUrl) === tallyView.tallyPrUrl,
     'The pull-request link points to github.com/draykerdk/daf/pull/.');
-  check(!('tallyPrForum' in tallyView) && !('tallyHasForum' in tallyView) && !html.includes('tallyPrForum') && !html.includes('tallyHasForum'),
-    'The pull-request panel has no forum link.');
-  check(Object.values(tallyView).every((v) => typeof v !== 'string' || !/forum\.drayker\.org\/t\/daf\/14\//.test(v)),
-    'No value points to a forum page for the pull request.');
+  check(tallyView.tallyHasForum === false && tallyView.tallyForum === ''
+    && Object.values(tallyView).every((v) => typeof v !== 'string' || !/forum\.drayker\.org\/t\/daf\/14\//.test(v)),
+    'A pull request that is not an assembly report has no forum link.');
+  const asmView = tallyWith({ assembly: true, onForum: true });
+  check(asmView.tallyHasForum === true && asmView.tallyForum === 'https://forum.drayker.org/t/daf/14/' && safeHref(asmView.tallyForum) === asmView.tallyForum,
+    'An assembly report the forum publishes links to its forum page.');
+  const closedView = tallyWith({ assembly: true, onForum: false });
+  check(closedView.tallyHasForum === false && closedView.tallyForum === '',
+    'A closed, unmerged assembly report has no forum link.');
+  check(/<sc-if value="\{\{ tallyHasForum \}\}"[^>]*>\s*<a href="\{\{ tallyForum \}\}"/.test(html),
+    'The forum link in the pull-request panel is conditional.');
 
   // site-3: "no assembly has been held" only while that is true.
   check(html.includes('INVENTED · NOT A REAL ASSEMBLY') && !html.includes('NO ASSEMBLY HAS BEEN HELD'), 'The example badge says it is not a real assembly.');

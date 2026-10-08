@@ -1,0 +1,59 @@
+name: Justified veto
+description: Contest one federation decision with its grounds. Read DAF-003 before you file.
+title: "[Veto] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A justified veto is weighed by its grounds, never counted like a vote, and one well-founded veto
+        can be enough to change a decision (DAF-003). A veto without grounds is not a veto: argue it in
+        the thread instead.
+
+        **This form is public and attributed to your account.** The design lets the author of a veto stay
+        anonymous, but this repository cannot. If filing here would put you at risk, do not file here, and
+        do not write details about anyone's body, home or private context in this form.
+  - type: input
+    id: decision
+    attributes:
+      label: The decision contested
+      description: A link to the exact line, file or pull request, and the commit it refers to.
+      placeholder: https://github.com/draykerdk/daf/blob/<commit>/federation/assemblies/2026-11.md#L12
+    validations:
+      required: true
+  - type: textarea
+    id: intention
+    attributes:
+      label: Intention and motives
+      description: Why you veto, and what you want to protect.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Which action is contested, who is affected, and what interrupting it would cost others.
+    validations:
+      required: true
+  - type: textarea
+    id: facts
+    attributes:
+      label: Facts or conditions
+      description: What the veto rests on, with links to the evidence wherever it exists.
+    validations:
+      required: true
+  - type: textarea
+    id: standing
+    attributes:
+      label: Standing
+      description: Your relation to the decision and to the context it affects.
+    validations:
+      required: true
+  - type: checkboxes
+    id: conditions
+    attributes:
+      label: Before filing
+      options:
+        - label: The grounds above are my real reasons, and they name the facts they rest on.
+          required: true
+        - label: I understand this veto is public and attributed to my account.
+          required: true

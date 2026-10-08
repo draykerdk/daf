@@ -2,9 +2,14 @@
 ///
 /// Preparation, not a deployment. Nothing here is installed anywhere, and
 /// nothing depends on it; see `icp/README.md`. The canister would keep the
-/// event log v1, its head and the standing folded from it. The head is
-/// certified; the standing is a convenience that a client checks by replaying
-/// the events up to the certified head.
+/// event log v1 and its head, and fold the standing from the log. The head is
+/// certified, from install on (the head of the empty log is 64 zeros); the
+/// standing is a convenience that a client checks by replaying the events up
+/// to the certified head.
+///
+/// The only stable data is the event list, its count, the head and the
+/// reserved appender. The standing is transient: it is refolded from the log
+/// at install and after an upgrade, so its layout never needs a migration.
 ///
 /// Motoko does not let a public method share its name with a field, so the
 /// state fields are `log`, `currentHead` and `standing`, behind the methods
@@ -35,7 +40,11 @@ actor Federation {
   /// Number of events in `log`; the seq of the newest one.
   var count : Nat = 0;
   var currentHead : Text = Event.ZERO;
-  var standing : Ledger.State = Ledger.empty();
+
+  /// The standing folded from `log`, and the number of events folded into it.
+  /// Not persisted; see `refold`.
+  transient var standing : Ledger.State = Ledger.empty();
+  transient var folded : Nat = 0;
 
   /// Reserved for a later, narrower appender than the controllers. No method
   /// sets it in this preparation, and `append` does not read it.
@@ -47,6 +56,20 @@ actor Federation {
       case null {};
     };
   };
+
+  /// Fold the whole log again into `standing`, oldest event first. A no-op
+  /// when the standing already covers every event, so running it from both
+  /// the actor body and `postupgrade` folds the log once.
+  func refold() {
+    if (folded == count) return;
+    standing := Ledger.fold(log.reverse().map<Stored, Event.EventV1>(func(s) { switch s { case (#v1(e)) e } }).values());
+    folded := count;
+  };
+
+  // Runs at install (and again on upgrade): the standing of the stored log,
+  // and the certified head, so that even the empty log's head is certified.
+  refold();
+  certify();
 
   /// Append a batch of events. All or nothing: any error rejects the whole
   /// batch and leaves the state as it was.
@@ -60,6 +83,7 @@ actor Federation {
         count := r.seq;
         currentHead := r.head;
         standing := r.state;
+        folded := r.seq;
         certify();
         #ok({ seq = r.seq; head = r.head });
       };
@@ -86,11 +110,15 @@ actor Federation {
 
   /// The standing folded from the events. Not certified: a client that needs
   /// assurance replays the events up to the certified head.
-  public query func ledger() : async [{ id : Text; points : Int; joined : Text; active : Bool }] {
+  /// Per holder: id, kind, points, joined and active. kind and joined are
+  /// empty for a holder with no unit.recorded. The reference's totals are not
+  /// returned.
+  public query func ledger() : async [{ id : Text; kind : Text; points : Int; joined : Text; active : Bool }] {
     Ledger.standing(standing, DORMANT_AFTER);
   };
 
   system func postupgrade() {
+    refold();
     certify();
   };
 };

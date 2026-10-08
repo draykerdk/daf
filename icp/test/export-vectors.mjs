@@ -27,9 +27,12 @@ const fakeBlob = (s) => createHash('sha1').update('synthetic ' + s).digest('hex'
  * A second, synthetic record in the shape loadRecord returns, covering what
  * the basic fixture does not: dormancy and return, a failed assembly whose
  * delivery rows are not events, a request without a requester (empty holder),
- * an assembly without a cycle issue (no evidence), a later record of a holder,
- * module bonuses over several functions, two penalties, a steward
- * intervention with two links and multi-digit points.
+ * an assembly without a cycle issue (no evidence), a later record of a holder
+ * at 0 points who is active in that assembly (example-fern), a later record
+ * of a holder with points who was active in an earlier closed assembly but
+ * not in the assembly that records it again, with a different kind
+ * (example-pine), module bonuses over several functions, two penalties, a
+ * steward intervention with two links and multi-digit points.
  */
 function syntheticRecord() {
   const asm = (cycle, outcome, o) => {
@@ -77,6 +80,7 @@ function syntheticRecord() {
       }),
       asm('2026-08', 'passed', {
         cycleIssue: 204,
+        newRecords: [['example-pine', 'participant']],
         deliveries: [['example-elm', 1, 44]],
         votes: [['example-elm', 'for', 1]]
       }),
@@ -94,6 +98,60 @@ function syntheticRecord() {
   };
 }
 
+/**
+ * A third synthetic record for holders that appear in the log before, or
+ * without, a unit.recorded, which the reference folds without objection: a
+ * failed founding assembly whose voters are new units (their votes are
+ * events, their New records rows are not), a delivery by a holder absent from
+ * New records in a later passed assembly (listed with joined and kind empty),
+ * and a voter who is listed only later, by a delivery, and whose earlier vote
+ * then counts as activity.
+ */
+function foundingRecord() {
+  const asm = (cycle, outcome, o) => {
+    const file = 'federation/assemblies/' + cycle + '.md';
+    let line = 10;
+    const L = () => line++;
+    return {
+      cycle, file, blob: fakeBlob(file), cycleIssue: o.cycleIssue,
+      vote: { outcome },
+      newRecords: (o.newRecords || []).map(([holder, kind]) => ({ holder, kind, first: 'https://github.com/example-org/example-repo/pull/' + (300 + line), line: L() })),
+      deliveries: (o.deliveries || []).map(([holder, points, issue]) => ({ holder, points, declared: '#' + issue, delivered: 'https://github.com/example-org/example-repo/pull/' + (400 + line), line: L() })),
+      modules: [],
+      penalties: [],
+      resources: [],
+      votes: (o.votes || []).map(([holder, vote, weight]) => ({ holder, vote, weight, line: L() })),
+      steward: { none: true }
+    };
+  };
+  return {
+    requests: [],
+    assemblies: [
+      asm('2026-03', 'failed', {
+        cycleIssue: 301,
+        newRecords: [['example-ash', 'participant'], ['example-birch', 'unit']],
+        deliveries: [['example-ash', 1, 51]],
+        votes: [['example-ash', 'for', 0], ['example-birch', 'against', 0]]
+      }),
+      asm('2026-04', 'passed', {
+        cycleIssue: 302,
+        newRecords: [['example-ash', 'participant']],
+        deliveries: [['example-ash', 1, 52], ['example-birch', 2, 53]],
+        votes: [['example-ash', 'for', 0], ['example-yew', 'for', 0]]
+      }),
+      asm('2026-05', 'passed', {
+        cycleIssue: 303,
+        deliveries: [['example-yew', 1, 54]],
+        votes: [['example-ash', 'for', 1]]
+      }),
+      asm('2026-06', 'passed', {
+        cycleIssue: 304,
+        votes: [['example-birch', 'for', 2]]
+      })
+    ]
+  };
+}
+
 function fixture(name, source, record, dormantAfter) {
   const d = deriveEvents(record);
   const check = verifyChain(d.events);
@@ -102,10 +160,10 @@ function fixture(name, source, record, dormantAfter) {
   const ledger = [];
   for (let k = 0; k <= d.events.length; k++) {
     const f = foldEvents(d.events.slice(0, k), params);
-    for (const h of f.holders) {
-      if (h.joined === null) throw new Error(name + ': holder ' + h.id + ' has standing without unit.recorded after ' + k + ' events');
-    }
-    ledger.push(f.holders.map((h) => ({ id: h.id, points: h.points, joined: h.joined, active: h.active })));
+    // A holder with no unit.recorded has kind and joined null in the
+    // reference; the canister gives them as empty texts. The totals are not
+    // compared: the canister does not return them.
+    ledger.push(f.holders.map((h) => ({ id: h.id, kind: h.kind === null ? '' : h.kind, points: h.points, joined: h.joined === null ? '' : h.joined, active: h.active })));
   }
   return {
     name, source, dormantAfter, count: d.count, head: d.head,
@@ -124,7 +182,8 @@ export function buildVectors() {
     genesis: ZERO,
     fixtures: [
       fixture('basic', 'tools/test/fixtures/basic', basic, basic.parameters.dormant_after_assemblies),
-      fixture('synthetic', 'icp/test/export-vectors.mjs syntheticRecord()', syntheticRecord(), 2)
+      fixture('synthetic', 'icp/test/export-vectors.mjs syntheticRecord()', syntheticRecord(), 2),
+      fixture('founding', 'icp/test/export-vectors.mjs foundingRecord()', foundingRecord(), 1)
     ]
   };
   return JSON.stringify(out, null, 2) + '\n';

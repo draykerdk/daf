@@ -32,6 +32,7 @@ service : {
           active: bool;
           id: text;
           joined: text;
+          kind: text;
           points: int;
         }) query;
 }

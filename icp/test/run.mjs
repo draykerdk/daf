@@ -26,8 +26,9 @@ const SOURCES = ['Sha256.mo', 'Event.mo', 'Ledger.mo', 'main.mo'];
 
 /**
  * Warnings accepted on purpose. Anything else fails the check.
- *  - M0270: the specification asks for `system func postupgrade` to re-set the
- *    certified data after an upgrade; this compiler marks the hook as
+ *  - M0270: the specification asks for `system func postupgrade` to refold
+ *    the transient standing and re-set the certified data after an upgrade
+ *    (the actor body does the same at install); this compiler marks the hook as
  *    deprecated in favour of migration functions. Revisit under the deploying
  *    toolchain.
  *  - M0194: `appender` is part of the specified state, reserved for a later,
@@ -92,6 +93,20 @@ if (out) {
   ok(bytes > 0, 'main.mo compiles to an ic wasm (' + bytes + ' bytes; not executed here)');
   golden(path.join(ICP, 'federation.did'), out.candid, 'Candid interface of main.mo');
   golden(path.join(ICP, 'federation.most'), out.stable, 'stable signature of main.mo');
+  // Only the event list and its bookkeeping are stable; the standing is
+  // refolded from the log, so no library container layout is persisted.
+  const stableVars = [...out.stable.matchAll(/stable var (\w+)/g)].map((m) => m[1]).sort();
+  ok(JSON.stringify(stableVars) === JSON.stringify(['appender', 'count', 'currentHead', 'log']), 'stable data is only log, count, currentHead and appender', stableVars.join(', '));
+  ok(!/Map__|Tree__|#red|#black/.test(out.stable), 'stable signature carries no core Map internals');
+}
+
+// The interpreter cannot run CertifiedData.set, so this only checks the
+// source: the actor body (two-space indent, outside any function) refolds and
+// certifies at install, and postupgrade does both again.
+{
+  const main = readFileSync(path.join(ICP, 'src', 'main.mo'), 'utf8');
+  ok(/\n  refold\(\);\n  certify\(\);\n/.test(main), 'main.mo certifies the head (64 zeros for the empty log) and refolds the standing at install');
+  ok(/system func postupgrade\(\) \{\n    refold\(\);\n    certify\(\);/.test(main), 'main.mo refolds and certifies in postupgrade');
 }
 
 console.log('# run: ' + passed + ' passed, ' + failed + ' failed, ' + (Date.now() - t0) + ' ms in total');

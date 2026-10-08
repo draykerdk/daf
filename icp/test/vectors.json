@@ -330,6 +330,7 @@
         [
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-01",
             "active": false
@@ -338,26 +339,14 @@
         [
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 0,
             "joined": "2026-01",
             "active": false
           },
           {
             "id": "example-river",
-            "points": 0,
-            "joined": "2026-01",
-            "active": false
-          }
-        ],
-        [
-          {
-            "id": "example-river",
-            "points": 1,
-            "joined": "2026-01",
-            "active": false
-          },
-          {
-            "id": "example-delta",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-01",
             "active": false
@@ -366,12 +355,14 @@
         [
           {
             "id": "example-river",
-            "points": 2,
+            "kind": "participant",
+            "points": 1,
             "joined": "2026-01",
             "active": false
           },
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 0,
             "joined": "2026-01",
             "active": false
@@ -380,12 +371,30 @@
         [
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-01",
             "active": false
           },
           {
             "id": "example-delta",
+            "kind": "unit",
+            "points": 0,
+            "joined": "2026-01",
+            "active": false
+          }
+        ],
+        [
+          {
+            "id": "example-river",
+            "kind": "participant",
+            "points": 2,
+            "joined": "2026-01",
+            "active": false
+          },
+          {
+            "id": "example-delta",
+            "kind": "unit",
             "points": 1,
             "joined": "2026-01",
             "active": false
@@ -394,12 +403,14 @@
         [
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-01",
             "active": false
           },
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 1,
             "joined": "2026-01",
             "active": false
@@ -408,12 +419,14 @@
         [
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-01",
             "active": false
           },
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 1,
             "joined": "2026-01",
             "active": false
@@ -422,12 +435,14 @@
         [
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 1,
             "joined": "2026-01",
             "active": true
@@ -436,18 +451,21 @@
         [
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 1,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-cedar",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-02",
             "active": false
@@ -456,18 +474,21 @@
         [
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 2,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-cedar",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-02",
             "active": false
@@ -476,18 +497,21 @@
         [
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 2,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-cedar",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-02",
             "active": false
@@ -496,18 +520,21 @@
         [
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 4,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-cedar",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-02",
             "active": false
@@ -516,18 +543,21 @@
         [
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 4,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-cedar",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-02",
             "active": false
           },
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-01",
             "active": true
@@ -536,18 +566,21 @@
         [
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 4,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-cedar",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-02",
             "active": false
           },
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-01",
             "active": true
@@ -556,18 +589,21 @@
         [
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 4,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-cedar",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-02",
             "active": false
           },
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-01",
             "active": true
@@ -576,18 +612,21 @@
         [
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 4,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-cedar",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-02",
             "active": false
           },
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-01",
             "active": true
@@ -596,18 +635,21 @@
         [
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 4,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-cedar",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-02",
             "active": false
           },
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-01",
             "active": true
@@ -616,18 +658,21 @@
         [
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 4,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-cedar",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-02",
             "active": true
           },
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-01",
             "active": true
@@ -636,18 +681,21 @@
         [
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 4,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-cedar",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-02",
             "active": true
           },
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-01",
             "active": true
@@ -656,18 +704,21 @@
         [
           {
             "id": "example-delta",
+            "kind": "unit",
             "points": 4,
             "joined": "2026-01",
             "active": true
           },
           {
             "id": "example-cedar",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-02",
             "active": true
           },
           {
             "id": "example-river",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-01",
             "active": true
@@ -679,8 +730,8 @@
       "name": "synthetic",
       "source": "icp/test/export-vectors.mjs syntheticRecord()",
       "dormantAfter": 2,
-      "count": 33,
-      "head": "f9cbbaf468670a2eaf7cc91ee6c6763fd78937c1670d59bad042dccc7d1fab77",
+      "count": 34,
+      "head": "c7852fcef6477f0124b8db8b602e466996220dbe3f2b8f5808b3f35865a5cd25",
       "events": [
         {
           "seq": 1,
@@ -1042,6 +1093,22 @@
         },
         {
           "seq": 24,
+          "kind": "unit.recorded",
+          "cycle": "2026-08",
+          "holder": "example-pine",
+          "points": 0,
+          "value": "participant",
+          "ref": "federation/units/example-pine.yml",
+          "blob": "",
+          "evidence": [
+            "https://github.com/example-org/example-repo/pull/110"
+          ],
+          "prev": "48a8e62ea5c85cd2161e8682dc9a04972fe0e2b9caff8da0502f523b82b26f65",
+          "preimage": "daf-event/1\nseq=24\nkind=unit.recorded\ncycle=2026-08\nholder=example-pine\npoints=0\nvalue=participant\nref=federation/units/example-pine.yml\nblob=\nevidence=1\nevidence=https://github.com/example-org/example-repo/pull/110\nprev=48a8e62ea5c85cd2161e8682dc9a04972fe0e2b9caff8da0502f523b82b26f65\n",
+          "hash": "0a159b48382aaffad4cf8bf0fa15f4bf06b06957306e9f000760adc6b2a058ac"
+        },
+        {
+          "seq": 25,
           "kind": "function.delivered",
           "cycle": "2026-08",
           "holder": "example-elm",
@@ -1051,14 +1118,14 @@
           "blob": "ec096fbe9ea76429174fb7902cd11426e20b896a",
           "evidence": [
             "https://github.com/draykerdk/daf/issues/44",
-            "https://github.com/example-org/example-repo/pull/210"
+            "https://github.com/example-org/example-repo/pull/211"
           ],
-          "prev": "48a8e62ea5c85cd2161e8682dc9a04972fe0e2b9caff8da0502f523b82b26f65",
-          "preimage": "daf-event/1\nseq=24\nkind=function.delivered\ncycle=2026-08\nholder=example-elm\npoints=1\nvalue=\nref=federation/assemblies/2026-08.md\nblob=ec096fbe9ea76429174fb7902cd11426e20b896a\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/44\nevidence=https://github.com/example-org/example-repo/pull/210\nprev=48a8e62ea5c85cd2161e8682dc9a04972fe0e2b9caff8da0502f523b82b26f65\n",
-          "hash": "3e2f7dbd9095c4e3a4a66c57db413489e2387469f43ac0d3046697141f810c3a"
+          "prev": "0a159b48382aaffad4cf8bf0fa15f4bf06b06957306e9f000760adc6b2a058ac",
+          "preimage": "daf-event/1\nseq=25\nkind=function.delivered\ncycle=2026-08\nholder=example-elm\npoints=1\nvalue=\nref=federation/assemblies/2026-08.md\nblob=ec096fbe9ea76429174fb7902cd11426e20b896a\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/44\nevidence=https://github.com/example-org/example-repo/pull/211\nprev=0a159b48382aaffad4cf8bf0fa15f4bf06b06957306e9f000760adc6b2a058ac\n",
+          "hash": "0eeecf07fcbd9903f0dbcc9bc9c7e4923dafd24699c632ef413fc162060ebdd0"
         },
         {
-          "seq": 25,
+          "seq": 26,
           "kind": "vote.cast",
           "cycle": "2026-08",
           "holder": "example-elm",
@@ -1067,12 +1134,12 @@
           "ref": "federation/assemblies/2026-08.md",
           "blob": "ec096fbe9ea76429174fb7902cd11426e20b896a",
           "evidence": [],
-          "prev": "3e2f7dbd9095c4e3a4a66c57db413489e2387469f43ac0d3046697141f810c3a",
-          "preimage": "daf-event/1\nseq=25\nkind=vote.cast\ncycle=2026-08\nholder=example-elm\npoints=1\nvalue=for\nref=federation/assemblies/2026-08.md\nblob=ec096fbe9ea76429174fb7902cd11426e20b896a\nevidence=0\nprev=3e2f7dbd9095c4e3a4a66c57db413489e2387469f43ac0d3046697141f810c3a\n",
-          "hash": "9fce8c5341cb50c98565068be7eff4577fafcad9dbced34c4074b1594ea71848"
+          "prev": "0eeecf07fcbd9903f0dbcc9bc9c7e4923dafd24699c632ef413fc162060ebdd0",
+          "preimage": "daf-event/1\nseq=26\nkind=vote.cast\ncycle=2026-08\nholder=example-elm\npoints=1\nvalue=for\nref=federation/assemblies/2026-08.md\nblob=ec096fbe9ea76429174fb7902cd11426e20b896a\nevidence=0\nprev=0eeecf07fcbd9903f0dbcc9bc9c7e4923dafd24699c632ef413fc162060ebdd0\n",
+          "hash": "8e453f2c78110c5774ee1d7287049bd3765e8ef09abf70fed80649436131499b"
         },
         {
-          "seq": 26,
+          "seq": 27,
           "kind": "assembly.closed",
           "cycle": "2026-08",
           "holder": "",
@@ -1083,12 +1150,12 @@
           "evidence": [
             "https://github.com/draykerdk/daf/issues/204"
           ],
-          "prev": "9fce8c5341cb50c98565068be7eff4577fafcad9dbced34c4074b1594ea71848",
-          "preimage": "daf-event/1\nseq=26\nkind=assembly.closed\ncycle=2026-08\nholder=\npoints=0\nvalue=passed\nref=federation/assemblies/2026-08.md\nblob=ec096fbe9ea76429174fb7902cd11426e20b896a\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/204\nprev=9fce8c5341cb50c98565068be7eff4577fafcad9dbced34c4074b1594ea71848\n",
-          "hash": "66662536fb49c294dd3d130d3e63b9935cbd2a5026dae39ad9850355831bfd99"
+          "prev": "8e453f2c78110c5774ee1d7287049bd3765e8ef09abf70fed80649436131499b",
+          "preimage": "daf-event/1\nseq=27\nkind=assembly.closed\ncycle=2026-08\nholder=\npoints=0\nvalue=passed\nref=federation/assemblies/2026-08.md\nblob=ec096fbe9ea76429174fb7902cd11426e20b896a\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/204\nprev=8e453f2c78110c5774ee1d7287049bd3765e8ef09abf70fed80649436131499b\n",
+          "hash": "4ce0bc67a17f1db507f0b5a2447857480deca202bd223aa53fb93ea9545ea623"
         },
         {
-          "seq": 27,
+          "seq": 28,
           "kind": "vote.cast",
           "cycle": "2026-09",
           "holder": "example-elm",
@@ -1097,12 +1164,12 @@
           "ref": "federation/assemblies/2026-09.md",
           "blob": "3151091841bd7c807f5786bf2ddccfc73a93e766",
           "evidence": [],
-          "prev": "66662536fb49c294dd3d130d3e63b9935cbd2a5026dae39ad9850355831bfd99",
-          "preimage": "daf-event/1\nseq=27\nkind=vote.cast\ncycle=2026-09\nholder=example-elm\npoints=2\nvalue=against\nref=federation/assemblies/2026-09.md\nblob=3151091841bd7c807f5786bf2ddccfc73a93e766\nevidence=0\nprev=66662536fb49c294dd3d130d3e63b9935cbd2a5026dae39ad9850355831bfd99\n",
-          "hash": "13a061d515c3b2054c6d0827c9b325d679699c58cf7c22ca0f655827ff23aaf8"
+          "prev": "4ce0bc67a17f1db507f0b5a2447857480deca202bd223aa53fb93ea9545ea623",
+          "preimage": "daf-event/1\nseq=28\nkind=vote.cast\ncycle=2026-09\nholder=example-elm\npoints=2\nvalue=against\nref=federation/assemblies/2026-09.md\nblob=3151091841bd7c807f5786bf2ddccfc73a93e766\nevidence=0\nprev=4ce0bc67a17f1db507f0b5a2447857480deca202bd223aa53fb93ea9545ea623\n",
+          "hash": "0871b26ed7710939ef417085333754bf58b6a079ab71918ac78050150bf32355"
         },
         {
-          "seq": 28,
+          "seq": 29,
           "kind": "assembly.closed",
           "cycle": "2026-09",
           "holder": "",
@@ -1113,12 +1180,12 @@
           "evidence": [
             "https://github.com/draykerdk/daf/issues/205"
           ],
-          "prev": "13a061d515c3b2054c6d0827c9b325d679699c58cf7c22ca0f655827ff23aaf8",
-          "preimage": "daf-event/1\nseq=28\nkind=assembly.closed\ncycle=2026-09\nholder=\npoints=0\nvalue=failed\nref=federation/assemblies/2026-09.md\nblob=3151091841bd7c807f5786bf2ddccfc73a93e766\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/205\nprev=13a061d515c3b2054c6d0827c9b325d679699c58cf7c22ca0f655827ff23aaf8\n",
-          "hash": "1e174bc8f693c24ff915fa118ed7a1bfa7eeaf7b6b67bd3a21a53e8bce597111"
+          "prev": "0871b26ed7710939ef417085333754bf58b6a079ab71918ac78050150bf32355",
+          "preimage": "daf-event/1\nseq=29\nkind=assembly.closed\ncycle=2026-09\nholder=\npoints=0\nvalue=failed\nref=federation/assemblies/2026-09.md\nblob=3151091841bd7c807f5786bf2ddccfc73a93e766\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/205\nprev=0871b26ed7710939ef417085333754bf58b6a079ab71918ac78050150bf32355\n",
+          "hash": "92e693cc11dab74f2dd70f1ee2d1c7fa34f0534d4ac1bc74114ec3a7420d8343"
         },
         {
-          "seq": 29,
+          "seq": 30,
           "kind": "unit.recorded",
           "cycle": "2026-10",
           "holder": "example-fern",
@@ -1129,12 +1196,12 @@
           "evidence": [
             "https://github.com/example-org/example-repo/pull/110"
           ],
-          "prev": "1e174bc8f693c24ff915fa118ed7a1bfa7eeaf7b6b67bd3a21a53e8bce597111",
-          "preimage": "daf-event/1\nseq=29\nkind=unit.recorded\ncycle=2026-10\nholder=example-fern\npoints=0\nvalue=unit\nref=federation/units/example-fern.yml\nblob=\nevidence=1\nevidence=https://github.com/example-org/example-repo/pull/110\nprev=1e174bc8f693c24ff915fa118ed7a1bfa7eeaf7b6b67bd3a21a53e8bce597111\n",
-          "hash": "9d6817533f6fce7e2ba6a75e776947dc444ccf99401ce01a77e3ce0d3e6037c8"
+          "prev": "92e693cc11dab74f2dd70f1ee2d1c7fa34f0534d4ac1bc74114ec3a7420d8343",
+          "preimage": "daf-event/1\nseq=30\nkind=unit.recorded\ncycle=2026-10\nholder=example-fern\npoints=0\nvalue=unit\nref=federation/units/example-fern.yml\nblob=\nevidence=1\nevidence=https://github.com/example-org/example-repo/pull/110\nprev=92e693cc11dab74f2dd70f1ee2d1c7fa34f0534d4ac1bc74114ec3a7420d8343\n",
+          "hash": "7bf0060f044e6973fe2e6dedd781caa90e094da963395e540aa27a5f6022d99e"
         },
         {
-          "seq": 30,
+          "seq": 31,
           "kind": "function.delivered",
           "cycle": "2026-10",
           "holder": "example-fern",
@@ -1146,12 +1213,12 @@
             "https://github.com/draykerdk/daf/issues/45",
             "https://github.com/example-org/example-repo/pull/211"
           ],
-          "prev": "9d6817533f6fce7e2ba6a75e776947dc444ccf99401ce01a77e3ce0d3e6037c8",
-          "preimage": "daf-event/1\nseq=30\nkind=function.delivered\ncycle=2026-10\nholder=example-fern\npoints=2\nvalue=\nref=federation/assemblies/2026-10.md\nblob=c7f1e5fb95317c7b122ff79f68c1f4657eb85159\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/45\nevidence=https://github.com/example-org/example-repo/pull/211\nprev=9d6817533f6fce7e2ba6a75e776947dc444ccf99401ce01a77e3ce0d3e6037c8\n",
-          "hash": "bbdc4af1e32e9114fd5bcd41d454612be39550486262c6387dbf34cdc02cef5f"
+          "prev": "7bf0060f044e6973fe2e6dedd781caa90e094da963395e540aa27a5f6022d99e",
+          "preimage": "daf-event/1\nseq=31\nkind=function.delivered\ncycle=2026-10\nholder=example-fern\npoints=2\nvalue=\nref=federation/assemblies/2026-10.md\nblob=c7f1e5fb95317c7b122ff79f68c1f4657eb85159\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/45\nevidence=https://github.com/example-org/example-repo/pull/211\nprev=7bf0060f044e6973fe2e6dedd781caa90e094da963395e540aa27a5f6022d99e\n",
+          "hash": "380016538bd0b546640bf9ba7af69ae877295d29f09111ceec14f2a7d49b93eb"
         },
         {
-          "seq": 31,
+          "seq": 32,
           "kind": "vote.cast",
           "cycle": "2026-10",
           "holder": "example-fern",
@@ -1160,12 +1227,12 @@
           "ref": "federation/assemblies/2026-10.md",
           "blob": "c7f1e5fb95317c7b122ff79f68c1f4657eb85159",
           "evidence": [],
-          "prev": "bbdc4af1e32e9114fd5bcd41d454612be39550486262c6387dbf34cdc02cef5f",
-          "preimage": "daf-event/1\nseq=31\nkind=vote.cast\ncycle=2026-10\nholder=example-fern\npoints=0\nvalue=for\nref=federation/assemblies/2026-10.md\nblob=c7f1e5fb95317c7b122ff79f68c1f4657eb85159\nevidence=0\nprev=bbdc4af1e32e9114fd5bcd41d454612be39550486262c6387dbf34cdc02cef5f\n",
-          "hash": "80f7d735b68112bfff89c91c22b35ca249ec7d914ebedd5e141094471a74f50f"
+          "prev": "380016538bd0b546640bf9ba7af69ae877295d29f09111ceec14f2a7d49b93eb",
+          "preimage": "daf-event/1\nseq=32\nkind=vote.cast\ncycle=2026-10\nholder=example-fern\npoints=0\nvalue=for\nref=federation/assemblies/2026-10.md\nblob=c7f1e5fb95317c7b122ff79f68c1f4657eb85159\nevidence=0\nprev=380016538bd0b546640bf9ba7af69ae877295d29f09111ceec14f2a7d49b93eb\n",
+          "hash": "492e7d59456e24903d3c7c7874860aaffcc55ee799fdb1b76c373586cbc388f7"
         },
         {
-          "seq": 32,
+          "seq": 33,
           "kind": "vote.cast",
           "cycle": "2026-10",
           "holder": "example-oak",
@@ -1174,12 +1241,12 @@
           "ref": "federation/assemblies/2026-10.md",
           "blob": "c7f1e5fb95317c7b122ff79f68c1f4657eb85159",
           "evidence": [],
-          "prev": "80f7d735b68112bfff89c91c22b35ca249ec7d914ebedd5e141094471a74f50f",
-          "preimage": "daf-event/1\nseq=32\nkind=vote.cast\ncycle=2026-10\nholder=example-oak\npoints=5\nvalue=for\nref=federation/assemblies/2026-10.md\nblob=c7f1e5fb95317c7b122ff79f68c1f4657eb85159\nevidence=0\nprev=80f7d735b68112bfff89c91c22b35ca249ec7d914ebedd5e141094471a74f50f\n",
-          "hash": "0122cae1a7d1dcbbb81500ff788ddf2bfd2a4d87d02979e0d855ceece50c2821"
+          "prev": "492e7d59456e24903d3c7c7874860aaffcc55ee799fdb1b76c373586cbc388f7",
+          "preimage": "daf-event/1\nseq=33\nkind=vote.cast\ncycle=2026-10\nholder=example-oak\npoints=5\nvalue=for\nref=federation/assemblies/2026-10.md\nblob=c7f1e5fb95317c7b122ff79f68c1f4657eb85159\nevidence=0\nprev=492e7d59456e24903d3c7c7874860aaffcc55ee799fdb1b76c373586cbc388f7\n",
+          "hash": "eb33a52322b487fed18a5b7581d01ca83512c9df38933ab80690d0a3e150901b"
         },
         {
-          "seq": 33,
+          "seq": 34,
           "kind": "assembly.closed",
           "cycle": "2026-10",
           "holder": "",
@@ -1190,9 +1257,9 @@
           "evidence": [
             "https://github.com/draykerdk/daf/issues/206"
           ],
-          "prev": "0122cae1a7d1dcbbb81500ff788ddf2bfd2a4d87d02979e0d855ceece50c2821",
-          "preimage": "daf-event/1\nseq=33\nkind=assembly.closed\ncycle=2026-10\nholder=\npoints=0\nvalue=passed\nref=federation/assemblies/2026-10.md\nblob=c7f1e5fb95317c7b122ff79f68c1f4657eb85159\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/206\nprev=0122cae1a7d1dcbbb81500ff788ddf2bfd2a4d87d02979e0d855ceece50c2821\n",
-          "hash": "f9cbbaf468670a2eaf7cc91ee6c6763fd78937c1670d59bad042dccc7d1fab77"
+          "prev": "eb33a52322b487fed18a5b7581d01ca83512c9df38933ab80690d0a3e150901b",
+          "preimage": "daf-event/1\nseq=34\nkind=assembly.closed\ncycle=2026-10\nholder=\npoints=0\nvalue=passed\nref=federation/assemblies/2026-10.md\nblob=c7f1e5fb95317c7b122ff79f68c1f4657eb85159\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/206\nprev=eb33a52322b487fed18a5b7581d01ca83512c9df38933ab80690d0a3e150901b\n",
+          "hash": "c7852fcef6477f0124b8db8b602e466996220dbe3f2b8f5808b3f35865a5cd25"
         }
       ],
       "ledger": [
@@ -1200,6 +1267,7 @@
         [
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": false
@@ -1208,12 +1276,14 @@
         [
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 0,
             "joined": "2026-05",
             "active": false
@@ -1222,18 +1292,21 @@
         [
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 0,
             "joined": "2026-05",
             "active": false
@@ -1242,18 +1315,21 @@
         [
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 0,
             "joined": "2026-05",
             "active": false
@@ -1262,18 +1338,21 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 12,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": false
@@ -1282,18 +1361,21 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 12,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": false
@@ -1302,38 +1384,21 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 12,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-oak",
-            "points": 1,
-            "joined": "2026-05",
-            "active": false
-          }
-        ],
-        [
-          {
-            "id": "example-pine",
-            "points": 12,
-            "joined": "2026-05",
-            "active": false
-          },
-          {
-            "id": "example-fern",
-            "points": 1,
-            "joined": "2026-05",
-            "active": false
-          },
-          {
-            "id": "example-oak",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": false
@@ -1342,18 +1407,44 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
+            "points": 12,
+            "joined": "2026-05",
+            "active": false
+          },
+          {
+            "id": "example-fern",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-05",
+            "active": false
+          },
+          {
+            "id": "example-oak",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-05",
+            "active": false
+          }
+        ],
+        [
+          {
+            "id": "example-pine",
+            "kind": "unit",
             "points": 12,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
@@ -1362,18 +1453,21 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 12,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
@@ -1382,18 +1476,21 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 12,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
@@ -1402,24 +1499,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 12,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-07",
             "active": false
@@ -1428,24 +1529,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 12,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-07",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
@@ -1454,24 +1559,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 12,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-07",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
@@ -1480,24 +1589,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 12,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-07",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
@@ -1506,24 +1619,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 9,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-07",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-05",
             "active": true
@@ -1532,24 +1649,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 9,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-07",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": true
@@ -1558,24 +1679,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 9,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-07",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": true
@@ -1584,24 +1709,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 9,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-07",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": true
@@ -1610,24 +1739,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 9,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-07",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": true
@@ -1636,24 +1769,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 9,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-07",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": true
@@ -1662,24 +1799,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 9,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-07",
             "active": false
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": true
@@ -1688,24 +1829,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "unit",
             "points": 9,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 1,
             "joined": "2026-07",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": false
@@ -1714,24 +1859,58 @@
         [
           {
             "id": "example-pine",
+            "kind": "participant",
             "points": 9,
-            "joined": "2026-05",
+            "joined": "2026-08",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-07",
+            "active": true
+          },
+          {
+            "id": "example-fern",
+            "kind": "participant",
+            "points": 0,
+            "joined": "2026-05",
+            "active": false
+          }
+        ],
+        [
+          {
+            "id": "example-pine",
+            "kind": "participant",
+            "points": 9,
+            "joined": "2026-08",
+            "active": true
+          },
+          {
+            "id": "example-oak",
+            "kind": "participant",
+            "points": 5,
+            "joined": "2026-05",
+            "active": true
+          },
+          {
+            "id": "example-elm",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-07",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": false
@@ -1740,24 +1919,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "participant",
             "points": 9,
-            "joined": "2026-05",
+            "joined": "2026-08",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-07",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": false
@@ -1766,24 +1949,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "participant",
             "points": 9,
-            "joined": "2026-05",
+            "joined": "2026-08",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-07",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": false
@@ -1792,24 +1979,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "participant",
             "points": 9,
-            "joined": "2026-05",
+            "joined": "2026-08",
             "active": true
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-07",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": false
@@ -1818,24 +2009,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "participant",
             "points": 9,
-            "joined": "2026-05",
+            "joined": "2026-08",
             "active": false
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-07",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "participant",
             "points": 0,
             "joined": "2026-05",
             "active": false
@@ -1844,24 +2039,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "participant",
             "points": 9,
-            "joined": "2026-05",
+            "joined": "2026-08",
             "active": false
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-07",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "unit",
             "points": 0,
             "joined": "2026-10",
             "active": false
@@ -1870,24 +2069,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "participant",
             "points": 9,
-            "joined": "2026-05",
+            "joined": "2026-08",
             "active": false
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-07",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "unit",
             "points": 2,
             "joined": "2026-10",
             "active": false
@@ -1896,24 +2099,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "participant",
             "points": 9,
-            "joined": "2026-05",
+            "joined": "2026-08",
             "active": false
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-07",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "unit",
             "points": 2,
             "joined": "2026-10",
             "active": false
@@ -1922,24 +2129,28 @@
         [
           {
             "id": "example-pine",
+            "kind": "participant",
             "points": 9,
-            "joined": "2026-05",
+            "joined": "2026-08",
             "active": false
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": false
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-07",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "unit",
             "points": 2,
             "joined": "2026-10",
             "active": false
@@ -1948,27 +2159,458 @@
         [
           {
             "id": "example-pine",
+            "kind": "participant",
             "points": 9,
-            "joined": "2026-05",
+            "joined": "2026-08",
             "active": false
           },
           {
             "id": "example-oak",
+            "kind": "participant",
             "points": 5,
             "joined": "2026-05",
             "active": true
           },
           {
             "id": "example-elm",
+            "kind": "participant",
             "points": 2,
             "joined": "2026-07",
             "active": true
           },
           {
             "id": "example-fern",
+            "kind": "unit",
             "points": 2,
             "joined": "2026-10",
             "active": true
+          }
+        ]
+      ]
+    },
+    {
+      "name": "founding",
+      "source": "icp/test/export-vectors.mjs foundingRecord()",
+      "dormantAfter": 1,
+      "count": 14,
+      "head": "b572b5187448f6e87edd4b72ed941085aed47b17ee186138501023850f395530",
+      "events": [
+        {
+          "seq": 1,
+          "kind": "vote.cast",
+          "cycle": "2026-03",
+          "holder": "example-ash",
+          "points": 0,
+          "value": "for",
+          "ref": "federation/assemblies/2026-03.md",
+          "blob": "2926e58a8dc0225162bc96d967cb0ed25af13dbc",
+          "evidence": [],
+          "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+          "preimage": "daf-event/1\nseq=1\nkind=vote.cast\ncycle=2026-03\nholder=example-ash\npoints=0\nvalue=for\nref=federation/assemblies/2026-03.md\nblob=2926e58a8dc0225162bc96d967cb0ed25af13dbc\nevidence=0\nprev=0000000000000000000000000000000000000000000000000000000000000000\n",
+          "hash": "949df2befb9f6e2b36df5376f480c6813003eaf29ef8f6df3501b722333e3367"
+        },
+        {
+          "seq": 2,
+          "kind": "vote.cast",
+          "cycle": "2026-03",
+          "holder": "example-birch",
+          "points": 0,
+          "value": "against",
+          "ref": "federation/assemblies/2026-03.md",
+          "blob": "2926e58a8dc0225162bc96d967cb0ed25af13dbc",
+          "evidence": [],
+          "prev": "949df2befb9f6e2b36df5376f480c6813003eaf29ef8f6df3501b722333e3367",
+          "preimage": "daf-event/1\nseq=2\nkind=vote.cast\ncycle=2026-03\nholder=example-birch\npoints=0\nvalue=against\nref=federation/assemblies/2026-03.md\nblob=2926e58a8dc0225162bc96d967cb0ed25af13dbc\nevidence=0\nprev=949df2befb9f6e2b36df5376f480c6813003eaf29ef8f6df3501b722333e3367\n",
+          "hash": "33178e4af8519c7aaf886b1b30ccd1ee2d50dd86dcb8e01b1e58d63012e5d613"
+        },
+        {
+          "seq": 3,
+          "kind": "assembly.closed",
+          "cycle": "2026-03",
+          "holder": "",
+          "points": 0,
+          "value": "failed",
+          "ref": "federation/assemblies/2026-03.md",
+          "blob": "2926e58a8dc0225162bc96d967cb0ed25af13dbc",
+          "evidence": [
+            "https://github.com/draykerdk/daf/issues/301"
+          ],
+          "prev": "33178e4af8519c7aaf886b1b30ccd1ee2d50dd86dcb8e01b1e58d63012e5d613",
+          "preimage": "daf-event/1\nseq=3\nkind=assembly.closed\ncycle=2026-03\nholder=\npoints=0\nvalue=failed\nref=federation/assemblies/2026-03.md\nblob=2926e58a8dc0225162bc96d967cb0ed25af13dbc\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/301\nprev=33178e4af8519c7aaf886b1b30ccd1ee2d50dd86dcb8e01b1e58d63012e5d613\n",
+          "hash": "fac4a02c420832e09122f9e9da8d44a29ac211aac008b6b8f958bd4e4d2a81b1"
+        },
+        {
+          "seq": 4,
+          "kind": "unit.recorded",
+          "cycle": "2026-04",
+          "holder": "example-ash",
+          "points": 0,
+          "value": "participant",
+          "ref": "federation/units/example-ash.yml",
+          "blob": "",
+          "evidence": [
+            "https://github.com/example-org/example-repo/pull/310"
+          ],
+          "prev": "fac4a02c420832e09122f9e9da8d44a29ac211aac008b6b8f958bd4e4d2a81b1",
+          "preimage": "daf-event/1\nseq=4\nkind=unit.recorded\ncycle=2026-04\nholder=example-ash\npoints=0\nvalue=participant\nref=federation/units/example-ash.yml\nblob=\nevidence=1\nevidence=https://github.com/example-org/example-repo/pull/310\nprev=fac4a02c420832e09122f9e9da8d44a29ac211aac008b6b8f958bd4e4d2a81b1\n",
+          "hash": "a1e02fe4c14c7638a14873f14573c3a4bc0c64c4b35371e4578fa8228f3c50f4"
+        },
+        {
+          "seq": 5,
+          "kind": "function.delivered",
+          "cycle": "2026-04",
+          "holder": "example-ash",
+          "points": 1,
+          "value": "",
+          "ref": "federation/assemblies/2026-04.md",
+          "blob": "8623faf5e37a03a222d30cd7bec0196dc83725ca",
+          "evidence": [
+            "https://github.com/draykerdk/daf/issues/52",
+            "https://github.com/example-org/example-repo/pull/411"
+          ],
+          "prev": "a1e02fe4c14c7638a14873f14573c3a4bc0c64c4b35371e4578fa8228f3c50f4",
+          "preimage": "daf-event/1\nseq=5\nkind=function.delivered\ncycle=2026-04\nholder=example-ash\npoints=1\nvalue=\nref=federation/assemblies/2026-04.md\nblob=8623faf5e37a03a222d30cd7bec0196dc83725ca\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/52\nevidence=https://github.com/example-org/example-repo/pull/411\nprev=a1e02fe4c14c7638a14873f14573c3a4bc0c64c4b35371e4578fa8228f3c50f4\n",
+          "hash": "24d4ae3d07a3ae021c678cc649b1a7a3a0751fb93ba2b5383b1b95dd7c8d9540"
+        },
+        {
+          "seq": 6,
+          "kind": "function.delivered",
+          "cycle": "2026-04",
+          "holder": "example-birch",
+          "points": 2,
+          "value": "",
+          "ref": "federation/assemblies/2026-04.md",
+          "blob": "8623faf5e37a03a222d30cd7bec0196dc83725ca",
+          "evidence": [
+            "https://github.com/draykerdk/daf/issues/53",
+            "https://github.com/example-org/example-repo/pull/412"
+          ],
+          "prev": "24d4ae3d07a3ae021c678cc649b1a7a3a0751fb93ba2b5383b1b95dd7c8d9540",
+          "preimage": "daf-event/1\nseq=6\nkind=function.delivered\ncycle=2026-04\nholder=example-birch\npoints=2\nvalue=\nref=federation/assemblies/2026-04.md\nblob=8623faf5e37a03a222d30cd7bec0196dc83725ca\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/53\nevidence=https://github.com/example-org/example-repo/pull/412\nprev=24d4ae3d07a3ae021c678cc649b1a7a3a0751fb93ba2b5383b1b95dd7c8d9540\n",
+          "hash": "27b2e10cac017b3adc4a67d742b028fcc41c1b779d315a49b53e692a945ed49d"
+        },
+        {
+          "seq": 7,
+          "kind": "vote.cast",
+          "cycle": "2026-04",
+          "holder": "example-ash",
+          "points": 0,
+          "value": "for",
+          "ref": "federation/assemblies/2026-04.md",
+          "blob": "8623faf5e37a03a222d30cd7bec0196dc83725ca",
+          "evidence": [],
+          "prev": "27b2e10cac017b3adc4a67d742b028fcc41c1b779d315a49b53e692a945ed49d",
+          "preimage": "daf-event/1\nseq=7\nkind=vote.cast\ncycle=2026-04\nholder=example-ash\npoints=0\nvalue=for\nref=federation/assemblies/2026-04.md\nblob=8623faf5e37a03a222d30cd7bec0196dc83725ca\nevidence=0\nprev=27b2e10cac017b3adc4a67d742b028fcc41c1b779d315a49b53e692a945ed49d\n",
+          "hash": "75f091a7b95ddb9e553c98554bfc2ed21f7dca22a33a90c763ecc57f2f3a7f95"
+        },
+        {
+          "seq": 8,
+          "kind": "vote.cast",
+          "cycle": "2026-04",
+          "holder": "example-yew",
+          "points": 0,
+          "value": "for",
+          "ref": "federation/assemblies/2026-04.md",
+          "blob": "8623faf5e37a03a222d30cd7bec0196dc83725ca",
+          "evidence": [],
+          "prev": "75f091a7b95ddb9e553c98554bfc2ed21f7dca22a33a90c763ecc57f2f3a7f95",
+          "preimage": "daf-event/1\nseq=8\nkind=vote.cast\ncycle=2026-04\nholder=example-yew\npoints=0\nvalue=for\nref=federation/assemblies/2026-04.md\nblob=8623faf5e37a03a222d30cd7bec0196dc83725ca\nevidence=0\nprev=75f091a7b95ddb9e553c98554bfc2ed21f7dca22a33a90c763ecc57f2f3a7f95\n",
+          "hash": "8353338cc45e875d9e53be4d86dbb22110c6de7920f483d353285015f61a8785"
+        },
+        {
+          "seq": 9,
+          "kind": "assembly.closed",
+          "cycle": "2026-04",
+          "holder": "",
+          "points": 0,
+          "value": "passed",
+          "ref": "federation/assemblies/2026-04.md",
+          "blob": "8623faf5e37a03a222d30cd7bec0196dc83725ca",
+          "evidence": [
+            "https://github.com/draykerdk/daf/issues/302"
+          ],
+          "prev": "8353338cc45e875d9e53be4d86dbb22110c6de7920f483d353285015f61a8785",
+          "preimage": "daf-event/1\nseq=9\nkind=assembly.closed\ncycle=2026-04\nholder=\npoints=0\nvalue=passed\nref=federation/assemblies/2026-04.md\nblob=8623faf5e37a03a222d30cd7bec0196dc83725ca\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/302\nprev=8353338cc45e875d9e53be4d86dbb22110c6de7920f483d353285015f61a8785\n",
+          "hash": "7e1a56c55bf44d94e454d244ffb11c15fbb04680a02fe9ec6ba74e9e33f4ef51"
+        },
+        {
+          "seq": 10,
+          "kind": "function.delivered",
+          "cycle": "2026-05",
+          "holder": "example-yew",
+          "points": 1,
+          "value": "",
+          "ref": "federation/assemblies/2026-05.md",
+          "blob": "87001c1579d461222ee288ce0a49a0d57cbadef3",
+          "evidence": [
+            "https://github.com/draykerdk/daf/issues/54",
+            "https://github.com/example-org/example-repo/pull/410"
+          ],
+          "prev": "7e1a56c55bf44d94e454d244ffb11c15fbb04680a02fe9ec6ba74e9e33f4ef51",
+          "preimage": "daf-event/1\nseq=10\nkind=function.delivered\ncycle=2026-05\nholder=example-yew\npoints=1\nvalue=\nref=federation/assemblies/2026-05.md\nblob=87001c1579d461222ee288ce0a49a0d57cbadef3\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/54\nevidence=https://github.com/example-org/example-repo/pull/410\nprev=7e1a56c55bf44d94e454d244ffb11c15fbb04680a02fe9ec6ba74e9e33f4ef51\n",
+          "hash": "0b8ad2e3e7472fcea94df8dcd96d7ea4606db0ee28253ee4e8a094b83c1c6310"
+        },
+        {
+          "seq": 11,
+          "kind": "vote.cast",
+          "cycle": "2026-05",
+          "holder": "example-ash",
+          "points": 1,
+          "value": "for",
+          "ref": "federation/assemblies/2026-05.md",
+          "blob": "87001c1579d461222ee288ce0a49a0d57cbadef3",
+          "evidence": [],
+          "prev": "0b8ad2e3e7472fcea94df8dcd96d7ea4606db0ee28253ee4e8a094b83c1c6310",
+          "preimage": "daf-event/1\nseq=11\nkind=vote.cast\ncycle=2026-05\nholder=example-ash\npoints=1\nvalue=for\nref=federation/assemblies/2026-05.md\nblob=87001c1579d461222ee288ce0a49a0d57cbadef3\nevidence=0\nprev=0b8ad2e3e7472fcea94df8dcd96d7ea4606db0ee28253ee4e8a094b83c1c6310\n",
+          "hash": "07e264cdd16a3b27785d38cea9f8acb9e98b1f0c002483e4ebcdf3a5405ee4f6"
+        },
+        {
+          "seq": 12,
+          "kind": "assembly.closed",
+          "cycle": "2026-05",
+          "holder": "",
+          "points": 0,
+          "value": "passed",
+          "ref": "federation/assemblies/2026-05.md",
+          "blob": "87001c1579d461222ee288ce0a49a0d57cbadef3",
+          "evidence": [
+            "https://github.com/draykerdk/daf/issues/303"
+          ],
+          "prev": "07e264cdd16a3b27785d38cea9f8acb9e98b1f0c002483e4ebcdf3a5405ee4f6",
+          "preimage": "daf-event/1\nseq=12\nkind=assembly.closed\ncycle=2026-05\nholder=\npoints=0\nvalue=passed\nref=federation/assemblies/2026-05.md\nblob=87001c1579d461222ee288ce0a49a0d57cbadef3\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/303\nprev=07e264cdd16a3b27785d38cea9f8acb9e98b1f0c002483e4ebcdf3a5405ee4f6\n",
+          "hash": "2031c82673fc9106d96dc84670e5f576bac87159414b8ef26124304fdd32b66d"
+        },
+        {
+          "seq": 13,
+          "kind": "vote.cast",
+          "cycle": "2026-06",
+          "holder": "example-birch",
+          "points": 2,
+          "value": "for",
+          "ref": "federation/assemblies/2026-06.md",
+          "blob": "9e50ade82aab08fd14ff717e03030f60e4614bf8",
+          "evidence": [],
+          "prev": "2031c82673fc9106d96dc84670e5f576bac87159414b8ef26124304fdd32b66d",
+          "preimage": "daf-event/1\nseq=13\nkind=vote.cast\ncycle=2026-06\nholder=example-birch\npoints=2\nvalue=for\nref=federation/assemblies/2026-06.md\nblob=9e50ade82aab08fd14ff717e03030f60e4614bf8\nevidence=0\nprev=2031c82673fc9106d96dc84670e5f576bac87159414b8ef26124304fdd32b66d\n",
+          "hash": "6f8e62cc318f6237b68b07f943fb6b4e2b08c6d786c7619daeef941ae53ac317"
+        },
+        {
+          "seq": 14,
+          "kind": "assembly.closed",
+          "cycle": "2026-06",
+          "holder": "",
+          "points": 0,
+          "value": "passed",
+          "ref": "federation/assemblies/2026-06.md",
+          "blob": "9e50ade82aab08fd14ff717e03030f60e4614bf8",
+          "evidence": [
+            "https://github.com/draykerdk/daf/issues/304"
+          ],
+          "prev": "6f8e62cc318f6237b68b07f943fb6b4e2b08c6d786c7619daeef941ae53ac317",
+          "preimage": "daf-event/1\nseq=14\nkind=assembly.closed\ncycle=2026-06\nholder=\npoints=0\nvalue=passed\nref=federation/assemblies/2026-06.md\nblob=9e50ade82aab08fd14ff717e03030f60e4614bf8\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/304\nprev=6f8e62cc318f6237b68b07f943fb6b4e2b08c6d786c7619daeef941ae53ac317\n",
+          "hash": "b572b5187448f6e87edd4b72ed941085aed47b17ee186138501023850f395530"
+        }
+      ],
+      "ledger": [
+        [],
+        [],
+        [],
+        [],
+        [
+          {
+            "id": "example-ash",
+            "kind": "participant",
+            "points": 0,
+            "joined": "2026-04",
+            "active": true
+          }
+        ],
+        [
+          {
+            "id": "example-ash",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-04",
+            "active": true
+          }
+        ],
+        [
+          {
+            "id": "example-birch",
+            "kind": "",
+            "points": 2,
+            "joined": "",
+            "active": true
+          },
+          {
+            "id": "example-ash",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-04",
+            "active": true
+          }
+        ],
+        [
+          {
+            "id": "example-birch",
+            "kind": "",
+            "points": 2,
+            "joined": "",
+            "active": true
+          },
+          {
+            "id": "example-ash",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-04",
+            "active": true
+          }
+        ],
+        [
+          {
+            "id": "example-birch",
+            "kind": "",
+            "points": 2,
+            "joined": "",
+            "active": true
+          },
+          {
+            "id": "example-ash",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-04",
+            "active": true
+          }
+        ],
+        [
+          {
+            "id": "example-birch",
+            "kind": "",
+            "points": 2,
+            "joined": "",
+            "active": true
+          },
+          {
+            "id": "example-ash",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-04",
+            "active": true
+          }
+        ],
+        [
+          {
+            "id": "example-birch",
+            "kind": "",
+            "points": 2,
+            "joined": "",
+            "active": true
+          },
+          {
+            "id": "example-ash",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-04",
+            "active": true
+          },
+          {
+            "id": "example-yew",
+            "kind": "",
+            "points": 1,
+            "joined": "",
+            "active": true
+          }
+        ],
+        [
+          {
+            "id": "example-birch",
+            "kind": "",
+            "points": 2,
+            "joined": "",
+            "active": true
+          },
+          {
+            "id": "example-ash",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-04",
+            "active": true
+          },
+          {
+            "id": "example-yew",
+            "kind": "",
+            "points": 1,
+            "joined": "",
+            "active": true
+          }
+        ],
+        [
+          {
+            "id": "example-birch",
+            "kind": "",
+            "points": 2,
+            "joined": "",
+            "active": false
+          },
+          {
+            "id": "example-ash",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-04",
+            "active": true
+          },
+          {
+            "id": "example-yew",
+            "kind": "",
+            "points": 1,
+            "joined": "",
+            "active": true
+          }
+        ],
+        [
+          {
+            "id": "example-birch",
+            "kind": "",
+            "points": 2,
+            "joined": "",
+            "active": false
+          },
+          {
+            "id": "example-ash",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-04",
+            "active": true
+          },
+          {
+            "id": "example-yew",
+            "kind": "",
+            "points": 1,
+            "joined": "",
+            "active": true
+          }
+        ],
+        [
+          {
+            "id": "example-birch",
+            "kind": "",
+            "points": 2,
+            "joined": "",
+            "active": true
+          },
+          {
+            "id": "example-ash",
+            "kind": "participant",
+            "points": 1,
+            "joined": "2026-04",
+            "active": false
+          },
+          {
+            "id": "example-yew",
+            "kind": "",
+            "points": 1,
+            "joined": "",
+            "active": false
           }
         ]
       ]

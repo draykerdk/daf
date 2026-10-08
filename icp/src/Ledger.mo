@@ -1,20 +1,24 @@
 /// Ledger — the standing of each holder, folded from events v1.
 ///
 /// Same semantics as `foldEvents` in `tools/lib/events.js`:
+///   - a holder is listed once a unit.recorded, function.delivered,
+///     module.completed or penalty names it, even with no earlier
+///     unit.recorded; then its joined and kind are empty;
 ///   - points come from function.delivered, module.completed and penalty;
-///   - joined is the cycle of the holder's unit.recorded;
+///   - joined is the cycle of the holder's latest unit.recorded, and kind the
+///     value of that event; a later unit.recorded keeps points and activity;
 ///   - a holder is active if it cast a vote, or delivered a function, in one
 ///     of the last `dormantAfter` closed assemblies (assembly.closed events).
 ///     Activity in an assembly that is not closed yet does not count, as in
 ///     the reference.
 ///
-/// One rule is stricter than the reference, which trusts its input: an event
-/// that changes points (function.delivered, module.completed, penalty) or a
-/// vote.cast for a holder with no earlier unit.recorded is rejected.
+/// A vote.cast alone does not list its holder, as in the reference: the vote
+/// is kept as activity, and counts if a later event lists that holder. No
+/// event is rejected for its holder; only the shape and chain checks of
+/// `Event.next` reject a batch.
 ///
 /// The fold is incremental. `State` is an immutable value: `apply` returns a
-/// new state per event, so a caller can abandon a batch by keeping the old one,
-/// and no call ever refolds the whole history.
+/// new state per event, so a caller can abandon a batch by keeping the old one.
 
 import Array "mo:core/Array";
 import Iter "mo:core/Iter";
@@ -27,7 +31,13 @@ import Event "Event";
 
 module {
   public type Holder = {
+    /// True once an event other than vote.cast names the holder; only listed
+    /// holders appear in the standing.
+    listed : Bool;
+    /// The value of the latest unit.recorded; empty when not recorded.
+    kind : Text;
     points : Int;
+    /// The cycle of the latest unit.recorded; empty when not recorded.
     joined : Text;
     /// Index (from 0) of the latest assembly in which the holder voted or
     /// delivered. That assembly may still be open.
@@ -44,14 +54,17 @@ module {
     closed : Nat;
   };
 
-  public type Standing = { id : Text; points : Int; joined : Text; active : Bool };
+  public type Standing = { id : Text; kind : Text; points : Int; joined : Text; active : Bool };
 
   public func empty() : State = { holders = Map.empty<Text, Holder>(); closed = 0 };
 
-  func recorded(s : State, e : Event.EventV1) : Result.Result<Holder, Text> {
-    switch (s.holders.get(Text.compare, e.holder)) {
-      case (?h) #ok(h);
-      case null #err("event " # e.seq.toText() # ": " # e.kind # " for holder \"" # e.holder # "\" without an earlier unit.recorded");
+  let NEW : Holder = { listed = false; kind = ""; points = 0; joined = ""; lastActive = null; activeBefore = null };
+
+  /// The holder, created on first sight.
+  func get(s : State, id : Text) : Holder {
+    switch (s.holders.get(Text.compare, id)) {
+      case (?h) h;
+      case null NEW;
     };
   };
 
@@ -66,37 +79,33 @@ module {
     { h with lastActive = ?open; activeBefore = h.lastActive };
   };
 
-  /// Fold one event into the state.
-  public func apply(s : State, e : Event.EventV1) : Result.Result<State, Text> {
+  /// Fold one event into the state. Never fails: an event that reaches this
+  /// point has passed `Event.next`.
+  public func apply(s : State, e : Event.EventV1) : State {
     switch (e.kind) {
       case "unit.recorded" {
-        let h : Holder = switch (s.holders.get(Text.compare, e.holder)) {
-          case (?old) { { old with joined = e.cycle } };
-          case null { { points = 0; joined = e.cycle; lastActive = null; activeBefore = null } };
-        };
-        #ok(put(s, e.holder, h));
+        put(s, e.holder, { get(s, e.holder) with listed = true; joined = e.cycle; kind = e.value });
       };
       case "function.delivered" {
-        switch (recorded(s, e)) {
-          case (#err(m)) #err(m);
-          case (#ok(h)) #ok(put(s, e.holder, touch({ h with points = h.points + e.points }, s.closed)));
-        };
+        let h = get(s, e.holder);
+        put(s, e.holder, touch({ h with listed = true; points = h.points + e.points }, s.closed));
       };
       case ("module.completed" or "penalty") {
-        switch (recorded(s, e)) {
-          case (#err(m)) #err(m);
-          case (#ok(h)) #ok(put(s, e.holder, { h with points = h.points + e.points }));
-        };
+        let h = get(s, e.holder);
+        put(s, e.holder, { h with listed = true; points = h.points + e.points });
       };
-      case "vote.cast" {
-        switch (recorded(s, e)) {
-          case (#err(m)) #err(m);
-          case (#ok(h)) #ok(put(s, e.holder, touch(h, s.closed)));
-        };
-      };
-      case "assembly.closed" #ok({ holders = s.holders; closed = s.closed + 1 });
-      case _ #ok(s);
+      case "vote.cast" put(s, e.holder, touch(get(s, e.holder), s.closed));
+      case "assembly.closed" ({ holders = s.holders; closed = s.closed + 1 });
+      case _ s;
     };
+  };
+
+  /// Fold events given in order, without checking the chain. For a log that
+  /// was checked when it was appended.
+  public func fold(events : Iter.Iter<Event.EventV1>) : State {
+    var st = empty();
+    for (e in events) { st := apply(st, e) };
+    st;
   };
 
   /// Check that `batch` extends a chain whose last event has `seq` and hash
@@ -111,10 +120,7 @@ module {
         case (#err(m)) return #err(m);
         case (#ok(x)) { h := x };
       };
-      switch (apply(st, e)) {
-        case (#err(m)) return #err(m);
-        case (#ok(x)) { st := x };
-      };
+      st := apply(st, e);
       n += 1;
     };
     #ok({ seq = n; head = h; state = st });
@@ -138,10 +144,11 @@ module {
     Text.compare(a.id, b.id);
   };
 
-  /// Every holder, by points (descending) then id, as the reference sorts them.
+  /// Every listed holder, by points (descending) then id, as the reference
+  /// sorts them. The reference's totals are not computed here.
   public func standing(s : State, dormantAfter : Nat) : [Standing] {
-    let rows = s.holders.entries().map<(Text, Holder), Standing>(
-      func((id, h)) = { id; points = h.points; joined = h.joined; active = isActive(h, s.closed, dormantAfter) }
+    let rows = s.holders.entries().filter(func((_, h) : (Text, Holder)) : Bool = h.listed).map<(Text, Holder), Standing>(
+      func((id, h)) = { id; kind = h.kind; points = h.points; joined = h.joined; active = isActive(h, s.closed, dormantAfter) }
     ).toArray();
     rows.sort(byStanding);
   };

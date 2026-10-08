@@ -1,12 +1,18 @@
 name: Federation site
 
-# Builds the site and deploys it to GitHub Pages from the workflow artifact,
-# regenerating data/federation.json at every build. The founding ruleset
-# protects master (no direct pushes, required component-contract check), and
-# workflow runs on bot-opened pull requests cannot be approved — so committing
-# the snapshot back to master is not possible. The repository remains the record;
-# the Pages artifact is only a generated reading surface over that record.
-# Same pattern as draykerdk/general-forum.
+# Builds the site and deploys it to GitHub Pages from the workflow artifact.
+# Every build generates data/federation.json, data/events.json and
+# data/events.log with `node tools/daf.js snapshot`, from the record in this
+# checkout and the open issues, and assembles _site/ from an explicit list of
+# files: tools/ is never published, so its test fixtures never reach the site.
+# The founding ruleset protects master (no direct pushes, required
+# component-contract check), so the generated snapshot is not committed back;
+# the repository remains the record, and the Pages artifact is only a reading
+# surface generated from it. Same pattern as draykerdk/general-forum.
+#
+# Never add a pull_request or pull_request_target trigger here: the github-pages
+# environment deploys only from master, and code from a pull request must never
+# run with the Pages token.
 
 on:
   push:
@@ -15,11 +21,12 @@ on:
   schedule:
     - cron: '17 4 * * *'
   workflow_dispatch:
+  # Cycle, claim and request issues change what the site lists, so it is rebuilt
+  # when one opens, changes or closes. Other issues and bot activity do not.
+  issues:
+    types: [opened, edited, closed, reopened]
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+permissions: {}
 
 concurrency:
   group: github-pages
@@ -27,53 +34,53 @@ concurrency:
 
 jobs:
   build:
+    if: >-
+      github.event_name != 'issues' ||
+      ((startsWith(github.event.issue.title, '[Cycle]') ||
+        startsWith(github.event.issue.title, '[Claim]') ||
+        startsWith(github.event.issue.title, '[Request]')) &&
+       github.event.sender.type != 'Bot')
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-      - name: Read the record
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Read the open issues
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          mkdir -p data
+          # Any API error fails the job, so the last good deployment stays live.
+          gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/issues?state=open&per_page=100" > "$RUNNER_TEMP/issues.json"
 
-          listdir () {
-            gh api "repos/${GITHUB_REPOSITORY}/contents/$1" --jq \
-              '[ .[] | select(.type=="file")
-                     | select(.name | test("^TEMPLATE\\.";"i") | not)
-                     | select(.name | test("^README";"i") | not)
-                     | {name: .name, url: .html_url} ]' 2>/dev/null || echo '[]'
-          }
+      - name: Generate the snapshot
+        run: |
+          set -euo pipefail
+          node tools/daf.js snapshot --out _site/data --issues "$RUNNER_TEMP/issues.json" --commit "$GITHUB_SHA"
 
-          listdir federation/units       > /tmp/units.json
-          listdir federation/assemblies  > /tmp/assemblies.json
-          listdir federation/requests    > /tmp/requests.json
+      - name: Assemble the site
+        run: |
+          set -euo pipefail
+          # The published files, listed one by one. tools/ is never in this list.
+          SITE_FILES=(index.html support.js drayker-mark.js drayker-favicon.svg favicon.ico CNAME robots.txt sitemap.xml llms.txt LICENSE README.md)
+          SITE_DIRS=(dafp federation)
+          for f in "${SITE_FILES[@]}"; do cp "$f" _site/; done
+          for d in "${SITE_DIRS[@]}"; do cp -R "$d" _site/; done
+          find _site -type f | sort
 
-          gh api "repos/${GITHUB_REPOSITORY}/issues?state=open&per_page=30" --jq \
-            '[ .[] | {num: .number, title: .title, url: .html_url, pr: (has("pull_request"))} ]' \
-            > /tmp/issues.json || echo '[]' > /tmp/issues.json
-
-          jq -n \
-            --slurpfile units /tmp/units.json \
-            --slurpfile assemblies /tmp/assemblies.json \
-            --slurpfile requests /tmp/requests.json \
-            --slurpfile issues /tmp/issues.json \
-            --arg generated "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-            '{generated: $generated,
-              units: $units[0],
-              assemblies: $assemblies[0],
-              requests: $requests[0],
-              issues: $issues[0]}' > data/federation.json
-
-          cat data/federation.json
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: .
+          path: _site
 
   deploy:
     environment:
@@ -81,7 +88,14 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      pages: write
+      id-token: write
     steps:
+      # Here rather than in build: it reads the Pages settings, and only this job
+      # holds a Pages permission.
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

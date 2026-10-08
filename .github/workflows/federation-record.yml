@@ -1,0 +1,64 @@
+name: Federation record
+
+# Checks the federation record on every pull request and on every push to
+# master: the tests of tools/, `node tools/daf.js check` (units, parameters,
+# assembly reports, requests, LEDGER.md and the event log), the site contract,
+# and that no workflow pastes event data or dispatch inputs into a shell script.
+# It reads the repository and writes nothing.
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+permissions: {}
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          # The whole history, so the base commit is there for `check --base`.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Test the instruments
+        run: node --test tools/test
+
+      - name: Check the record
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          args=(check)
+          if [ "$EVENT" = "pull_request" ]; then
+            base="$PR_BASE"
+            # A report under vote is pending until it is closed; master must not hold one.
+            args+=(--allow-pending)
+          else
+            base="$PUSH_BEFORE"
+          fi
+          if [[ "$base" =~ ^[0-9a-f]{40}$ ]] && [[ ! "$base" =~ ^0+$ ]]; then
+            if git cat-file -e "${base}^{commit}" 2>/dev/null; then
+              args+=(--base "$base")
+            else
+              echo "::notice::base commit $base is not in the checkout; checking without --base"
+            fi
+          fi
+          node tools/daf.js "${args[@]}"
+
+      - name: Check the site contract
+        run: node tools/render-check.js
+
+      - name: Check the workflows
+        run: node tools/check-workflows.js

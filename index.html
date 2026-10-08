@@ -207,10 +207,15 @@
               <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--tx3);margin-bottom:12px">OPEN IN THE REPOSITORY</div>
               <div style="border:1px solid var(--line);border-bottom:none">
                 <sc-for list="{{ dafThreads }}" as="th" hint-placeholder-count="3">
-                  <a href="{{ th.url }}" target="_blank" rel="noreferrer" style="display:flex;gap:16px;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--bg);color:var(--tx)" style-hover="background:var(--surf2)">
-                    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx3);flex-shrink:0">#{{ th.num }}</span>
-                    <span style="font-size:14px;line-height:1.5;flex:1">{{ th.title }}</span>
-                  </a>
+                  <div style="display:flex;gap:16px;align-items:baseline;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--bg)">
+                    <a href="{{ th.url }}" target="_blank" rel="noreferrer" style="display:flex;gap:16px;align-items:baseline;flex:1;min-width:0;color:var(--tx)" style-hover="color:#3FA9FF">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx3);flex-shrink:0">#{{ th.num }}</span>
+                      <span style="font-size:14px;line-height:1.5;flex:1">{{ th.title }}</span>
+                    </a>
+                    <sc-if value="{{ th.hasForum }}" hint-placeholder-val="{{ true }}">
+                      <a href="{{ th.forum }}" target="_blank" rel="noreferrer" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;flex-shrink:0">read on the forum →</a>
+                    </sc-if>
+                  </div>
                 </sc-for>
               </div>
             </div>
@@ -235,6 +240,9 @@
                   <a href="{{ cyc.url }}" target="_blank" rel="noreferrer" style="background:#3FA9FF;color:#0A0A0C;padding:13px 22px;font-size:13.5px;font-weight:600" style-hover="background:#6FC1FF">Open the cycle · #{{ cyc.num }} →</a>
                   <div role="button" tabindex="0" onClick="{{ goAssembly }}" style="border:1px solid var(--line3);color:var(--tx);padding:13px 22px;font-size:13.5px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">Claim, vote or count</div>
                 </div>
+                <sc-if value="{{ cycHasForum }}" hint-placeholder-val="{{ true }}">
+                  <a href="{{ cycForum }}" target="_blank" rel="noreferrer" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em">read on the forum →</a>
+                </sc-if>
               </div>
               <div style="background:var(--bg);padding:clamp(22px,3vw,32px);display:flex;flex-direction:column;gap:12px;outline:1px solid var(--line)">
                 <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--tx3)">CLAIMED SO FAR, IN THE THREAD</div>
@@ -245,6 +253,21 @@
                         <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--tx3)">{{ c.user }} · {{ c.at }}</div>
                         <div style="font-size:13.5px;line-height:1.5;color:var(--tx2)">{{ c.text }}</div>
                       </a>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ cycHasClaimIssues }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-direction:column;gap:1px">
+                    <sc-for list="{{ cycClaimIssues }}" as="ci" hint-placeholder-count="2">
+                      <div style="background:var(--surf);padding:13px 15px;display:flex;flex-direction:column;gap:5px;outline:1px solid var(--line)">
+                        <a href="{{ ci.url }}" target="_blank" rel="noreferrer" style="font-size:13.5px;line-height:1.5;color:var(--tx2)" style-hover="color:#3FA9FF">#{{ ci.num }} · {{ ci.title }}</a>
+                        <div style="display:flex;gap:14px;align-items:baseline;flex-wrap:wrap">
+                          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--tx3)">claim issue — proposed, not in the record until an assembly accepts it</span>
+                          <sc-if value="{{ ci.hasForum }}" hint-placeholder-val="{{ true }}">
+                            <a href="{{ ci.forum }}" target="_blank" rel="noreferrer" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em">read on the forum →</a>
+                          </sc-if>
+                        </div>
+                      </div>
                     </sc-for>
                   </div>
                 </sc-if>
@@ -776,7 +799,7 @@
           <sc-if value="{{ tCount }}" hint-placeholder-val="{{ false }}">
             <div style="border:1px solid var(--line);border-top:none;background:var(--bg);padding:clamp(24px,3vw,40px);display:grid;grid-template-columns:{{ twoCol }};gap:clamp(24px,3vw,48px)">
               <div style="display:flex;flex-direction:column;gap:18px">
-                <p style="font-size:14.5px;line-height:1.64;color:var(--tx2);margin:0;text-wrap:pretty">The same arithmetic as <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">tools/tally.js</code>, run here in your browser: read the comments on an assembly pull request, keep each holder's last vote, weigh it by the ledger. Nothing is submitted — the official table is still written by a person into the report, which is what Phase 0 buys and all it buys.</p>
+                <p style="font-size:14.5px;line-height:1.64;color:var(--tx2);margin:0;text-wrap:pretty">A rough version of the arithmetic of <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">tools/daf.js tally</code>, run here in your browser: read the comments on an assembly pull request, keep each holder's last vote, weigh it by the ledger. It does not apply the window or check who may speak for each holder; the count that does is the Federation tally workflow. Nothing is submitted — the official table is still written by a person into the report, which is what Phase 0 buys and all it buys.</p>
                 <div style="display:flex;flex-direction:column;gap:7px">
                   <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--tx3)">PULL REQUEST NUMBER</label>
                   <input value="{{ tallyPr }}" onChange="{{ onTallyPr }}" placeholder="14" style="background:var(--surf);border:1px solid var(--line2);color:var(--tx);padding:11px 13px;font-size:14px;width:100%;outline:none;font-family:'JetBrains Mono',monospace" />
@@ -785,7 +808,7 @@
                 <sc-if value="{{ tallyErr }}" hint-placeholder-val="{{ false }}">
                   <div style="border-left:2px solid #FF5500;padding:2px 0 2px 16px;font-size:13.5px;line-height:1.6;color:var(--tx2)">{{ tallyMsg }}</div>
                 </sc-if>
-                <div style="border-left:2px solid var(--line2);padding-left:16px;font-size:13.5px;line-height:1.62;color:var(--tx2);text-wrap:pretty">Weight here comes from <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">LEDGER.md</code> as it stands now. A real count weighs it at the <em>previous</em> assembly — <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">tally.js --ledger-ref</code> does that, and it is what keeps the awards under vote from changing the votes that approve them.</div>
+                <div style="border-left:2px solid var(--line2);padding-left:16px;font-size:13.5px;line-height:1.62;color:var(--tx2);text-wrap:pretty">Weight here comes from <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">LEDGER.md</code> as it stands now. A real count weighs it at the <em>previous</em> assembly — <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">tools/daf.js tally</code> does that, and it is what keeps the awards under vote from changing the votes that approve them.</div>
               </div>
               <div>
                 <sc-if value="{{ tallyReady }}" hint-placeholder-val="{{ true }}">
@@ -803,6 +826,12 @@
                       <div style="font-size:13.5px;line-height:1.6;color:var(--tx2);text-wrap:pretty">{{ tallyWhy }}</div>
                     </div>
                     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3)">{{ tallyFound }} VOTES FOUND IN {{ tallyComments }} COMMENTS</div>
+                    <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em">
+                      <a href="{{ tallyPrUrl }}" target="_blank" rel="noreferrer">PULL REQUEST #{{ tallyPrNum }} →</a>
+                      <sc-if value="{{ tallyHasForum }}" hint-placeholder-val="{{ true }}">
+                        <a href="{{ tallyPrForum }}" target="_blank" rel="noreferrer">read on the forum →</a>
+                      </sc-if>
+                    </div>
                     <div style="display:flex;flex-direction:column;gap:1px">
                       <sc-for list="{{ tallyRows }}" as="v" hint-placeholder-count="0">
                         <div style="background:var(--surf);padding:12px 16px;display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:baseline;outline:1px solid var(--line)">
@@ -1101,6 +1130,9 @@
         </div>
         <h1 style="font-size:clamp(34px,4.6vw,64px);line-height:1;letter-spacing:-0.04em;font-weight:700;margin:0 0 24px;max-width:22ch;text-wrap:balance">Everything the federation has decided, and the arithmetic behind it.</h1>
         <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);max-width:64ch;margin:0;text-wrap:pretty">Read from <a href="{{ dafRecord }}" target="_blank" rel="noreferrer">federation/</a> at <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">master</code> — the ledger, the unit records and every assembly report, parsed from the files themselves. The audit tab sums the reports and checks the ledger against them, because a decision that cannot be recomputed from the public record did not happen.</p>
+        <sc-if value="{{ eventsOn }}" hint-placeholder-val="{{ false }}">
+          <a href="{{ eventsHref }}" target="_blank" rel="noreferrer" style="display:inline-block;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em">{{ eventsLine }}</a>
+        </sc-if>
       </section>
 
       <section style="border-top:1px solid var(--line);background:var(--surf)">
@@ -1126,6 +1158,9 @@
                   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--tx3);margin-top:6px">ACTIVE POINTS · THE QUORUM DENOMINATOR</div>
                 </div>
               </div>
+              <sc-if value="{{ ledgerGenerated }}" hint-placeholder-val="{{ false }}">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.04em;color:var(--tx3);margin:-8px 0 18px">{{ ledgerSrc }}</div>
+              </sc-if>
               <sc-if value="{{ ledgerEmpty }}" hint-placeholder-val="{{ true }}">
                 <div style="border-left:2px solid #3FA9FF;padding:4px 0 4px 18px;max-width:70ch">
                   <div style="font-size:15px;line-height:1.66;color:var(--tx2);text-wrap:pretty">The ledger has no holders. Nothing has been awarded, because no assembly has been held — so there is no weight in the federation at all, and the first delivery to be accepted will be the whole of it.</div>
@@ -1287,7 +1322,7 @@
 <div ref="{{ markFooter }}" style="width:26px;height:26px;flex:none"></div>
           <span style="font-size:15px;font-weight:600;letter-spacing:-0.02em">DAF</span>
         </div>
-        <div style="font-size:13.5px;line-height:1.62;color:var(--tx2);max-width:34ch">An autonomous federation of autonomous units, a basic and primitive form of PAP, implemented now. Phase 0 is a public GitHub record, with no assembly held yet.</div>
+        <div style="font-size:13.5px;line-height:1.62;color:var(--tx2);max-width:34ch">{{ footState }}</div>
       </div>
       <div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.16em;color:var(--tx3);margin-bottom:14px">THE SPECIFICATION</div>
@@ -1329,6 +1364,19 @@ const DAF_001 = DAF_R + '/blob/master/dafp/daf-001-phase-0-github-federation.md'
 const DAF_REC = DAF_R + '/tree/master/federation';
 
 const FORUM_SITE = 'https://forum.drayker.org';
+// The forum publishes every public issue and pull request of this repository
+// at a page named by its number, so the link is built from the number alone.
+const FORUM_DAF = FORUM_SITE + '/t/daf/';
+
+// Links that come from data (the snapshot, the GitHub API) are rendered only
+// when they point where the record lives: this organisation on GitHub, the
+// generated data beside this page, or the forum page of one of its threads.
+const HREF_OK = ['https://github.com/draykerdk/', './data/', FORUM_DAF];
+const safeHref = (u) => (typeof u === 'string' && HREF_OK.some((p) => u.startsWith(p))
+  && !u.includes('..') && !/[\s"'<>\\]/.test(u)) ? u : '';
+const issueNum = (n) => (Number.isSafeInteger(n) && n > 0 ? n : null);
+const forumHref = (n) => (issueNum(n) ? FORUM_DAF + n + '/' : '');
+const issueHref = (i) => safeHref(i && i.url) || (issueNum(i && i.num) ? DAF_R + '/issues/' + i.num : DAF_R + '/issues');
 
 const NAV = [
   { id: 'rules', label: 'The rules' },
@@ -1350,7 +1398,9 @@ const FORM = (tmpl, params) => {
 };
 
 const ROUTE_META = {
-  home: { t: 'DAF — federation implemented now on GitHub', d: 'A federation of autonomous units in Drayker and a basic and primitive form of PAP: weight follows delivered work, and it is implemented now on GitHub (Phase 0), with no chain, no token, no treasury, and no assembly held yet.' },
+  home: { t: 'DAF — federation implemented now on GitHub', d: 'A federation of autonomous units in Drayker and a basic and primitive form of PAP: weight follows delivered work, and it is implemented now on GitHub (Phase 0), with no chain, no token, no treasury, and no assembly held yet.',
+    // Used instead of d once the record holds an assembly (see metaDesc).
+    dUsed: 'A federation of autonomous units in Drayker and a basic and primitive form of PAP: weight follows delivered work, implemented now on GitHub (Phase 0). Record in use — see the ledger.' },
   rules: { t: 'The rules — DAF', d: 'DAF-000 and DAF-001 in short: units, how a point is earned, how points become voting weight, quorum and majority, and what Phase 0 deliberately leaves out.' },
   join: { t: 'Join — DAF', d: 'A record and one delivered function. Compose your unit record and your first claim, and publish both on GitHub under your own account.' },
   assembly: { t: 'The assembly — DAF', d: 'One cycle a month, seven days to argue with it. Open the cycle, draft the report, cast a vote in the format that can be counted mechanically.' },
@@ -1383,7 +1433,7 @@ const DAF_PIPE = [
     g: 'A pull request adding federation/assemblies/YYYY-MM.md, open for seven days.',
     tool: 'cycle', tl: 'Open the cycle and the report' },
   { n: '05', k: 'VOTE', t: 'Seven days, one comment per holder, counted in the open.',
-    b: 'Weight comes from the ledger as it stood at the previous assembly, so the awards being voted on cannot change the votes that approve them. A vote is a single comment in a fixed format, so it can be found and counted mechanically. The last one you post is the one that counts.',
+    b: 'Weight comes from the ledger as it stood at the previous assembly, so the awards being voted on cannot change the votes that approve them. A vote is a single comment in a fixed format, so it can be found and counted mechanically. The last one you post is the one that counts. Voting is transitional: it holds only until contextual weighing by Dk Global, justified vetoes weighed by their grounds and councils formed for each question can be reproduced and tested, and each one that is replaces part of the vote.',
     r: 'DAF-000 §5.3 — 30% participation of active points, then a simple majority of votes cast.', ref: DAF_000 + '#53-quorum-and-majority',
     g: 'A comment on that pull request reading VOTE: for | against | abstain, then AS: your-unit-id.',
     tool: 'vote', tl: 'Compose your vote' },
@@ -1543,18 +1593,63 @@ class Component extends DCLogic {
       const el = document.head ? document.head.querySelector(sel) : null;
       if (el && el.getAttribute(attr) !== val) el.setAttribute(attr, val);
     };
-    set('meta[name="description"]', 'content', m.d);
+    set('meta[name="description"]', 'content', this.metaDesc(p));
+  };
+
+  // Assemblies the record shows as held: the generated ledger's count, or the
+  // reports listed, whichever is larger. 0 until the record has been read.
+  assembliesHeld = () => {
+    const d = this.state.dafData;
+    if (this.state.dafState !== 'ready' || !d) return 0;
+    const fromLedger = d.ledger ? d.ledger.totals.assemblies : 0;
+    return Math.max(fromLedger, (d.assemblies || []).length);
+  };
+  // The home description says no assembly has been held only while that is true.
+  metaDesc = (p) => {
+    const key = ROUTE_META[p] ? p : 'home';
+    return key === 'home' && this.assembliesHeld() > 0 ? ROUTE_META.home.dUsed : ROUTE_META[key].d;
   };
 
   // ==========================================================================
-  // THE RECORD — a committed snapshot (data/federation.json) is preferred; the
-  // API only refreshes it. Cached 30 min. The site renders in full with the
+  // THE RECORD — a generated snapshot (data/federation.json, written at every
+  // build by `node tools/daf.js snapshot`) is preferred; the API only stands in
+  // when it is missing. Cached 30 min. The site renders in full with the
   // network off: the specification needs no request.
   // ==========================================================================
-  DAF_CACHE = 'daf-record-v1';
+  DAF_CACHE = 'daf-record-v2';
 
   validSnapshot = (snapshot) => !!snapshot && ['units', 'assemblies', 'requests', 'issues']
     .every((key) => Array.isArray(snapshot[key]));
+
+  // The optional keys of a snapshot, each checked for shape; anything else is
+  // dropped to null, which every reader below treats as absent.
+  snapExtras = (snap) => {
+    const s = snap && typeof snap === 'object' ? snap : {};
+    const int = (v) => (Number.isSafeInteger(v) && v >= 0 ? v : 0);
+    const str = (v) => (typeof v === 'string' ? v : '');
+    const obj = (v) => !!v && typeof v === 'object' && !Array.isArray(v);
+    let ledger = null;
+    if (obj(s.ledger) && Array.isArray(s.ledger.holders)) {
+      const t = obj(s.ledger.totals) ? s.ledger.totals : {};
+      ledger = {
+        asOf: /^\d{4}-\d{2}$/.test(str(s.ledger.asOf)) ? s.ledger.asOf : null,
+        holders: s.ledger.holders.filter((h) => obj(h) && str(h.id) && Number.isSafeInteger(h.points))
+          .map((h) => ({ id: h.id, kind: str(h.kind) || '—', points: h.points, active: h.active === true,
+            joined: str(h.joined) || '—' })),
+        totals: { holders: int(t.holders), points: int(t.points), activePoints: int(t.activePoints), assemblies: int(t.assemblies) }
+      };
+    }
+    const events = obj(s.events) && Number.isSafeInteger(s.events.count) && s.events.count >= 0
+      && /^[0-9a-f]{64}$/.test(str(s.events.head))
+      ? { version: int(s.events.version), count: s.events.count, head: s.events.head } : null;
+    return {
+      generated: /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?Z$/.test(str(s.generated)) ? s.generated : null,
+      source_commit: /^[0-9a-f]{7,64}$/.test(str(s.source_commit)) ? s.source_commit : null,
+      parameters: obj(s.parameters) ? s.parameters : null,
+      ledger,
+      events
+    };
+  };
 
   loadDAF = async (force) => {
     if (this.state.dafState === 'loading') return;
@@ -1590,7 +1685,8 @@ class Component extends DCLogic {
       } catch (e) {}
       let d;
       if (this.validSnapshot(snap)) {
-        d = { units: snap.units || [], assemblies: snap.assemblies || [], requests: snap.requests || [], issues: snap.issues || [], src: 'snapshot' };
+        d = { units: snap.units || [], assemblies: snap.assemblies || [], requests: snap.requests || [], issues: snap.issues || [], src: 'snapshot',
+          ...this.snapExtras(snap) };
       } else {
         const [units, assemblies, requests] = await Promise.all([dir('federation/units'), dir('federation/assemblies'), dir('federation/requests')]);
         let issues = [];
@@ -1598,7 +1694,7 @@ class Component extends DCLogic {
           const raw = await get('https://api.github.com/repos/draykerdk/daf/issues?state=open&per_page=30');
           issues = (raw || []).map((i) => ({ num: i.number, title: i.title, url: i.html_url, pr: !!i.pull_request }));
         } catch (e) {}
-        d = { units, assemblies, requests, issues, src: 'api' };
+        d = { units, assemblies, requests, issues, src: 'api', ...this.snapExtras(null) };
       }
       const t = Date.now();
       try { localStorage.setItem(this.DAF_CACHE, JSON.stringify({ t, d })); } catch (e) {}
@@ -1630,7 +1726,7 @@ class Component extends DCLogic {
       const [ledgerMd, ...rest] = await Promise.all([
         text('federation/LEDGER.md'),
         ...(d.units || []).slice(0, 40).map((f) => text('federation/units/' + f.name)),
-        ...(d.assemblies || []).slice(0, 24).map((f) => text('federation/assemblies/' + f.name))
+        ...(d.assemblies || []).slice(0, 240).map((f) => text('federation/assemblies/' + f.name))
       ]);
       const nU = Math.min((d.units || []).length, 40);
       const unitTexts = rest.slice(0, nU);
@@ -1684,8 +1780,11 @@ class Component extends DCLogic {
   // total by hand: the deliveries table, the module bonus, and the penalties.
   parseAssembly = (md, meta) => {
     if (!md) return null;
+    // A section starts at its heading, or, where the template writes it as a bold
+    // label (**Module completions**), at that label.
     const rows = (heading, cols) => {
-      const i = md.search(new RegExp('^#+\\s*' + heading, 'im'));
+      let i = md.search(new RegExp('^#+\\s*' + heading, 'im'));
+      if (i < 0) i = md.search(new RegExp('^\\*\\*' + heading + '\\*\\*\\s*$', 'im'));
       if (i < 0) return [];
       const rest = md.slice(i);
       const stop = rest.slice(1).search(/^##\s/m);
@@ -1737,20 +1836,28 @@ class Component extends DCLogic {
   };
 
   // ==========================================================================
-  // THE TALLY. The same arithmetic as tools/tally.js, in the browser: read the
-  // comments on an assembly pull request, keep the LAST vote per holder, weigh
-  // it by the ledger. The official table is still written by a person into the
-  // report — this only removes the counting.
+  // THE TALLY, as a reading aid in the browser: read the comments on an
+  // assembly pull request, keep the LAST vote per holder, weigh it by the
+  // ledger. The authoritative arithmetic is `node tools/daf.js tally` (and the
+  // "Federation tally" workflow that runs it); this is not a second copy of it.
+  // The official table is still written by a person into the report.
   // ==========================================================================
   runTally = async () => {
     const n = String(this.state.tallyPr || '').replace(/[^\d]/g, '');
     if (!n) { this.setState({ tallyState: 'error', tallyMsg: 'Give the pull request number.' }); return; }
     this.setState({ tallyState: 'loading', tallyMsg: '' });
     try {
-      const r = await fetch('https://api.github.com/repos/draykerdk/daf/issues/' + n + '/comments?per_page=100',
-        { headers: { Accept: 'application/vnd.github+json' } });
-      if (!r.ok) throw new Error(r.status === 404 ? 'No pull request #' + n + ' in the repository.' : 'GitHub answered ' + r.status + '.');
-      const comments = await r.json();
+      // Every page of comments, 100 at a time, so a long thread is read whole.
+      const comments = [];
+      for (let page = 1; page <= 50; page++) {
+        const r = await fetch('https://api.github.com/repos/draykerdk/daf/issues/' + n + '/comments?per_page=100&page=' + page,
+          { headers: { Accept: 'application/vnd.github+json' } });
+        if (!r.ok) throw new Error(r.status === 404 ? 'No pull request #' + n + ' in the repository.' : 'GitHub answered ' + r.status + '.');
+        const batch = await r.json();
+        if (!Array.isArray(batch)) break;
+        comments.push(...batch);
+        if (batch.length < 100) break;
+      }
       const last = {};
       (comments || []).forEach((c) => {
         const v = /^\s*VOTE:\s*(for|against|abstain)\s*$/im.exec(c.body || '');
@@ -1985,34 +2092,26 @@ class Component extends DCLogic {
       + '&value=' + encodeURIComponent(this.dafReqMd());
   };
 
+  // What the cycle form (cycle.yml) writes into the issue body, shown before
+  // opening it. The drafting tool reads these headings.
   dafCycleBody = () => {
-    return ['This issue opens the cycle for assembly **' + this.dafMonth() + '**.',
-      '',
-      '**Window:** opens ' + this.dafOpenDay() + ' · closes ' + this.dafClose() + ' (seven days)',
-      '',
-      '### Up for decision',
-      '',
+    return ['### Cycle', '', this.dafMonth(), '',
+      '### Window opens', '', this.dafOpenDay(), '',
+      '### Window closes', '', this.dafClose(), '',
+      '### Up for decision', '',
       '- Deliveries claimed since the last assembly',
       '- Resource requests filed in `federation/requests/`',
       '- Proposed changes to DAF-000 and DAF-001',
-      '- Unit records applying with a first delivery',
-      '',
-      '### How to claim a delivery',
-      '',
-      'Comment here with the issue that declared the function and the merged result. Claims are public and can be contested by anyone in this thread.',
-      '',
-      '### How the vote works',
-      '',
-      'The report is opened as a pull request against `master`. Holders vote there, one comment each:',
-      '',
-      '```text', 'VOTE: for | against | abstain', 'AS: <unit-id or participant-id>', '```',
-      '',
-      'Weight comes from the ledger as it stood at the previous assembly. Quorum is 30% participation of active points, then a simple majority of the votes cast.',
-      '',
-      DAF_001 + '#4-the-cycle'].join('\n');
+      '- Unit records applying with a first delivery'].join('\n');
   };
-  dafCycleUrl = () => DAF_R + '/issues/new?title=' + encodeURIComponent('[Cycle] Assembly ' + this.dafMonth())
-    + '&body=' + encodeURIComponent(this.dafCycleBody());
+  // The cycle goes through the published issue form, so every cycle issue has
+  // the same body format, which is what `node tools/daf.js draft` reads.
+  dafCycleUrl = () => FORM('cycle.yml', {
+    title: '[Cycle] Assembly ' + this.dafMonth(),
+    cycle: this.dafMonth(),
+    opens: this.dafOpenDay(),
+    closes: this.dafClose()
+  });
   dafReportMd = () => {
     return ['# Assembly ' + this.dafMonth(),
       '',
@@ -2197,6 +2296,14 @@ class Component extends DCLogic {
     const claimOk = this.dafClaimReady();
     const reqOk = this.dafReqReady();
     const tab = (id, cur) => ({ on: id === cur, bg: id === cur ? '#3FA9FF' : 'var(--bg)', fg: id === cur ? '#0A0A0C' : 'var(--tx2)', sub: id === cur ? 'rgba(10,10,12,0.6)' : 'var(--tx3)' });
+    // The empty-state wording holds only while no assembly is on the record.
+    const held = this.assembliesHeld();
+    const heldLine = held + (held === 1 ? ' assembly' : ' assemblies') + ' held';
+    // Open issues filed through the claim form. Proposed, not recorded.
+    const claimIssues = ready ? dd.issues.filter((i) => i && !i.pr && /^\[claim\] /i.test(String(i.title || '')))
+      .slice(0, 12).map((i) => ({ num: String(i.num), title: String(i.title), url: issueHref(i), forum: forumHref(i.num),
+        hasForum: !!forumHref(i.num) })) : [];
+    const snapLedger = ready && dd.ledger && dd.ledger.holders.length > 0 ? dd.ledger : null;
 
     // Column counts, computed rather than left to auto-fit: a track count that always
     // divides the item count means the last row is never short, so no cell-outline
@@ -2267,18 +2374,33 @@ class Component extends DCLogic {
             : s.deepState === 'error' ? 'THE FILES COULD NOT BE READ — THE RULES BELOW STILL APPLY'
             : ready ? 'PARSED FROM federation/ AT master' : 'NOT READ YET',
 
-          ledgerRows: ready ? deep.ledger.map((r) => {
-            const total = deep.ledger.reduce((a, x) => a + x.points, 0) || 1;
-            return { id: r.id, kind: r.kind, points: String(r.points), joined: r.joined,
-              state: r.active ? 'ACTIVE' : 'DORMANT',
-              stateFg: r.active ? '#3FA9FF' : 'var(--tx3)',
-              share: ((r.points / total) * 100).toFixed(1) + '%',
-              bar: Math.max(1, (r.points / total) * 100).toFixed(1) + '%' };
-          }) : [],
-          ledgerEmpty: ready && deep.ledger.length === 0,
-          ledgerTotal: ready ? String(deep.ledger.reduce((a, x) => a + x.points, 0)) : '0',
-          ledgerActive: ready ? String(deep.ledger.filter((r) => r.active).reduce((a, x) => a + x.points, 0)) : '0',
+          // The generated ledger (folded from the assemblies by tools/daf.js) when
+          // the snapshot has one with holders; LEDGER.md as read from master
+          // otherwise.
+          ...(() => {
+            const rows = snapLedger ? snapLedger.holders : (ready ? deep.ledger : null);
+            if (!rows) return { ledgerRows: [], ledgerEmpty: false, ledgerTotal: '0', ledgerActive: '0' };
+            const total = rows.reduce((a, x) => a + x.points, 0);
+            return {
+              ledgerRows: rows.map((r) => ({ id: r.id, kind: r.kind, points: String(r.points), joined: r.joined,
+                state: r.active ? 'ACTIVE' : 'DORMANT',
+                stateFg: r.active ? '#3FA9FF' : 'var(--tx3)',
+                share: ((r.points / (total || 1)) * 100).toFixed(1) + '%',
+                bar: Math.max(1, (r.points / (total || 1)) * 100).toFixed(1) + '%' })),
+              ledgerEmpty: rows.length === 0,
+              ledgerTotal: String(total),
+              ledgerActive: String(rows.filter((r) => r.active).reduce((a, x) => a + x.points, 0))
+            };
+          })(),
+          ledgerGenerated: !!snapLedger,
+          ledgerSrc: snapLedger ? 'generated from the assemblies by tools/daf.js'
+            + (snapLedger.asOf ? ' · as of assembly ' + snapLedger.asOf : '') : '',
           ledgerUrl: DAF_R + '/blob/master/federation/LEDGER.md',
+          // The event log, when the snapshot carries it.
+          eventsOn: !!(dd && s.dafState === 'ready' && dd.events),
+          eventsLine: dd && s.dafState === 'ready' && dd.events
+            ? 'Event log: ' + dd.events.count + ' events · head ' + dd.events.head.slice(0, 12) : '',
+          eventsHref: safeHref('./data/events.json'),
 
           unitRows: ready ? deep.units.map((u) => ({ ...u,
             kindLabel: (u.kind || 'unit').toUpperCase(),
@@ -2347,16 +2469,24 @@ class Component extends DCLogic {
                 : 'Quorum met, but the majority is not there — abstentions count in the denominator.'))),
           tallyFound: t ? String(t.found) : '0',
           tallyComments: t ? String(t.comments) : '0',
+          tallyPrNum: t ? String(t.pr) : '',
+          tallyPrUrl: t && issueNum(Number(t.pr)) ? DAF_R + '/pull/' + Number(t.pr) : DAF_R + '/pulls',
+          tallyPrForum: t ? forumHref(Number(t.pr)) : '',
+          tallyHasForum: !!(t && forumHref(Number(t.pr))),
 
           // ---- the open cycle ----------------------------------------------
           cycleOpen: s.cycleState === 'ready' && !!cyc,
           cycleNone: s.cycleState === 'none',
-          cyc: cyc || {},
+          cyc: cyc ? { ...cyc, url: issueHref(cyc) } : {},
+          cycForum: cyc ? forumHref(cyc.num) : '',
+          cycHasForum: !!(cyc && forumHref(cyc.num)),
           cycLeft: left == null ? '—' : (left > 0 ? String(left) : '0'),
           cycLeftLabel: left == null ? 'WINDOW' : (left > 1 ? 'DAYS LEFT TO VOTE' : (left === 1 ? 'DAY LEFT TO VOTE' : 'THE WINDOW HAS CLOSED')),
-          cycClaims: cyc ? cyc.claims : [],
+          cycClaims: cyc ? cyc.claims.map((c) => ({ ...c, url: safeHref(c.url) || issueHref(cyc) })) : [],
           cycHasClaims: cyc ? cyc.claims.length > 0 : false,
-          cycNoClaims: cyc ? cyc.claims.length === 0 : false,
+          cycClaimIssues: claimIssues,
+          cycHasClaimIssues: claimIssues.length > 0,
+          cycNoClaims: cyc ? cyc.claims.length === 0 && claimIssues.length === 0 : false,
 
           contestBody: this.contestBody(),
           copyContest: this.dafCopy('contest', this.contestBody()),
@@ -2385,8 +2515,13 @@ class Component extends DCLogic {
       states: [
         { k: 'SPECIFIED', d: 'DAF-000 and DAF-001 are written: units, points, quorum, resources, penalties, exit.', bg: 'var(--surf)', fg: '#3FA9FF' },
         { k: 'STRUCTURED', d: 'federation/ exists with its templates, so the first delivery has somewhere to be written down.', bg: 'var(--surf)', fg: '#3FA9FF' },
-        { k: 'NOT YET USED', d: 'No unit recorded, no points issued, no assembly held. That gap is the invitation.', bg: 'var(--bg)', fg: 'var(--tx3)' }
+        held > 0
+          ? { k: 'IN USE', d: heldLine + '. Record in use — see the ledger.', bg: 'var(--surf)', fg: '#3FA9FF' }
+          : { k: 'NOT YET USED', d: 'No unit recorded, no points issued, no assembly held. That gap is the invitation.', bg: 'var(--bg)', fg: 'var(--tx3)' }
       ],
+      footState: held > 0
+        ? 'An autonomous federation of autonomous units, a basic and primitive form of PAP, implemented now. Phase 0 is a public GitHub record. Record in use — see the ledger.'
+        : 'An autonomous federation of autonomous units, a basic and primitive form of PAP, implemented now. Phase 0 is a public GitHub record, with no assembly held yet.',
 
       dafStats: [
         { k: 'UNITS RECORDED', v: dash(nU) },
@@ -2396,11 +2531,16 @@ class Component extends DCLogic {
       ],
       dafSrcLine: s.dafState === 'loading' ? 'READING THE REPOSITORY…'
         : s.dafState === 'error' ? 'REPOSITORY UNREACHABLE — EVERYTHING BELOW IS THE SPECIFICATION ITSELF, WHICH NEEDS NO NETWORK'
-        : ready ? 'READ FROM ' + (dd.src === 'snapshot' ? 'THE COMMITTED SNAPSHOT' : 'THE GITHUB API') + ' · ' + this.ago(s.dafAt)
+        : ready ? 'READ FROM ' + (dd.src === 'snapshot' ? 'THE GENERATED SNAPSHOT' : 'THE GITHUB API') + ' · '
+          // The snapshot's own time when it states one; the fetch time otherwise.
+          + (dd.src === 'snapshot' && dd.generated
+            ? 'GENERATED ' + dd.generated.slice(0, 10) + ' ' + dd.generated.slice(11, 16) + ' UTC'
+            : this.ago(s.dafAt))
         : 'NOT READ YET',
       dafRefresh: () => this.loadDAF(true),
       dafEmpty: ready && nU === 0 && nA === 0,
-      dafThreads: ready ? dd.issues.filter((i) => !i.pr).slice(0, 6) : [],
+      dafThreads: ready ? dd.issues.filter((i) => i && !i.pr).slice(0, 6).map((i) => ({ num: String(i.num), title: String(i.title || ''),
+        url: issueHref(i), forum: forumHref(i.num), hasForum: !!forumHref(i.num) })) : [],
       dafHasThreads: ready && dd.issues.filter((i) => !i.pr).length > 0,
 
       dafPipe: DAF_PIPE.map((st2, i) => {

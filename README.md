@@ -53,6 +53,7 @@ Contribution is attributable through [UID](https://uid.drayker.org), while feder
 - **[DAF-000](./dafp/daf-000-federation-constitution.md)**. The minimal constitution, independent of any platform: participants and units, how a point is earned, how points become voting weight, quorum and majority, how a resource request is judged, penalties and exit.
 - **[DAF-001](./dafp/daf-001-phase-0-github-federation.md)**. Phase 0, the initial version: the federation designed to run on this repository, with no chain and no unit of account, and an explicit account of what is deferred to later phases.
 - **[DAF-002](./dafp/daf-002-phase-0-instruments.md)** (draft). The instruments that keep the record in Phase 0: they check its structure and arithmetic, regenerate the ledger, draft assembly reports and compute the arithmetic of a vote, and export the record as an event log a later substrate can replay. They never judge, merge or decide.
+- **[DAF-003](./dafp/daf-003-justified-vetoes.md)** (draft). The justified veto in Phase 0: a public record of a veto against a federation decision, with its grounds, and of the triage that examined it. A decision is not merged while a veto against it awaits triage.
 
 The record itself lives in [`federation/`](./federation): unit records, assembly reports, resource requests and the ledger, in plain text under version control, so that any claim about who delivered what can be checked by reading.
 

@@ -75,6 +75,14 @@ None.
 
 > Used only against proposals misaligned with Drayker's published values and purpose, or against fraud, spam and attacks. Never as a preference. If used, say which proposal and why, in full. See [DAF-000 §5.4](../../dafp/daf-000-federation-constitution.md#54-the-founding-steward).
 
+## Justified vetoes
+
+| Veto | Contests | State |
+| --- | --- | --- |
+| `vetoes/n.md` | which decision in this report | open / adjustment / not passed |
+
+None, if no veto was filed against a decision of this cycle. A decision is not merged while a veto against it awaits triage. If it is merged anyway, say so here in full: who merged, when and why. See [DAF-003](../../dafp/daf-003-justified-vetoes.md).
+
 ## What the federation would change about itself
 
 What the rules got wrong this cycle. Parameters that did not behave as expected, procedures that cost more than they were worth, gaps that only showed up in use. This section is the reason the rules are drafts.

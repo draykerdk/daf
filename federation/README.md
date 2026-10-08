@@ -8,6 +8,7 @@ Everything here is plain text under version control, so that any claim about who
 units/         one record per participant or unit
 assemblies/    one report per cycle. The decisions, the awards, the tally
 requests/      resource requests under evaluation
+vetoes/        justified vetoes and their triage (DAF-003, a draft)
 parameters.yml the numbers of DAF-000 and DAF-001, read by the tools
 LEDGER.md      current standing, generated from the assemblies
 ```
@@ -28,6 +29,7 @@ Nothing in this directory is edited directly on `master`. Every change arrives a
 
 - **Joining**. Add your record to `units/`, from [`units/TEMPLATE.yml`](./units/TEMPLATE.yml), in the same pull request that claims your first delivered function.
 - **Requesting resources**. Add a file to `requests/`, from [`requests/TEMPLATE.md`](./requests/TEMPLATE.md). Read [DAF-000 §6](../dafp/daf-000-federation-constitution.md#6-resources) first: a request that does not say what was tried before it is returned without being judged.
+- **Vetoing a decision**. Open the [justified veto form](https://github.com/draykerdk/daf/issues/new?template=veto.yml), then record the veto in `vetoes/`, from [`vetoes/TEMPLATE.md`](./vetoes/TEMPLATE.md), where its triage is appended. Read [DAF-003](../dafp/daf-003-justified-vetoes.md) first: a veto carries its grounds, and in Phase 0 it is public.
 - **Running an assembly**. Follow the sequence below, which is [DAF-001 §4](../dafp/daf-001-phase-0-github-federation.md#4-the-cycle) with the instruments of [DAF-002](../dafp/daf-002-phase-0-instruments.md).
 
 `node tools/daf.js check` runs on every pull request. It checks structure and arithmetic. Whether a delivery is real is argued by people, in the thread.

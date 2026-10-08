@@ -10,26 +10,33 @@
  *
  * Anything else in the comment is discussion. A holder's LAST valid comment of
  * this form is the one that counts. Weight comes from the assemblies held before
- * the cycle under vote (DAF-001 §4.5), folded from the record in the working
- * tree, which should be the pull request's head.
+ * the cycle under vote (DAF-001 §4.5). Unit records, parameters and earlier
+ * assemblies are read from the record in the working tree, which should be the
+ * default branch (DAF-002 §5); with --report <file>, only the report under vote
+ * is read from that file, as `node tools/daf.js tally --report` does.
  *
  * This is a thin wrapper: it fetches the comments with the GitHub CLI and hands
- * them to tools/lib/tally.js, the same arithmetic as `node tools/daf.js tally`.
+ * them to tools/lib/tally.js, the same arithmetic as `node tools/daf.js tally`,
+ * with the same refusals: a record holding a closed report whose outcome cannot
+ * be recomputed (the founding case) is not folded without --allow-undetermined,
+ * as `close` and `ledger --write` do not fold it. An undetermined outcome for
+ * the report under vote is printed, and `close` will not write it.
  * The tally is still written into the report and merged by a person.
  *
  * Usage:
  *   node tools/tally.js <pr-number> [--cycle <YYYY-MM>] [--root <dir>]
+ *                       [--report <file>] [--allow-undetermined]
  *
  * Requires: the GitHub CLI (`gh`), authenticated. No dependencies.
  */
 
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const { loadRecord } = require('./lib/record');
-const { computeTally } = require('./lib/tally');
+const { loadRecord, withReport } = require('./lib/record');
+const { computeTally, requireDetermined } = require('./lib/tally');
 const { renderTally } = require('./lib/render');
 
-const USAGE = 'usage: node tools/tally.js <pr-number> [--cycle <YYYY-MM>] [--root <dir>]';
+const USAGE = 'usage: node tools/tally.js <pr-number> [--cycle <YYYY-MM>] [--root <dir>] [--report <file>] [--allow-undetermined]';
 
 function main(argv) {
   const args = argv.slice();
@@ -48,9 +55,16 @@ function main(argv) {
     take('--ledger-ref');
     process.stderr.write('note: --ledger-ref is ignored. Weights now come from the assemblies before the cycle under vote (DAF-001 §4.5), folded from the record in the working tree.\n');
   }
+  const allowUndetermined = args.includes('--allow-undetermined');
+  if (allowUndetermined) args.splice(args.indexOf('--allow-undetermined'), 1);
   const cycleArg = take('--cycle');
+  const reportArg = take('--report');
   const root = path.resolve(take('--root') || path.resolve(__dirname, '..'));
   const pr = args[0];
+  if (cycleArg !== undefined && !/^\d{4}-(0[1-9]|1[0-2])$/.test(cycleArg)) {
+    process.stderr.write(USAGE + '\n');
+    return 1;
+  }
   if (!pr || !/^\d+$/.test(pr) || args.length > 1) {
     process.stderr.write(USAGE + '\n');
     return 1;
@@ -82,10 +96,17 @@ function main(argv) {
     }
     let local = null;
     try { local = execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch (e) { /* not a git checkout */ }
-    if (head && local && local !== head) process.stderr.write('note: the working tree is at ' + local.slice(0, 7) + ', the pull request head is ' + head.slice(0, 7) + '; weights and speakers are read from the working tree.\n');
+    if (head && local && local === head && !reportArg) process.stderr.write('note: the working tree is the pull request head; unit records, parameters and earlier assemblies are read from it. DAF-002 §5 reads them from the default branch: run this from a checkout of it, with --report <the report file>.\n');
+    else if (head && local && local !== head) process.stderr.write('note: the working tree is at ' + local.slice(0, 7) + ', the pull request head is ' + head.slice(0, 7) + '; weights and speakers are read from the working tree.\n');
 
-    const record = loadRecord(root);
+    let record = loadRecord(root);
+    if (!record.parameters) throw new Error('federation/parameters.yml is missing or invalid');
+    for (const w of requireDetermined(record, record.parameters, allowUndetermined, 'tally ' + cycle, cycle)) process.stderr.write('WARNING: ' + w + '\n');
+    if (reportArg) record = withReport(record, path.resolve(reportArg), cycle);
+    const report = record.assemblies.find((a) => a.cycle === cycle);
+    if (report) for (const p of report.problems) process.stderr.write('WARNING: ' + p + '\n');
     const t = computeTally({ record, cycle, comments, reviews, reviewComments, pr, head });
+    if (t.outcome === 'undetermined') process.stderr.write('NOTE: the outcome is undetermined; `close` will not write it.\n');
     process.stdout.write(renderTally(t));
     return 0;
   } catch (e) {

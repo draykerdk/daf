@@ -102,3 +102,48 @@ test('events: values outside printable ASCII fail loudly with file and row', () 
   write(dir, f, read(dir, f).replace('https://github.com/example-org/example-repo/pull/7', 'https://github.com/example-org/example-repo/pull/7é'));
   assert.throws(() => deriveEvents(loadRecord(dir)), /^Error: federation\/assemblies\/2026-02\.md row 13: cannot derive event function\.delivered: evidence "https:\/\/github\.com\/example-org\/example-repo\/pull\/7é" is not printable ASCII/);
 });
+
+test('events: T4 a closed report with parse problems stops the export, with file and row', () => {
+  const { run } = require('./helpers');
+  const fs = require('node:fs');
+  const dir = tmpCopy('basic');
+  const f = 'federation/assemblies/2026-02.md';
+  write(dir, f, read(dir, f).replace('/pull/7 | 1 |', '/pull/7 | one |').replace('| `example-delta` | against | 1 |', '| `example-delta` | against | two |'));
+  assert.throws(() => deriveEvents(loadRecord(dir)), /^Error: federation\/assemblies\/2026-02\.md: cannot derive events while the report has problems: federation\/assemblies\/2026-02\.md:13: points "one" is not an integer; federation\/assemblies\/2026-02\.md:\d+: weight "two"/);
+  for (const cmd of ['events', 'snapshot']) {
+    const out = path.join(dir, 'out-' + cmd);
+    const r = run([cmd, '--root', dir, '--out', out, '--allow-undetermined']);
+    assert.equal(r.code, 1, cmd);
+    assert.match(r.err, /\nerror: federation\/assemblies\/2026-02\.md: cannot derive events while the report has problems: federation\/assemblies\/2026-02\.md:13: points "one"/, cmd);
+    assert.ok(!fs.existsSync(out), cmd + ' writes nothing');
+  }
+  // A pending report is not exported, so its problems do not stop the export.
+  const pending = tmpCopy('basic');
+  write(pending, 'federation/assemblies/2026-04.md', require('./helpers').pendingReport().replace('/pull/10 | 1 |', '/pull/10 | one |'));
+  assert.equal(deriveEvents(loadRecord(pending)).head, GOLDEN_HEAD);
+});
+
+test('events: T4 emit refuses a null or unsafe points value', () => {
+  const rec = loadRecord(path.join(FIX, 'basic'));
+  const a = rec.assemblies[1];
+  a.deliveries[0].points = null;
+  assert.throws(() => deriveEvents(rec), /^Error: federation\/assemblies\/2026-02\.md row 13: cannot derive event function\.delivered: points null is not a safe integer$/);
+  a.deliveries[0].points = 2 ** 53;
+  assert.throws(() => deriveEvents(rec), /row 13: cannot derive event function\.delivered: points 9007199254740992 is not a safe integer/);
+  a.deliveries[0].points = 1;
+  a.votes[0].weight = null;
+  assert.throws(() => deriveEvents(rec), /row \d+: cannot derive event vote\.cast: points null is not a safe integer/);
+});
+
+test('events: T8 shapes require safe integers written in decimal', () => {
+  const d = deriveEvents(loadRecord(path.join(FIX, 'basic')));
+  const json = JSON.parse(serialize(d).json);
+  for (const bad of [-1e21, 2 ** 53, 1.5]) {
+    const evs = json.events.map((e) => Object.assign({}, e));
+    evs[12].points = bad;
+    assert.match(verifyChain(evs).problems.join('\n'), /event 13: points must be a safe integer written in decimal/, String(bad));
+  }
+  const seq = json.events.map((e) => Object.assign({}, e));
+  seq[0].seq = 2 ** 53;
+  assert.match(verifyChain(seq).problems.join('\n'), /event 1: seq must be a positive integer/);
+});

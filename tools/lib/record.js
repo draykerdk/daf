@@ -167,4 +167,24 @@ function loadRecord(root, opts) {
   return record;
 }
 
-module.exports = { loadRecord, validateUnit, parseRequest, gitBlobSha, LOGIN_RE, REQUEST_HEADINGS, skipName };
+/**
+ * withReport(record, file, cycle) -> a copy of the record in which the report
+ * read from `file` stands as federation/assemblies/<cycle>.md, replacing or
+ * adding it. In memory only: nothing on disk changes. Units, parameters,
+ * requests and the other assemblies stay those of `record`.
+ */
+function withReport(record, file, cycle) {
+  let raw;
+  try { raw = fs.readFileSync(file); } catch (e) { throw new Error('cannot read the report ' + file + ': ' + e.message); }
+  const rel = 'federation/assemblies/' + cycle + '.md';
+  const a = parseAssembly(raw.toString('utf8'), { file: rel, params: record.parameters });
+  if (a.cycle && a.cycle !== cycle) a.problems.push(rel + ': the title says assembly ' + a.cycle + ' but the report is read as ' + cycle);
+  a.cycle = cycle;
+  a.raw = raw;
+  a.blob = gitBlobSha(raw);
+  const assemblies = record.assemblies.filter((x) => x.cycle !== cycle).concat([a]);
+  assemblies.sort((x, y) => (x.cycle < y.cycle ? -1 : x.cycle > y.cycle ? 1 : 0));
+  return Object.assign({}, record, { assemblies });
+}
+
+module.exports = { loadRecord, withReport, validateUnit, parseRequest, gitBlobSha, LOGIN_RE, REQUEST_HEADINGS, skipName };

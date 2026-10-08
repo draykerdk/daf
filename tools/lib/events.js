@@ -59,10 +59,10 @@ const sha256 = (s) => crypto.createHash('sha256').update(Buffer.from(s, 'ascii')
 
 /** Check one event's field shapes; returns a message or null. */
 function shapeError(e) {
-  if (!Number.isInteger(e.seq) || e.seq < 1) return 'seq must be a positive integer';
+  if (!Number.isSafeInteger(e.seq) || e.seq < 1) return 'seq must be a positive integer';
   if (!KINDS.includes(e.kind)) return 'unknown kind "' + e.kind + '"';
   if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(e.cycle)) return 'cycle must be YYYY-MM';
-  if (!Number.isInteger(e.points)) return 'points must be an integer';
+  if (!Number.isSafeInteger(e.points) || !/^(0|-?[1-9][0-9]*)$/.test(String(e.points))) return 'points must be a safe integer written in decimal';
   if (!/^[0-9a-f]{40}$|^$/.test(e.blob)) return 'blob must be 40 lowercase hex or empty';
   if (!/^[0-9a-f]{64}$/.test(e.prev)) return 'prev must be 64 lowercase hex';
   for (const [k, v] of [['holder', e.holder], ['value', e.value], ['ref', e.ref], ['blob', e.blob], ['cycle', e.cycle], ['kind', e.kind]]) {
@@ -75,7 +75,8 @@ function shapeError(e) {
 
 /**
  * deriveEvents(record) -> { version, events, head, count }. Throws, naming the
- * file and row, when a value cannot be hashed.
+ * file and row, when a closed report has parse problems or a value cannot be
+ * hashed: an unparsed cell is never exported as a default.
  */
 function deriveEvents(record) {
   const events = [];
@@ -83,19 +84,21 @@ function deriveEvents(record) {
   const requestsByPath = new Map((record.requests || []).map((r) => [r.path, r]));
 
   const emit = (where, fields) => {
+    if (fields.points == null || !Number.isSafeInteger(fields.points)) {
+      throw new Error(where + ': cannot derive event ' + fields.kind + ': points ' + JSON.stringify(fields.points == null ? null : fields.points) + ' is not a safe integer');
+    }
     const e = {
       seq: events.length + 1,
       kind: fields.kind,
       cycle: fields.cycle,
       holder: norm(fields.holder),
-      points: fields.points == null ? 0 : fields.points,
+      points: fields.points,
       value: norm(fields.value),
       ref: norm(fields.ref),
       blob: fields.blob || '',
       evidence: (fields.evidence || []).map(norm),
       prev
     };
-    if (typeof e.points === 'string') e.points = parseInt(norm(e.points), 10);
     const err = shapeError(e);
     if (err) throw new Error(where + ': cannot derive event ' + e.kind + ': ' + err);
     e.preimage = preimageOf(e);
@@ -107,6 +110,7 @@ function deriveEvents(record) {
   for (const a of record.assemblies) {
     const outcome = a.vote && a.vote.outcome;
     if (outcome === 'pending') continue;
+    if (a.problems && a.problems.length) throw new Error(a.file + ': cannot derive events while the report has problems: ' + a.problems.join('; '));
     if (outcome !== 'passed' && outcome !== 'failed') throw new Error(a.file + ': cannot derive events: the outcome is not passed, failed or pending');
     const ref = a.file;
     const blob = a.blob;

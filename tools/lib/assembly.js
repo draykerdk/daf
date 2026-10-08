@@ -88,10 +88,60 @@ function tableBlocks(section) {
 const stripTicks = (s) => String(s || '').replace(/`/g, '').trim();
 const normMinus = (s) => String(s).replace(/−/g, '-');
 
+/**
+ * An integer cell: digits with an optional sign (U+2212 accepted), or null. A
+ * value outside the safe integer range is null too: it cannot be summed or
+ * written back exactly.
+ */
 function parseIntCell(cell) {
   const s = normMinus(stripTicks(cell)).replace(/\*\*/g, '').trim();
   if (!/^[+-]?\d+$/.test(s)) return null;
-  return parseInt(s, 10);
+  const n = parseInt(s, 10);
+  return Number.isSafeInteger(n) ? n : null;
+}
+
+/** Why an integer cell was rejected, for the problem message. */
+function intCellError(cell) {
+  const s = normMinus(stripTicks(cell)).replace(/\*\*/g, '').trim();
+  return /^[+-]?\d+$/.test(s) ? 'is outside the safe integer range' : 'is not an integer';
+}
+
+/** Strip trailing '.' and unbalanced ')' from a bare URL. */
+function trimUrl(u) {
+  for (;;) {
+    if (u.endsWith('.')) { u = u.slice(0, -1); continue; }
+    if (u.endsWith(')') && (u.match(/\(/g) || []).length < (u.match(/\)/g) || []).length) { u = u.slice(0, -1); continue; }
+    return u;
+  }
+}
+
+/**
+ * Replace markdown links [label](target) by placeholder tokens. The target may
+ * hold balanced parentheses and no whitespace. Returns { text, links }.
+ */
+function replaceLinks(s) {
+  const links = [];
+  let out = '';
+  let i = 0;
+  const re = /\[([^\]]*)\]\(/g;
+  let m;
+  while ((m = re.exec(s)) !== null) {
+    const start = m.index + m[0].length;
+    let depth = 0;
+    let end = -1;
+    for (let j = start; j < s.length; j++) {
+      const c = s[j];
+      if (/\s/.test(c)) break;
+      if (c === '(') depth++;
+      else if (c === ')') { if (depth === 0) { end = j; break; } depth--; }
+    }
+    if (end < 0) continue;
+    out += s.slice(i, m.index) + ' \u0000' + links.length + ' ';
+    links.push({ all: s.slice(m.index, end + 1), url: s.slice(start, end) });
+    i = end + 1;
+    re.lastIndex = end + 1;
+  }
+  return { text: out + s.slice(i), links };
 }
 
 /**
@@ -103,13 +153,8 @@ function parseIntCell(cell) {
 function extractRefs(cell, strict) {
   const urls = [];
   const bad = [];
-  let s = stripTicks(cell);
   // Markdown links become placeholder tokens so references keep their order.
-  const links = [];
-  s = s.replace(/\[([^\]]*)\]\(([^)\s]*)\)/g, (all, label, url) => {
-    links.push({ all, url });
-    return ' \u0000' + (links.length - 1) + ' ';
-  });
+  const { text: s, links } = replaceLinks(stripTicks(cell));
   for (let tok of s.split(/[\s,;]+/)) {
     if (!tok) continue;
     const ph = /^\u0000(\d+)$/.exec(tok);
@@ -122,7 +167,7 @@ function extractRefs(cell, strict) {
     const auto = /^<(.+)>$/.exec(tok);
     if (auto) tok = auto[1];
     if (/^#\d+$/.test(tok)) { urls.push(ISSUE_URL + String(parseInt(tok.slice(1), 10))); continue; }
-    if (/^https:\/\/\S+$/.test(tok)) { urls.push(tok.replace(/[.)]+$/, '')); continue; }
+    if (/^https:\/\/\S+$/.test(tok)) { urls.push(trimUrl(tok)); continue; }
     if (/^[a-z][a-z0-9+.-]*:\/\//i.test(tok)) { bad.push(tok); continue; }
     if (strict) bad.push(tok);
   }
@@ -152,7 +197,7 @@ function parseAssembly(text, opts) {
   const out = {
     cycle: null, file, window: null, cycleIssue: null,
     deliveries: [], modules: [], penalties: [], newRecords: [], resources: [],
-    vote: { active: null, cast: null, participation: null, for: null, against: null, abstain: null, outcome: null, outcomeRaw: null, baseLabel: null },
+    vote: { active: null, cast: null, participation: null, for: null, against: null, abstain: null, outcome: null, outcomeRaw: null, baseLabel: null, rows: {} },
     votes: [], steward: null, prose: { where: '', change: '' },
     placeholders, problems, warnings, todo: []
   };
@@ -249,7 +294,7 @@ function parseAssembly(text, opts) {
   for (const r of tableRows('deliveries')) {
     const [h, fn, decl, deliv, pts] = r.cells;
     const points = parseIntCell(pts);
-    if (points === null) problem(r.i, 'points "' + pts + '" is not an integer');
+    if (points === null) problem(r.i, 'points "' + pts + '" ' + intCellError(pts));
     out.deliveries.push({ holder: holderOf(h, r.i), function: fn, declared: oneRef(decl, r.i, 'Declared in'), delivered: oneRef(deliv, r.i, 'Delivered'), points, line: r.line });
   }
   for (const r of tableRows('modules')) {
@@ -258,13 +303,13 @@ function parseAssembly(text, opts) {
     for (const b of refs.bad) problem(r.i, 'Functions in it: "' + b + '" is not an https URL or #n reference');
     if (!refs.urls.length) problem(r.i, 'a module must list the functions in it');
     const b = parseIntCell(bonus);
-    if (b === null) problem(r.i, 'bonus "' + bonus + '" is not an integer');
+    if (b === null) problem(r.i, 'bonus "' + bonus + '" ' + intCellError(bonus));
     out.modules.push({ holder: holderOf(h, r.i), module: mod, functions: refs.urls, bonus: b, line: r.line });
   }
   for (const r of tableRows('penalties')) {
     const [h, commitment, what, pts] = r.cells;
     const points = parseIntCell(pts);
-    if (points === null) problem(r.i, 'points removed "' + pts + '" is not an integer');
+    if (points === null) problem(r.i, 'points removed "' + pts + '" ' + intCellError(pts));
     else if (points >= 0) problem(r.i, 'points removed must be negative, found ' + points);
     const refs = extractRefs(commitment, false);
     for (const b of refs.bad) problem(r.i, 'Commitment: "' + b + '" is not an https URL or #n reference');
@@ -299,17 +344,26 @@ function parseAssembly(text, opts) {
         if (c.length < 2) continue;
         const label = c[0].replace(/\*\*/g, '').trim().toLowerCase();
         const val = c[1].replace(/\*\*/g, '').trim();
-        const n = /^\d+$/.test(val) ? parseInt(val, 10) : null;
+        const nat = (x) => { if (!/^\d+$/.test(x)) return null; const k = parseInt(x, 10); return Number.isSafeInteger(k) ? k : null; };
+        const n = nat(val);
         const isN = /^n$/i.test(val);
-        if (label === 'active points' || label === 'total points') { out.vote.active = n; out.vote.baseLabel = label; if (isN) out.vote.placeholder = true; }
-        else if (label === 'votes cast') { out.vote.cast = n; if (isN) out.vote.placeholder = true; }
-        else if (label === 'participation') { out.vote.participation = val; if (/^n%/.test(val)) out.vote.placeholder = true; }
+        // Every summary row is kept with its raw value and line, so `check` can
+        // say which row is missing or not a number.
+        const keep = (key) => {
+          if (out.vote.rows[key]) problem(r.i, 'the vote table has a second "' + c[0].replace(/\*\*/g, '').trim() + '" row');
+          out.vote.rows[key] = { label, value: val, line: r.i + 1 };
+        };
+        if (label === 'active points' || label === 'total points') { keep('base'); out.vote.active = n; out.vote.baseLabel = label; if (isN) out.vote.placeholder = true; }
+        else if (label === 'votes cast') { keep('cast'); out.vote.cast = n; if (isN) out.vote.placeholder = true; }
+        else if (label === 'participation') { keep('participation'); out.vote.participation = val; if (/^n%/.test(val)) out.vote.placeholder = true; }
         else if (label === 'for / against / abstain') {
+          keep('split');
           const m = /^(\d+)\s*\/\s*(\d+)\s*\/\s*(\d+)$/.exec(val);
-          if (m) { out.vote.for = +m[1]; out.vote.against = +m[2]; out.vote.abstain = +m[3]; }
+          if (m && [m[1], m[2], m[3]].every((x) => nat(x) !== null)) { out.vote.for = nat(m[1]); out.vote.against = nat(m[2]); out.vote.abstain = nat(m[3]); }
           else if (/^n\s*\/\s*n\s*\/\s*n$/i.test(val)) out.vote.placeholder = true;
           else problem(r.i, 'For / against / abstain must read "a / b / c"');
         } else if (label === 'outcome') {
+          keep('outcome');
           out.vote.outcomeRaw = val;
           out.vote.outcomeLine = r.i + 1;
           const v = val.toLowerCase();
@@ -326,7 +380,7 @@ function parseAssembly(text, opts) {
     const vote = stripTicks(v).toLowerCase();
     if (!['for', 'against', 'abstain'].includes(vote)) problem(r.i, 'vote must be for, against or abstain, found "' + v + '"');
     const weight = parseIntCell(w);
-    if (weight === null || weight < 0) problem(r.i, 'weight "' + w + '" is not a non-negative integer');
+    if (weight === null || weight < 0) problem(r.i, 'weight "' + w + '" is not a non-negative safe integer');
     out.votes.push({ holder: holderOf(h, r.i), vote, weight, line: r.line });
   }
 
@@ -378,4 +432,4 @@ function renderAssemblyVote(text, summary, votes) {
   return parts.join('\n');
 }
 
-module.exports = { parseAssembly, renderAssemblyVote, extractRefs, scanSections, splitRow, tableBlocks, parseIntCell, ISSUE_URL, ID_RE, PLACEHOLDER_HOLDERS, HEADERS };
+module.exports = { parseAssembly, renderAssemblyVote, extractRefs, scanSections, splitRow, tableBlocks, parseIntCell, intCellError, ISSUE_URL, ID_RE, PLACEHOLDER_HOLDERS, HEADERS };

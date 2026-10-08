@@ -85,3 +85,33 @@ test('assembly: renderAssemblyVote rewrites only the two vote tables', () => {
   const crlf = renderAssemblyVote(before.replace(/\n/g, '\r\n'), summary, votes);
   assert.ok(!/[^\r]\n/.test(crlf));
 });
+
+test('assembly: T8 integer cells must be safe integers', () => {
+  const { parseIntCell } = require('../lib/assembly');
+  assert.equal(parseIntCell('9007199254740991'), 9007199254740991);
+  assert.equal(parseIntCell('−9007199254740991'), -9007199254740991);
+  assert.equal(parseIntCell('9007199254740992'), null);
+  assert.equal(parseIntCell('−9007199254740993'), null, 'would round to -9007199254740992');
+  assert.equal(parseIntCell('−1000000000000000000000'), null, 'would print as -1e+21');
+  assert.equal(parseIntCell('`−1`'), -1);
+  const a = parseAssembly(basic('2026-02').replace('| −1 |', '| −1000000000000000000000 |').replace('/pull/7 | 1 |', '/pull/7 | one |'), { file: 'x.md' });
+  const p = a.problems.join('\n');
+  assert.match(p, /x\.md:26: points removed "−1000000000000000000000" is outside the safe integer range/);
+  assert.match(p, /x\.md:13: points "one" is not an integer/);
+  assert.equal(a.penalties[0].points, null);
+  const w = parseAssembly(basic('2026-02').replace('| `example-river` | for | 2 |', '| `example-river` | for | 9007199254740992 |'), { file: 'y.md' });
+  assert.match(w.problems.join('\n'), /weight "9007199254740992" is not a non-negative safe integer/);
+});
+
+test('assembly: T9 URLs keep balanced parentheses, bare and in markdown links', () => {
+  const wiki = 'https://en.wikipedia.org/wiki/Function_(mathematics)';
+  assert.deepEqual(extractRefs(wiki, true), { urls: [wiki], bad: [] });
+  assert.deepEqual(extractRefs('[doc](' + wiki + ')', true), { urls: [wiki], bad: [] });
+  assert.deepEqual(extractRefs('[a](' + wiki + '), [b](https://a.example/b)', true), { urls: [wiki, 'https://a.example/b'], bad: [] });
+  assert.deepEqual(extractRefs('(see ' + wiki + ').', false), { urls: [wiki], bad: [] }, 'the unbalanced closing parenthesis and the period go');
+  assert.deepEqual(extractRefs('(see https://a.example/b).', false), { urls: ['https://a.example/b'], bad: [] });
+  assert.deepEqual(extractRefs('https://a.example/x_(y)_(z)', true), { urls: ['https://a.example/x_(y)_(z)'], bad: [] });
+  const a = parseAssembly(basic('2026-02').replace('https://github.com/example-org/example-repo/pull/7', '[the result](' + wiki + ')'), { file: 'z.md' });
+  assert.deepEqual(a.problems, []);
+  assert.equal(a.deliveries[0].delivered, wiki);
+});

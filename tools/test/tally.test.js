@@ -80,9 +80,9 @@ test('tally: filters, each with its reason', () => {
   const t = tally([
     comment(1, 'example-cedar-gh', IN, vote('for', 'example-river')),
     comment(2, 'example-cedar-gh', '2026-03-31T23:59:59Z', vote('for', 'example-cedar')),
-    comment(3, 'example-delta-gh', '2026-04-08T23:00:00Z', vote('for', 'example-delta'), '2026-04-09T01:00:00Z'),
+    comment(3, 'example-delta-gh', '2026-04-07T23:00:00Z', vote('for', 'example-delta'), '2026-04-08T00:00:00Z'),
     comment(4, 'example-ghost-gh', IN, vote('for', 'example-ghost')),
-    comment(5, 'example-river-gh', '2026-04-09T00:00:00Z', vote('for', 'example-river')),
+    comment(5, 'example-river-gh', '2026-04-08T00:00:00Z', vote('for', 'example-river')),
     comment(6, 'example-river-gh', IN, 'I would vote for this, but this is discussion.')
   ], {
     reviews: [[{ id: 7, user: { login: 'example-delta-gh' }, submitted_at: IN, body: vote('for', 'example-delta') }]],
@@ -102,8 +102,28 @@ test('tally: filters, each with its reason', () => {
 });
 
 test('tally: an edit inside the window is fine', () => {
-  const t = tally([comment(1, 'example-delta-gh', IN, vote('for', 'example-delta'), '2026-04-08T23:59:59Z')]);
+  const t = tally([comment(1, 'example-delta-gh', IN, vote('for', 'example-delta'), '2026-04-07T23:59:59Z')]);
   assert.equal(t.votes.length, 1);
+});
+
+test('tally: the window is window_days x 24 h, from <opens>T00:00:00Z to <closes>T00:00:00Z (T7)', () => {
+  // The report says opens 2026-04-01, closes 2026-04-08: seven full days.
+  const t = tally([
+    comment(1, 'example-delta-gh', '2026-04-01T00:00:00Z', vote('for', 'example-delta')),
+    comment(2, 'example-river-gh', '2026-04-07T23:59:59Z', vote('against', 'example-river')),
+    comment(3, 'example-cedar-gh', '2026-04-08T00:00:00Z', vote('for', 'example-cedar')),
+    comment(4, 'example-cedar-gh', '2026-04-08T12:00:00Z', vote('against', 'example-cedar'))
+  ]);
+  assert.deepEqual(t.votes.map((v) => v.holder).sort(), ['example-delta', 'example-river'], 'the first and last second of the window count');
+  assert.deepEqual(reasons(t), ['example-cedar: posted after the window closed', 'example-cedar: posted after the window closed'], 'a vote at the closing instant is after the close');
+  const { parseAssembly } = require('../lib/assembly');
+  const params = { window_days: 7 };
+  const seven = parseAssembly(pendingReport(), { file: 'r.md', params });
+  assert.deepEqual(seven.warnings.filter((w) => /window/.test(w)), []);
+  const eight = parseAssembly(pendingReport().replace('closes 2026-04-08', 'closes 2026-04-09'), { file: 'r.md', params });
+  assert.match(eight.warnings.join('\n'), /r\.md:3: the window dates are 8 days apart; parameters\.yml says window_days: 7/);
+  const six = parseAssembly(pendingReport().replace('closes 2026-04-08', 'closes 2026-04-07'), { file: 'r.md', params });
+  assert.match(six.warnings.join('\n'), /the window dates are 6 days apart/);
 });
 
 test('tally: slurped pagination (an array of pages) and a flat array give the same result', () => {
@@ -120,7 +140,7 @@ test('tally: single-holder concentration is stated', () => {
   assert.deepEqual(t.concentration, ['`example-delta`: one holder alone reaches the quorum and the majority (DAF-000 §5.4).']);
   const md = renderTally(t);
   assert.match(md, /\| `example-delta` \| for \| 4 \| 66\.6% \|/);
-  assert.match(md, /Computed from 1 comment on PR #42 at head abcdef1, window 2026-04-01–2026-04-08 \(UTC\), weights from the assemblies before 2026-04\./);
+  assert.match(md, /Computed from 1 comment on PR #42 at head abcdef1, window from 2026-04-01 00:00 to 2026-04-08 00:00 UTC \(a vote at or after the close is not counted\), weights from the assemblies before 2026-04\./);
   assert.match(md, /This computes the arithmetic only\. The vote table in the report is written and merged by a person\./);
 });
 
@@ -157,4 +177,67 @@ test('render: user strings are inline code, defused and capped', () => {
   assert.equal(code('a\r\nb<script>@x'), '`abscript>@​x`');
   assert.equal(code('x'.repeat(100)).length, 82);
   assert.equal(code('a`b|c'), "`a'b/c`");
+});
+
+test('tally: T2 a dormant holder whose vote is counted joins the base; participation never exceeds 100%', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const { run, read } = require('./helpers');
+  const dir = tmpCopy('basic');
+  const RIVER_ROW = '| `example-river` | A fictional delivery under vote | #41 | https://github.com/example-org/example-repo/pull/10 | 1 |\n';
+  const close = (cycle, comments) => {
+    write(dir, 'federation/assemblies/' + cycle + '.md', pendingReport({ cycle }).replace(RIVER_ROW, ''));
+    const file = path.join(dir, 'c-' + cycle + '.json');
+    fs.writeFileSync(file, JSON.stringify(comments));
+    const r = run(['close', cycle, '--root', dir, '--comments', file, '--allow-undetermined']);
+    assert.equal(r.code, 0, r.err);
+    return read(dir, 'federation/assemblies/' + cycle + '.md');
+  };
+  // Only example-cedar votes in 2026-04, 05 and 06: delta (4) and river (1)
+  // are dormant before 2026-07, and the active points are cedar's 1.
+  const cedarFor = [comment(1, 'example-cedar-gh', IN, vote('for', 'example-cedar'))];
+  assert.match(close('2026-04', cedarFor), /\*\*failed\*\*/);
+  assert.match(close('2026-05', cedarFor), /\*\*failed\*\*/);
+  assert.match(close('2026-06', cedarFor), /\| Active points \| 1 \|[\s\S]*\*\*passed\*\*/);
+  write(dir, 'federation/assemblies/2026-07.md', pendingReport({ cycle: '2026-07' }).replace(RIVER_ROW, ''));
+  const record = loadRecord(dir);
+  const t7 = (comments) => computeTally({ record, cycle: '2026-07', comments });
+  const prior = t7([]).prior;
+  assert.deepEqual(prior.holders.map((h) => [h.id, h.points, h.active]), [['example-delta', 4, false], ['example-cedar', 1, true], ['example-river', 1, false]]);
+  assert.equal(prior.totals.activePoints, 1);
+
+  const delta = comment(2, 'example-delta-gh', IN, vote('for', 'example-delta'));
+  const cedarAgainst = comment(3, 'example-cedar-gh', IN, vote('against', 'example-cedar'));
+  const t = t7([delta, cedarAgainst]);
+  assert.equal(t.base, 5, 'active 1 + dormant delta 4, who voted');
+  assert.equal(t.cast, 5);
+  assert.equal(t.participation, 1);
+  assert.equal(t.outcome, 'passed');
+  assert.deepEqual(t.concentration, ['`example-delta`: one holder alone reaches the quorum and the majority (DAF-000 §5.4).'], 'cedar (1 of 5 cast) does not reach the majority alone');
+  // Majority alone is measured against the votes cast, quorum alone against the base.
+  const two = t7([delta, cedarAgainst, comment(4, 'example-river-gh', IN, vote('against', 'example-river'))]);
+  assert.deepEqual([two.base, two.cast, two.outcome], [6, 6, 'passed']);
+  assert.deepEqual(two.concentration, ['`example-delta`: one holder alone reaches the quorum and the majority (DAF-000 §5.4).']);
+
+  // Every combination of voters and choices stays at or below 100%.
+  const voters = [['example-delta', 'example-delta-gh'], ['example-cedar', 'example-cedar-gh'], ['example-river', 'example-river-gh']];
+  for (let mask = 0; mask < 27; mask++) {
+    const cs = [];
+    let m = mask;
+    voters.forEach(([id, login], i) => { const c = m % 3; m = Math.floor(m / 3); if (c) cs.push(comment(10 + i, login, IN, vote(c === 1 ? 'for' : 'against', id))); });
+    const r = t7(cs);
+    assert.ok(r.cast <= r.base, 'mask ' + mask + ': cast ' + r.cast + ' of base ' + r.base);
+    if (r.participation !== null) assert.ok(r.participation <= 1);
+  }
+  // quorum_base total is unchanged: every holder's points, voting or not.
+  const total = computeTally({ record, cycle: '2026-07', params: Object.assign({}, record.parameters, { quorum_base: 'total' }), comments: [delta] });
+  assert.equal(total.base, 6);
+
+  // close writes the same base, and check recomputes it from the Votes table.
+  const file = path.join(dir, 'c-2026-07.json');
+  fs.writeFileSync(file, JSON.stringify([delta, cedarAgainst]));
+  assert.equal(run(['close', '2026-07', '--root', dir, '--comments', file, '--allow-undetermined']).code, 0);
+  assert.match(read(dir, 'federation/assemblies/2026-07.md'), /\| Active points \| 5 \|\n\| Votes cast \| 5 \|\n\| Participation \| 100% \(quorum 30%\) \|/);
+  const check = run(['check', '--root', dir, '--allow-undetermined']);
+  assert.equal(check.code, 0, check.err);
 });

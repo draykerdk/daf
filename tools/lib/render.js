@@ -92,7 +92,7 @@ function votesTableLines(t, withShare) {
     : ['| Holder | Vote | Weight |', '| --- | --- | --- |'];
   for (const v of t.votes) {
     const row = '| `' + v.holder + '` | ' + v.vote + ' | ' + v.weight + ' |';
-    out.push(withShare ? row + ' ' + (t.base ? pct(v.weight, t.base) : '—') + ' |' : row);
+    out.push(withShare ? row + ' ' + (t.base > 0 && t.outcome !== 'undetermined' ? pct(v.weight, t.base) : '—') + ' |' : row);
   }
   return out;
 }
@@ -119,7 +119,7 @@ function renderTally(t) {
   let prov = 'Computed from ' + t.commentsCount + ' ' + (t.commentsCount === 1 ? 'comment' : 'comments');
   if (t.pr) prov += ' on PR #' + String(t.pr).replace(/[^0-9]/g, '');
   if (t.head) prov += ' at head ' + String(t.head).replace(/[^0-9a-f]/gi, '').slice(0, 7);
-  prov += t.window ? ', window ' + t.window.opens + '–' + t.window.closes + ' (UTC)' : ', no window in the report';
+  prov += t.window ? ', window from ' + t.window.opens + ' 00:00 to ' + t.window.closes + ' 00:00 UTC (a vote at or after the close is not counted)' : ', no window in the report';
   prov += ', weights from the assemblies before ' + t.cycle + '.';
   out.push(prov);
   out.push('');

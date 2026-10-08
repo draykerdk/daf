@@ -1,0 +1,168 @@
+[
+  [
+    {
+      "number": 110,
+      "state": "open",
+      "title": "[Cycle] Assembly 2026-04",
+      "html_url": "https://github.com/draykerdk/daf/issues/110",
+      "user": {
+        "login": "example-river-gh",
+        "id": 3001,
+        "type": "User"
+      },
+      "labels": [
+        {
+          "name": "assembly"
+        }
+      ],
+      "created_at": "2026-03-31T09:00:00Z",
+      "updated_at": "2026-03-31T09:00:00Z",
+      "body": "### Cycle\n\n2026-04\n\n### Window opens\n\n2026-04-01\n\n### Window closes\n\n2026-04-08\n\n### Up for decision\n\n- Deliveries claimed since the last assembly\n- Resource requests filed in `federation/requests/`\n- Proposed changes to DAF-000 and DAF-001\n- Unit records applying with a first delivery"
+    },
+    {
+      "number": 111,
+      "state": "open",
+      "title": "[Claim] Ran the fictional assembly",
+      "html_url": "https://github.com/draykerdk/daf/issues/111",
+      "user": {
+        "login": "example-willow-gh",
+        "id": 2111,
+        "type": "User"
+      },
+      "labels": [
+        {
+          "name": "claim"
+        }
+      ],
+      "created_at": "2026-04-02T10:00:00Z",
+      "updated_at": "2026-04-02T10:00:00Z",
+      "body": "### Claimed as\n\nexample-willow\n\n### Record\n\n_No response_\n\n### What was delivered\n\nRan the fictional assembly end to end, against work that already happened.\nThis second line is not drafted.\n\n### Declared in\n\nhttps://github.com/example-org/example-repo/issues/2\n\n### The result\n\nhttps://github.com/example-org/example-repo/commit/89abcdef0123456789abcdef0123456789abcdef\n\n### Conditions — DAF-000 §3.1\n\n- [X] It was declared in public before it was accepted as complete.\n- [X] The result is public and inspectable.\n- [X] It closes. This is not ongoing effort.\n\n### What is being claimed\n\nOne function — 1 point\n\n### If a module, the functions in it\n\n_No response_\n\n### Cycle\n\n2026-04"
+    },
+    {
+      "number": 112,
+      "state": "closed",
+      "title": "[Claim] Reviewed the fictional proposal",
+      "html_url": "https://github.com/draykerdk/daf/issues/112",
+      "user": {
+        "login": "example-river-gh",
+        "id": 2112,
+        "type": "User"
+      },
+      "labels": [
+        {
+          "name": "claim"
+        }
+      ],
+      "created_at": "2026-04-02T10:00:00Z",
+      "updated_at": "2026-04-02T10:00:00Z",
+      "body": "### Claimed as\n\nexample-river\n\n### Record\n\nI already have a record\n\n### What was delivered\n\nReviewed the fictional proposal <b>@everyone</b> | with a pipe\n\n### Declared in\n\n#31\n\n### The result\n\nhttps://github.com/example-org/example-repo/pull/11\n\n### Conditions — DAF-000 §3.1\n\n- [X] It was declared in public before it was accepted as complete.\n- [X] The result is public and inspectable.\n- [X] It closes. This is not ongoing effort.\n\n### What is being claimed\n\nOne function — 1 point\n\n### If a module, the functions in it\n\n_No response_\n\n### Cycle\n\n2026-04"
+    },
+    {
+      "number": 113,
+      "state": "open",
+      "title": "[Claim] A claim without a result link",
+      "html_url": "https://github.com/draykerdk/daf/issues/113",
+      "user": {
+        "login": "example-cedar-gh",
+        "id": 2113,
+        "type": "User"
+      },
+      "labels": [
+        {
+          "name": "claim"
+        }
+      ],
+      "created_at": "2026-04-02T10:00:00Z",
+      "updated_at": "2026-04-02T10:00:00Z",
+      "body": "### Claimed as\n\nexample-cedar\n\n### Record\n\nI already have a record\n\n### What was delivered\n\nSomething\n\n### Declared in\n\n#32\n\n### The result\n\nsee the thread\n\n### Conditions — DAF-000 §3.1\n\n- [X] It was declared in public before it was accepted as complete.\n- [X] The result is public and inspectable.\n- [X] It closes. This is not ongoing effort.\n\n### What is being claimed\n\nOne function — 1 point\n\n### If a module, the functions in it\n\n_No response_\n\n### Cycle\n\n2026-04"
+    }
+  ],
+  [
+    {
+      "number": 114,
+      "state": "open",
+      "title": "[Claim] A claim for another cycle",
+      "html_url": "https://github.com/draykerdk/daf/issues/114",
+      "user": {
+        "login": "example-cedar-gh",
+        "id": 2114,
+        "type": "User"
+      },
+      "labels": [
+        {
+          "name": "claim"
+        }
+      ],
+      "created_at": "2026-04-02T10:00:00Z",
+      "updated_at": "2026-04-02T10:00:00Z",
+      "body": "### Claimed as\n\nexample-cedar\n\n### Record\n\n_No response_\n\n### What was delivered\n\nLater work\n\n### Declared in\n\n#33\n\n### The result\n\nhttps://github.com/example-org/example-repo/pull/12\n\n### Conditions — DAF-000 §3.1\n\n- [X] It was declared in public before it was accepted as complete.\n- [X] The result is public and inspectable.\n- [X] It closes. This is not ongoing effort.\n\n### What is being claimed\n\nOne function — 1 point\n\n### If a module, the functions in it\n\n_No response_\n\n### Cycle\n\n2026-05"
+    },
+    {
+      "number": 115,
+      "state": "open",
+      "title": "[Claim] The fictional module",
+      "html_url": "https://github.com/draykerdk/daf/issues/115",
+      "user": {
+        "login": "example-delta-gh",
+        "id": 2115,
+        "type": "User"
+      },
+      "labels": [
+        {
+          "name": "claim"
+        }
+      ],
+      "created_at": "2026-04-02T10:00:00Z",
+      "updated_at": "2026-04-02T10:00:00Z",
+      "body": "### Claimed as\n\nexample-delta\n\n### Record\n\nI already have a record\n\n### What was delivered\n\nThe fictional module as a whole\n\n### Declared in\n\n#40\n\n### The result\n\nhttps://github.com/example-org/example-repo/pull/13\n\n### Conditions — DAF-000 §3.1\n\n- [X] It was declared in public before it was accepted as complete.\n- [X] The result is public and inspectable.\n- [X] It closes. This is not ongoing effort.\n\n### What is being claimed\n\nA completed module — 1 additional point per function in it\n\n### If a module, the functions in it\n\n#41, #42\n\n### Cycle\n\n2026-04"
+    },
+    {
+      "number": 118,
+      "state": "open",
+      "title": "[Claim] Translated the fictional guide",
+      "html_url": "https://github.com/draykerdk/daf/issues/118",
+      "user": {
+        "login": "example-aspen-gh",
+        "id": 2118,
+        "type": "User"
+      },
+      "labels": [
+        {
+          "name": "claim"
+        }
+      ],
+      "created_at": "2026-04-02T10:00:00Z",
+      "updated_at": "2026-04-02T10:00:00Z",
+      "body": "### Claimed as\n\nexample-aspen\n\n### Record\n\nFirst delivery, as a unit (a group)\n\n### What was delivered\n\nTranslated the fictional guide into a second language.\n\n### Declared in\n\nhttps://github.com/example-org/example-repo/issues/5\n\n### The result\n\nhttps://github.com/example-org/example-repo/pull/14\n\n### Conditions — DAF-000 §3.1\n\n- [X] It was declared in public before it was accepted as complete.\n- [X] The result is public and inspectable.\n- [X] It closes. This is not ongoing effort.\n\n### What is being claimed\n\nOne function — 1 point\n\n### If a module, the functions in it\n\n_No response_\n\n### Cycle\n\n2026-04"
+    },
+    {
+      "number": 116,
+      "state": "open",
+      "title": "[Claim] a pull request, not an issue",
+      "html_url": "https://github.com/draykerdk/daf/pull/116",
+      "user": {
+        "login": "example-cedar-gh",
+        "id": 3002,
+        "type": "User"
+      },
+      "labels": [],
+      "body": "",
+      "pull_request": {
+        "url": "https://api.github.com/repos/draykerdk/daf/pulls/116"
+      }
+    },
+    {
+      "number": 117,
+      "state": "open",
+      "title": "An unrelated fictional open function",
+      "html_url": "https://github.com/draykerdk/daf/issues/117",
+      "user": {
+        "login": "example-river-gh",
+        "id": 3001,
+        "type": "User"
+      },
+      "labels": [],
+      "body": "Nothing to claim."
+    }
+  ]
+]

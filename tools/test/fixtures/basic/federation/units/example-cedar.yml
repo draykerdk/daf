@@ -1,0 +1,13 @@
+schema_version: 1
+unit:
+  id: example-cedar
+  name: Example Cedar
+  kind: participant
+  founding_function: >-
+    A fictional participant used only by the tests,
+    with a folded description.
+  speaks_for:
+    - https://github.com/example-cedar-gh
+  work:
+    - https://github.com/example-org/example-repo
+  joined: 2026-02

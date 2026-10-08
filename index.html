@@ -84,6 +84,20 @@
   button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px solid #3FA9FF;outline-offset:3px}
   @keyframes dk-fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   .dk-page{animation:dk-fade .34s ease both}
+  /* Tables laid out as grids. On a phone their columns stack, so no route
+     scrolls sideways; the phase map's header turns into a label on each cell. */
+  .phase-row{display:grid;grid-template-columns:minmax(110px,1fr) minmax(190px,2fr) minmax(170px,1.6fr);gap:16px}
+  .phase-lbl{display:none}
+  .ex-deliv{display:grid;grid-template-columns:minmax(110px,0.7fr) minmax(190px,2fr) minmax(88px,0.7fr) minmax(105px,0.9fr) 44px;gap:14px}
+  .ledger-row{display:grid;grid-template-columns:minmax(120px,1.4fr) minmax(80px,0.7fr) 70px minmax(90px,0.8fr) minmax(90px,1fr) minmax(80px,0.8fr);gap:14px}
+  .audit-row{display:grid;grid-template-columns:minmax(120px,1.6fr) minmax(90px,1fr) minmax(90px,1fr) minmax(90px,0.9fr);gap:14px}
+  @media (max-width:720px){
+    .phase-row,.ex-deliv{grid-template-columns:1fr;gap:6px}
+    .ledger-row,.audit-row{grid-template-columns:1fr 1fr;gap:8px 14px}
+    .phase-head{display:none}
+    .phase-lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.14em;color:var(--tx3);margin-bottom:3px}
+    .ex-deliv>:last-child{text-align:left !important}
+  }
 </style>
 </helmet>
 
@@ -238,7 +252,7 @@
                   <div style="font-size:clamp(38px,4.4vw,58px);font-weight:700;letter-spacing:-0.04em;line-height:1;color:#3FA9FF">{{ cycLeft }}</div>
                   <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:var(--tx3)">{{ cycLeftLabel }}</div>
                 </div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx3);letter-spacing:0.08em">OPENS {{ cyc.opens }} · CLOSES {{ cyc.closes }}</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx3);letter-spacing:0.08em;text-transform:uppercase">OPENS {{ cyc.opens }} · {{ cycClosesAt }}</div>
                 <div style="font-size:14px;line-height:1.62;color:var(--tx2);text-wrap:pretty">Claims are made in the thread and can be contested by anyone in it. Weight comes from the ledger as it stood at the previous assembly, so the awards under vote cannot change the votes that approve them.</div>
                 <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:2px">
                   <a href="{{ cyc.url }}" target="_blank" rel="noreferrer" style="background:#3FA9FF;color:#0A0A0C;padding:13px 22px;font-size:13.5px;font-weight:600" style-hover="background:#6FC1FF">Open the cycle · #{{ cyc.num }} →</a>
@@ -557,16 +571,16 @@
           <h2 style="font-size:clamp(23px,2.7vw,34px);line-height:1.08;letter-spacing:-0.03em;font-weight:600;margin:0 0 16px;max-width:24ch;text-wrap:balance">What this MVP holds, and what was deliberately left out.</h2>
           <p style="font-size:15px;line-height:1.66;color:var(--tx2);margin:0 0 28px;max-width:64ch;text-wrap:pretty">The right-hand column is not a roadmap and carries no dates. It is a record of what Phase 0 does not attempt, so that the small thing running now is not mistaken for the whole design, and the rest is not mistaken for work in progress.</p>
           <div style="border:1px solid var(--line)">
-            <div style="display:grid;grid-template-columns:minmax(110px,1fr) minmax(190px,2fr) minmax(170px,1.6fr);gap:16px;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--surf2)">
+            <div class="phase-row phase-head" style="padding:14px 18px;border-bottom:1px solid var(--line);background:var(--surf2)">
               <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--tx3)">CONCERN</div>
               <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#3FA9FF">PHASE 0 · ON GITHUB</div>
               <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--tx3)">LATER PHASES</div>
             </div>
             <sc-for list="{{ phaseMap }}" as="p" hint-placeholder-count="9">
-              <div style="display:grid;grid-template-columns:minmax(110px,1fr) minmax(190px,2fr) minmax(170px,1.6fr);gap:16px;padding:15px 18px;border-bottom:1px solid var(--line);align-items:start">
+              <div class="phase-row" style="padding:15px 18px;border-bottom:1px solid var(--line);align-items:start">
                 <div style="font-size:14px;font-weight:500;color:var(--tx)">{{ p.k }}</div>
-                <div style="font-size:13.5px;line-height:1.55;color:var(--tx2)">{{ p.now }}</div>
-                <div style="font-size:13.5px;line-height:1.55;color:var(--tx3)">{{ p.later }}</div>
+                <div style="font-size:13.5px;line-height:1.55;color:var(--tx2)"><span class="phase-lbl" style="color:#3FA9FF">PHASE 0 · ON GITHUB</span>{{ p.now }}</div>
+                <div style="font-size:13.5px;line-height:1.55;color:var(--tx3)"><span class="phase-lbl">LATER PHASES</span>{{ p.later }}</div>
               </div>
             </sc-for>
           </div>
@@ -827,7 +841,14 @@
                     </div>
                     <div style="border:1px solid {{ tallyOutLine }};padding:20px 22px;display:flex;flex-direction:column;gap:10px">
                       <div style="font-size:clamp(24px,2.8vw,34px);font-weight:700;letter-spacing:-0.03em;color:{{ tallyOutFg }};line-height:1">{{ tallyOutcome }}</div>
-                      <div style="font-size:13.5px;line-height:1.6;color:var(--tx2);text-wrap:pretty">{{ tallyWhy }}</div>
+                      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:var(--tx)">{{ tallySums }}</div>
+                      <sc-if value="{{ tallyNotAssembly }}" hint-placeholder-val="{{ false }}">
+                        <div style="border-left:2px solid #FF5500;padding:2px 0 2px 14px;font-size:13.5px;line-height:1.6;color:var(--tx)">{{ tallyNotAssemblyMsg }}</div>
+                      </sc-if>
+                      <sc-if value="{{ tallyHasWhy }}" hint-placeholder-val="{{ false }}">
+                        <div style="font-size:13.5px;line-height:1.6;color:var(--tx2);text-wrap:pretty">{{ tallyWhy }}</div>
+                      </sc-if>
+                      <div style="font-size:13.5px;line-height:1.6;color:var(--tx2);text-wrap:pretty">This reading does not check the window or who may speak for each holder. The count that does is the <a href="{{ tallyWorkflowUrl }}" target="_blank" rel="noreferrer">Federation tally workflow</a>.</div>
                     </div>
                     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--tx3)">{{ tallyFound }} VOTES FOUND IN {{ tallyComments }} COMMENTS</div>
                     <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em">
@@ -885,7 +906,7 @@
               <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#3FA9FF;margin-bottom:12px">DELIVERIES</div>
               <div style="border:1px solid var(--line);border-bottom:none">
                 <sc-for list="{{ ex.deliveries }}" as="d" hint-placeholder-count="3">
-                  <div style="display:grid;grid-template-columns:minmax(110px,0.7fr) minmax(190px,2fr) minmax(88px,0.7fr) minmax(105px,0.9fr) 44px;gap:14px;padding:13px 16px;border-bottom:1px solid var(--line);align-items:baseline">
+                  <div class="ex-deliv" style="padding:13px 16px;border-bottom:1px solid var(--line);align-items:baseline">
                     <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--tx)">{{ d.h }}</div>
                     <div style="font-size:14px;color:var(--tx2);line-height:1.45">{{ d.f }}</div>
                     <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx3)">{{ d.d }}</div>
@@ -893,7 +914,7 @@
                     <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#3FA9FF;text-align:right">{{ d.p }}</div>
                   </div>
                 </sc-for>
-                <div style="display:grid;grid-template-columns:minmax(110px,0.7fr) minmax(190px,2fr) minmax(88px,0.7fr) minmax(105px,0.9fr) 44px;gap:14px;padding:13px 16px;border-bottom:1px solid var(--line);align-items:baseline;background:var(--surf2)">
+                <div class="ex-deliv" style="padding:13px 16px;border-bottom:1px solid var(--line);align-items:baseline;background:var(--surf2)">
                   <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--tx)">{{ ex.module.h }}</div>
                   <div style="font-size:14px;color:var(--tx2);line-height:1.45">MODULE COMPLETED · {{ ex.module.m }}</div>
                   <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx3)">{{ ex.module.f }}</div>
@@ -1169,7 +1190,7 @@
                 </div>
               </sc-if>
               <sc-for list="{{ ledgerRows }}" as="r" hint-placeholder-count="0">
-                <div style="display:grid;grid-template-columns:minmax(120px,1.4fr) minmax(80px,0.7fr) 70px minmax(90px,0.8fr) minmax(90px,1fr) minmax(80px,0.8fr);gap:14px;padding:14px 0;border-bottom:1px solid var(--line);align-items:center">
+                <div class="ledger-row" style="padding:14px 0;border-bottom:1px solid var(--line);align-items:center">
                   <div style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--tx)">{{ r.id }}</div>
                   <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--tx3);letter-spacing:0.08em">{{ r.kind }}</div>
                   <div style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#3FA9FF;text-align:right">{{ r.points }}</div>
@@ -1289,7 +1310,7 @@
               </div>
               <div style="display:flex;flex-direction:column;gap:1px">
                 <sc-for list="{{ auditRows }}" as="r" hint-placeholder-count="0">
-                  <div style="background:var(--surf);padding:14px 18px;display:grid;grid-template-columns:minmax(120px,1.6fr) minmax(90px,1fr) minmax(90px,1fr) minmax(90px,0.9fr);gap:14px;align-items:baseline;outline:1px solid {{ r.line }}">
+                  <div class="audit-row" style="background:var(--surf);padding:14px 18px;align-items:baseline;outline:1px solid {{ r.line }}">
                     <div style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--tx)">{{ r.id }}</div>
                     <div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--tx3)">REPORTS </span><span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--tx)">{{ r.summed }}</span></div>
                     <div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--tx3)">LEDGER </span><span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--tx)">{{ r.stated }}</span></div>
@@ -1375,6 +1396,12 @@
 const DAF_R = 'https://github.com/draykerdk/daf';
 const DAF_000 = DAF_R + '/blob/master/dafp/daf-000-federation-constitution.md';
 const DAF_001 = DAF_R + '/blob/master/dafp/daf-001-phase-0-github-federation.md';
+const DAF_002 = DAF_R + '/blob/master/dafp/daf-002-phase-0-instruments.md';
+const DAF_003 = DAF_R + '/blob/master/dafp/daf-003-justified-vetoes.md';
+// The workflow that counts a vote with the window and speaks_for applied.
+const TALLY_WF = DAF_R + '/actions/workflows/federation-tally.yml';
+// An assembly report is a pull request titled "Assembly YYYY-MM".
+const ASSEMBLY_TITLE = /^Assembly \d{4}-(0[1-9]|1[0-2])$/;
 const DAF_REC = DAF_R + '/tree/master/federation';
 
 const FORUM_SITE = 'https://forum.drayker.org';
@@ -1388,7 +1415,7 @@ const FORUM_DAF = FORUM_SITE + '/t/daf/';
 // page of one of its issues. The links in unit records (speaks_for, work) are
 // not covered by this list: they are rendered as links only when they start
 // with https://, and as plain text otherwise (httpsHref below).
-const HREF_OK = ['https://github.com/draykerdk/', './data/', FORUM_DAF];
+const HREF_OK = ['https://github.com/draykerdk/', './data/', FORUM_DAF, TALLY_WF];
 const safeHref = (u) => (typeof u === 'string' && HREF_OK.some((p) => u.startsWith(p))
   && !u.includes('..') && !/[\s"'<>\\]/.test(u)) ? u : '';
 const issueNum = (n) => (Number.isSafeInteger(n) && n > 0 ? n : null);
@@ -1531,6 +1558,8 @@ const DAF_OPEN = [
 const DAF_SOURCES = [
   { t: 'DAF-000 — the constitution', d: 'Units, points, quorum, resources, penalties, exit.', href: DAF_000 },
   { t: 'DAF-001 — Phase 0', d: 'The federation on this repository, and what is deferred.', href: DAF_001 },
+  { t: 'DAF-002 — Phase 0 instruments (draft)', d: 'The tools that check the record, draft and close assemblies, and export the event log.', href: DAF_002 },
+  { t: 'DAF-003 — Justified vetoes (draft)', d: 'A veto with its grounds, kept on the record, and the triage that examines it.', href: DAF_003 },
   { t: 'federation/ — the record', d: 'Units, assemblies, requests, ledger.', href: DAF_REC },
   { t: 'LEDGER.md', d: 'Current standing, summed from the assemblies.', href: DAF_R + '/blob/master/federation/LEDGER.md' },
   { t: 'GOVERNANCE.md', d: 'What governs Drayker today. Where it and DAF-000 disagree, it wins.', href: 'https://github.com/draykerdk/.github/blob/master/GOVERNANCE.md' },
@@ -1885,6 +1914,13 @@ class Component extends DCLogic {
     if (!n) { this.setState({ tallyState: 'error', tallyMsg: 'Give the pull request number.' }); return; }
     this.setState({ tallyState: 'loading', tallyMsg: '' });
     try {
+      // The pull request itself, once, for its title: only a pull request titled
+      // "Assembly YYYY-MM" is an assembly report.
+      const pr = await fetch('https://api.github.com/repos/draykerdk/daf/pulls/' + n,
+        { headers: { Accept: 'application/vnd.github+json' } });
+      if (!pr.ok) throw new Error(pr.status === 404 ? 'No pull request #' + n + ' in the repository.' : 'GitHub answered ' + pr.status + '.');
+      const prInfo = await pr.json();
+      const assembly = ASSEMBLY_TITLE.test(String((prInfo && prInfo.title) || ''));
       // Every page of comments, 100 at a time, so a long thread is read whole.
       const comments = [];
       for (let page = 1; page <= 50; page++) {
@@ -1900,7 +1936,8 @@ class Component extends DCLogic {
       (comments || []).forEach((c) => {
         const v = /^\s*VOTE:\s*(for|against|abstain)\s*$/im.exec(c.body || '');
         const as = /^\s*AS:\s*`?([a-z0-9-]+)`?\s*$/im.exec(c.body || '');
-        if (v && as) last[as[1]] = { choice: v[1].toLowerCase(), user: c.user && c.user.login, at: c.created_at };
+        // Holder ids are lowercase; AS is read without case, as tools/daf.js does.
+        if (v && as) last[as[1].toLowerCase()] = { choice: v[1].toLowerCase(), user: c.user && c.user.login, at: c.created_at };
       });
       if (!this.state.deep) await this.loadDeep();
       const ledger = (this.state.deep && this.state.deep.ledger) || [];
@@ -1919,7 +1956,7 @@ class Component extends DCLogic {
       });
       rows.sort((a, b) => b.weight - a.weight);
       const cast = yes + no + abs;
-      this.setState({ tallyState: 'ready', tally: { rows, unknown, yes, no, abs, cast, active, pr: n,
+      this.setState({ tallyState: 'ready', tally: { rows, unknown, yes, no, abs, cast, active, pr: n, assembly,
         found: Object.keys(last).length, comments: (comments || []).length } });
     } catch (e) {
       this.setState({ tallyState: 'error', tallyMsg: String(e.message || e) });
@@ -1968,8 +2005,10 @@ class Component extends DCLogic {
     } catch (e) { this.setState({ cycleState: 'none' }); }
   };
 
+  // The window closes at 00:00 UTC of the closing day: a vote posted at or
+  // after that instant is not counted. Any fraction of a day left shows as 1.
   daysLeft = (closes) => {
-    const dt = new Date(closes + 'T23:59:59Z');
+    const dt = new Date(closes + 'T00:00:00Z');
     if (isNaN(dt.getTime())) return null;
     return Math.ceil((dt.getTime() - Date.now()) / 864e5);
   };
@@ -2205,6 +2244,14 @@ class Component extends DCLogic {
       '',
       'None.',
       '',
+      '## Justified vetoes',
+      '',
+      '| Veto | Contests | State |',
+      '| --- | --- | --- |',
+      '| `vetoes/n.md` | which decision in this report | open / adjustment / not passed |',
+      '',
+      'None, if no veto was filed against a decision of this cycle. A decision is not merged while a veto against it awaits triage. If it is merged anyway, say so here in full: who merged, when and why. See [DAF-003](' + DAF_003 + ').',
+      '',
       '## What the federation would change about itself',
       '',
       'What the rules got wrong this cycle.', ''].join('\n');
@@ -2401,8 +2448,9 @@ class Component extends DCLogic {
           sub: tab === id ? 'rgba(10,10,12,0.6)' : 'var(--tx3)' });
         const t = s.tally;
         const part = t && t.active > 0 ? (t.cast / t.active) * 100 : 0;
-        const quorum = part >= 30;
-        const majority = t && t.cast > 0 && t.yes * 2 > t.cast;
+        // No holder had weight before this assembly: the founding case, which
+        // tools/daf.js tally reports as undetermined.
+        const founding = !!t && t.active === 0;
         const cyc = s.cycle;
         const left = cyc ? this.daysLeft(cyc.closes) : null;
         return {
@@ -2511,14 +2559,19 @@ class Component extends DCLogic {
             { k: 'PARTICIPATION', v: part.toFixed(0) + '%' },
             { k: 'FOR / AGAINST / ABSTAIN', v: t.yes + ' / ' + t.no + ' / ' + t.abs }
           ] : [],
-          tallyOutcome: t ? ((quorum && majority) ? 'PASSED' : 'FAILED') : '—',
-          tallyOutFg: t && quorum && majority ? '#3FA9FF' : 'var(--tx2)',
-          tallyOutLine: t && quorum && majority ? '#3FA9FF' : 'var(--line2)',
-          tallyWhy: !t ? '' : (t.active === 0
-            ? 'No active points in the ledger, so no weight can be assigned. Until the first assembly there is nothing to weigh a vote against.'
-            : (!quorum ? 'Below the 30% participation floor. Nothing passes, whatever the split.'
-              : (majority ? 'Quorum met and a majority of the votes cast is in favour.'
-                : 'Quorum met, but the majority is not there — abstentions count in the denominator.'))),
+          // This page reads the thread without the window or speaks_for, so it
+          // never states an outcome: the Federation tally workflow does.
+          tallyOutcome: !t ? '—' : (founding ? 'UNDETERMINED' : 'UNVERIFIED READING'),
+          tallyOutFg: 'var(--tx)',
+          tallyOutLine: 'var(--line2)',
+          tallySums: !t ? '' : 'FOR ' + t.yes + ' · AGAINST ' + t.no + ' · ABSTAIN ' + t.abs + ' · CAST ' + t.cast + ' OF ' + t.active + ' ACTIVE POINTS',
+          tallyWhy: founding
+            ? 'No holder had weight before this assembly. DAF-000 and DAF-001 do not specify how the founding assembly is decided; the outcome cannot be computed.'
+            : '',
+          tallyHasWhy: founding,
+          tallyNotAssembly: !!t && t.assembly === false,
+          tallyNotAssemblyMsg: 'This pull request is not an assembly report.',
+          tallyWorkflowUrl: safeHref(TALLY_WF),
           tallyFound: t ? String(t.found) : '0',
           tallyComments: t ? String(t.comments) : '0',
           tallyPrNum: t ? String(t.pr) : '',
@@ -2531,6 +2584,7 @@ class Component extends DCLogic {
           cycForum: cyc ? forumHref(cyc.num) : '',
           cycHasForum: !!(cyc && forumHref(cyc.num)),
           cycLeft: left == null ? '—' : (left > 0 ? String(left) : '0'),
+          cycClosesAt: cyc && /^\d{4}-\d{2}-\d{2}$/.test(String(cyc.closes || '')) ? 'closes ' + cyc.closes + ' 00:00 UTC' : 'closes —',
           cycLeftLabel: left == null ? 'WINDOW' : (left > 1 ? 'DAYS LEFT TO VOTE' : (left === 1 ? 'DAY LEFT TO VOTE' : 'THE WINDOW HAS CLOSED')),
           cycClaims: cyc ? cyc.claims.map((c) => ({ ...c, url: safeHref(c.url) || issueHref(cyc) })) : [],
           cycHasClaims: cyc ? cyc.claims.length > 0 : false,

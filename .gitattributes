@@ -1,0 +1,3 @@
+federation/** text eol=lf
+tools/test/fixtures/** text eol=lf
+icp/test/vectors.json text eol=lf

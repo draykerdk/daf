@@ -7,7 +7,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const { tmpCopy, run, read, write, comment, vote, pendingReport } = require('./helpers');
+const { tmpCopy, run, read, write, comment, vote, pendingReport, commitAll } = require('./helpers');
 const { computeTally, BELOW_ZERO } = require('../lib/tally');
 const { loadRecord } = require('../lib/record');
 
@@ -30,10 +30,11 @@ const lines = (s) => s.split('\n').filter(Boolean);
 
 /** Write a pending report for `cycle` and close it with the given comments. */
 function closeCycle(dir, cycle, text, comments) {
+  const base = commitAll(dir); // the default branch: every earlier report merged
   write(dir, 'federation/assemblies/' + cycle + '.md', text);
   const file = path.join(dir, 'c-' + cycle + '.json');
   fs.writeFileSync(file, JSON.stringify(comments));
-  const r = run(['close', cycle, '--root', dir, '--comments', file, '--allow-undetermined']);
+  const r = run(['close', cycle, '--root', dir, '--comments', file, '--base-ref', base, '--allow-undetermined']);
   assert.equal(r.code, 0, r.err);
   return r;
 }

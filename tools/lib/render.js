@@ -4,6 +4,8 @@
  * through `code()`: inline code, no line breaks, no '<', '@' defused, capped.
  */
 
+const { PROVISIONAL } = require('./tally');
+
 /** Inline code for a user-controlled string. Never a link. */
 function code(s, max) {
   max = max || 80;
@@ -102,6 +104,7 @@ function renderTally(t) {
   const out = ['## The vote', '', 'Weight from the ledger as it stood at the previous assembly.', ''];
   out.push(...voteSummaryLines(t));
   out.push('');
+  if (t.provisional) { out.push(PROVISIONAL); out.push(''); }
   for (const s of t.sentences) { out.push(s); out.push(''); }
   out.push('**Votes**');
   out.push('');

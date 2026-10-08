@@ -2,7 +2,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { ROOT } = require('./helpers');
-const { findViolations, runBlocks, main } = require('../check-workflows');
+const { findViolations, findUnpinned, runBlocks, main } = require('../check-workflows');
 
 const quiet = () => { const out = []; const err = []; return { io: { out: (s) => out.push(s), err: (s) => err.push(s) }, out, err }; };
 
@@ -159,4 +159,56 @@ test('check-workflows: a violation fails the CLI with a located message', () => 
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test('check-workflows: C7 uses: must name a 40-hex commit, except local and draykerdk refs', () => {
+  const SHA = '11d5960a326750d5838078e36cf38b85af677262';
+  const wf = [
+    'jobs:',
+    '  call:',
+    '    uses: draykerdk/.github/.github/workflows/validate-component.yml@master',
+    '  a:',
+    '    steps:',
+    '      - uses: actions/checkout@' + SHA + ' # v4.4.0',
+    '      - uses: actions/setup-node@v4',
+    '      - name: quoted tag',
+    '        uses: "actions/upload-pages-artifact@v4.0.0"',
+    '      - uses: ./.github/actions/local',
+    '      - uses: example/other-action@main',
+    '      - uses: example/short-sha@11d5960',
+    '      - uses: example/upper-sha@' + SHA.toUpperCase(),
+    '      - uses: docker://alpine:3.20',
+    '      - uses: example/no-ref',
+    '      - uses: \'actions/cache@' + SHA + '\'',
+    ''
+  ].join('\n');
+  assert.deepEqual(findUnpinned(wf).map((x) => [x.line, x.ref]), [
+    [7, 'actions/setup-node@v4'],
+    [9, 'actions/upload-pages-artifact@v4.0.0'],
+    [11, 'example/other-action@main'],
+    [12, 'example/short-sha@11d5960'],
+    [13, 'example/upper-sha@' + SHA.toUpperCase()],
+    [14, 'docker://alpine:3.20'],
+    [15, 'example/no-ref']
+  ]);
+});
+
+test('check-workflows: C7 an unpinned action fails the CLI, and icp-check.yml is pinned', () => {
+  const fs = require('node:fs');
+  const os = require('node:os');
+  const path = require('node:path');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'daf-wf-'));
+  try {
+    fs.mkdirSync(path.join(dir, '.github', 'workflows'), { recursive: true });
+    fs.writeFileSync(path.join(dir, '.github', 'workflows', 'tag.yml'), 'jobs:\n  a:\n    steps:\n      - uses: actions/checkout@v4\n');
+    const q = quiet();
+    assert.equal(main(['--root', dir], q.io), 1);
+    assert.match(q.err.join('\n'), /tag\.yml:4: uses: actions\/checkout@v4 is not pinned to a commit/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+  const icp = fs.readFileSync(path.join(ROOT, '.github', 'workflows', 'icp-check.yml'), 'utf8');
+  assert.match(icp, /uses: actions\/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4\.4\.0\n/);
+  assert.match(icp, /uses: actions\/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4\.4\.0\n/);
+  assert.deepEqual(findUnpinned(icp), []);
 });

@@ -365,6 +365,108 @@ async function loadWith(fetchImpl) {
   ]);
   check(cyc2 && cyc2.num === 30, 'A [Cycle] issue left with the form’s default title is found.');
 
+  // DAF-C2: the browser count is an unverified reading, never an outcome.
+  const TALLY_WF = 'https://github.com/draykerdk/daf/actions/workflows/federation-tally.yml';
+  const UNVERIFIED = 'This reading does not check the window or who may speak for each holder. The count that does is the <a href="{{ tallyWorkflowUrl }}" target="_blank" rel="noreferrer">Federation tally workflow</a>.';
+  const FOUNDING = 'No holder had weight before this assembly. DAF-000 and DAF-001 do not specify how the founding assembly is decided; the outcome cannot be computed.';
+  check(html.includes(UNVERIFIED) && safeHref(TALLY_WF) === TALLY_WF, 'The reading names what it does not check and links to the Federation tally workflow.');
+  const countWith = async ({ title, prStatus = 200, comments, ledger }) => {
+    const urls = [];
+    context.fetch = async (url) => {
+      urls.push(String(url));
+      if (/\/pulls\/\d+$/.test(String(url))) return { ok: prStatus === 200, status: prStatus, json: async () => ({ number: 30, title }) };
+      return { ok: true, status: 200, json: async () => comments };
+    };
+    const c = makeComponent();
+    c.setState({ deepState: 'ready', deep: { units: [], assemblies: [], ledger }, tallyPr: '30' });
+    await c.runTally();
+    return { c, view: c.renderVals(), urls };
+  };
+  const vote = (body, login) => ({ body, user: { login }, created_at: '2026-10-03T10:00:00Z' });
+  const noOutcome = (view) => Object.keys(view).filter((k) => k.startsWith('tally'))
+    .every((k) => typeof view[k] !== 'string' || !/\b(PASSED|FAILED)\b/i.test(view[k]));
+
+  // The founding case: no holder had weight before, so the outcome cannot be computed.
+  const founding = await countWith({ title: 'Assembly 2026-10', ledger: [],
+    comments: [vote('VOTE: for\nAS: example-delta', 'someone')] });
+  check(founding.view.tallyOutcome === 'UNDETERMINED' && founding.view.tallyWhy === FOUNDING && founding.view.tallyHasWhy,
+    'With no weight before the assembly, the reading is undetermined, with the founding sentence.');
+  check(noOutcome(founding.view) && !founding.view.tallyNotAssembly, 'The founding case states no outcome.');
+  check(founding.view.tallyWorkflowUrl === TALLY_WF, 'The founding case links to the workflow that counts.');
+  check(founding.urls.filter((u) => u === 'https://api.github.com/repos/draykerdk/daf/pulls/30').length === 1,
+    'The pull request is fetched once, for its title.');
+
+  // With weight: a stranger's vote is still read, so the headline is a reading with the sums, not PASSED.
+  const weighed = await countWith({ title: 'Assembly 2026-10',
+    ledger: [{ id: 'example-delta', kind: 'unit', points: 5, active: true, joined: '2026-09' },
+      { id: 'river', kind: 'unit', points: 2, active: true, joined: '2026-09' }],
+    comments: [vote('VOTE: for\nAS: Example-Delta', 'stranger'), vote('VOTE: against\nAS: `RIVER`', 'other')] });
+  check(weighed.view.tallyOutcome === 'UNVERIFIED READING' && !weighed.view.tallyHasWhy && noOutcome(weighed.view),
+    'With weight, the headline is an unverified reading and never PASSED or FAILED.');
+  check(weighed.view.tallySums === 'FOR 5 · AGAINST 2 · ABSTAIN 0 · CAST 7 OF 7 ACTIVE POINTS', 'The reading shows the sums.');
+  check(weighed.c.state.tally.unknown.length === 0 && weighed.view.tallyRows.map((r) => r.id).join() === 'example-delta,river',
+    'AS is read without case, as tools/daf.js reads it: Example-Delta is example-delta.');
+
+  // A pull request that is not an assembly report is said to be one.
+  const other = await countWith({ title: 'DAF-003: justified vetoes in Phase 0', ledger: [], comments: [] });
+  check(other.view.tallyNotAssembly && other.view.tallyNotAssemblyMsg === 'This pull request is not an assembly report.',
+    'A pull request whose title is not "Assembly YYYY-MM" is said not to be an assembly report.');
+  const badMonth = await countWith({ title: 'Assembly 2026-13', ledger: [], comments: [] });
+  check(badMonth.view.tallyNotAssembly, 'A title with a month that does not exist is not an assembly report.');
+  check(!founding.view.tallyNotAssembly && !weighed.view.tallyNotAssembly, 'An assembly report is not flagged.');
+  const missing = await countWith({ title: '', prStatus: 404, ledger: [], comments: [] });
+  check(missing.c.state.tallyState === 'error' && missing.c.state.tallyMsg === 'No pull request #30 in the repository.',
+    'A number that is not a pull request is refused.');
+
+  // INT-5: the window closes at <closes>T00:00:00Z; any fraction left shows as 1 day.
+  const realNow = Date.now;
+  const leftAt = (iso) => {
+    Date.now = () => Date.parse(iso);
+    try {
+      const c = makeComponent();
+      c.setState({ cycleState: 'ready', cycle: { num: 40, title: '[Cycle] Assembly 2026-11', url: 'https://github.com/draykerdk/daf/issues/40',
+        opens: '2026-11-01', closes: '2026-11-08', claims: [] } });
+      const v = c.renderVals();
+      return { n: v.cycLeft, label: v.cycLeftLabel, at: v.cycClosesAt };
+    } finally { Date.now = realNow; }
+  };
+  const justBefore = leftAt('2026-11-07T23:59:59Z');
+  const atClose = leftAt('2026-11-08T00:00:00Z');
+  const sameDay = leftAt('2026-11-08T10:00:00Z');
+  const dayBefore = leftAt('2026-11-07T01:00:00Z');
+  check(justBefore.n === '1' && justBefore.label === 'DAY LEFT TO VOTE', 'One second before the close, one day is shown.');
+  check(atClose.n === '0' && atClose.label === 'THE WINDOW HAS CLOSED', 'At <closes>T00:00:00Z the window is closed.');
+  check(sameDay.label === 'THE WINDOW HAS CLOSED', 'During the closing day the window is closed.');
+  check(dayBefore.n === '1' && dayBefore.label === 'DAY LEFT TO VOTE', 'With 23 hours left, one day is shown.');
+  check(atClose.at === 'closes 2026-11-08 00:00 UTC' && html.includes('OPENS {{ cyc.opens }} · {{ cycClosesAt }}'),
+    'The exact instant the window closes is shown.');
+
+  // LIVE-5: the site's report draft carries every section of the template, in order.
+  const template = fs.readFileSync(path.join(root, 'federation', 'assemblies', 'TEMPLATE.md'), 'utf8').replace(/\r\n/g, '\n');
+  const draft = idle.dafReportMd();
+  const headings = (md) => md.split('\n').filter((l) => l.startsWith('## '));
+  const tHeads = headings(template);
+  const dHeads = headings(draft);
+  check(tHeads.includes('## Justified vetoes') && dHeads.join('\n') === tHeads.join('\n'),
+    'Every ## heading of TEMPLATE.md appears, in order, in the site draft.');
+  const section = (md, h) => { const rest = md.split(h + '\n')[1] || ''; return rest.split('\n## ')[0].trim(); };
+  const tVeto = section(template, '## Justified vetoes')
+    .replace('](../../dafp/daf-003-justified-vetoes.md)', '](https://github.com/draykerdk/daf/blob/master/dafp/daf-003-justified-vetoes.md)');
+  check(section(draft, '## Justified vetoes') === tVeto && !draft.includes('](../'), 'The vetoes block is the template\'s, with the DAF-003 link absolute.');
+
+  // FID-3: DAF-002 and DAF-003 are among the source documents.
+  const sources = idleView.dafSources.map((x) => x.href);
+  check(sources.includes('https://github.com/draykerdk/daf/blob/master/dafp/daf-002-phase-0-instruments.md')
+    && sources.includes('https://github.com/draykerdk/daf/blob/master/dafp/daf-003-justified-vetoes.md')
+    && idleView.dafSources.filter((x) => /^DAF-00[23] .*\(draft\)$/.test(x.t)).length === 2, 'DAF-002 and DAF-003 are listed as drafts.');
+
+  // LIVE-6: the two wide grids are classes that stack on a phone.
+  const css = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
+  const phone = (css.split('@media (max-width:720px){')[1] || '');
+  check(/\.phase-row,\.ex-deliv\{grid-template-columns:1fr/.test(phone) && /\.phase-head\{display:none\}/.test(phone),
+    'Below 720px the phase map and the example deliveries stack, and the phase map header is hidden.');
+  check(!/style="[^"]*grid-template-columns:minmax\(110px,(1fr|0\.7fr)\)/.test(html), 'The two wide grids are no longer set inline.');
+
   console.log(`${checks} DAF contract checks passed`);
 })().catch((error) => {
   console.error(error.stack || error);

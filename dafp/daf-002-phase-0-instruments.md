@@ -31,7 +31,7 @@ Everything lives in [`tools/`](../tools) and runs with Node and nothing else ins
 | `node tools/daf.js ledger --write` | Regenerates `federation/LEDGER.md` from the assemblies. |
 | `node tools/daf.js draft YYYY-MM` | Writes a draft report for a cycle from its cycle issue and its claim issues, with the outcome left `pending`, and a record stub for each holder that has none. Claims that fail the structure are listed at the top of the draft, not dropped silently. |
 | `node tools/daf.js tally …` | Computes the vote on an assembly report. Run by the **Federation tally** workflow, which a person dispatches with the pull-request number. It writes the result to the run summary, or to one comment on the pull request when asked. |
-| `node tools/daf.js close YYYY-MM …` | After the window, writes the vote tables and the outcome into the report, sets `joined` on the records the assembly accepts and regenerates `LEDGER.md`. It changes files. It commits nothing. |
+| `node tools/daf.js close YYYY-MM …` | After the window, and only then, computes the vote from the record on `master` and the report under vote, writes the vote tables and the outcome into the report, sets `joined` on the records the assembly accepts and regenerates `LEDGER.md`. It changes files. It commits nothing. |
 | `node tools/daf.js snapshot` | Builds the data the site reads, `data/federation.json`, plus the event log. Run by the site workflow. |
 | `node tools/daf.js events` | Exports the event log of §6. |
 
@@ -52,7 +52,7 @@ DAF-001 leaves a few operational details implicit. The instruments need an answe
 - **Edited votes.** A vote comment edited after the window closes is listed and not counted.
 - **Where votes go.** Votes are conversation comments on the report's pull request. A vote written in a review or on a line of the diff is listed and not counted.
 - **Weight** comes from the assemblies held before the cycle, which is the ledger as it stood at the previous assembly (DAF-001 §4, step 5).
-- **What the tally reads.** Unit records, parameters and earlier assemblies come from `master`; only the report under vote comes from its pull request. A pull request therefore cannot change who may vote or what a vote weighs. Anything else it changes is listed next to the tally and not used.
+- **What the tally and `close` read.** Unit records, parameters and earlier assemblies come from `master`; only the report under vote comes from its pull request. A pull request therefore cannot change who may vote or what a vote weighs. Anything else it changes is listed next to the result and not used. A tally computed before the window closes says that it is provisional, and `close` does not run until the window has closed.
 - **Dormant holders who vote.** DAF-000 §3.4 says a dormant holder becomes active again by voting. Its points therefore join the base of the vote in which it votes, so participation never exceeds the whole.
 - **Points below zero** are not specified: DAF-000 §7 says a sanctioned holder loses its accumulated points. `check` stops when a penalty would take a holder below zero.
 - **A failed assembly** awards nothing: its deliveries, bonuses, penalties and new records do not enter the ledger. Its votes still count as activity, because DAF-000 §3.4 makes a holder active when it casts a vote.
@@ -72,12 +72,12 @@ For each assembly, in order of cycle, the events are emitted in this order:
 | `function.delivered` | passed | the holder | the points awarded | |
 | `module.completed` | passed | the holder | the bonus | |
 | `penalty` | passed | the holder | the points removed, negative | |
-| `request.decided` | passed | the requesting holder | 0 | `approved`, `returned` or `rejected` |
+| `request.decided` | passed | | 0 | `approved`, `returned` or `rejected` |
 | `vote.cast` | always | the holder | its weight | `for`, `against` or `abstain` |
 | `steward.intervention` | when recorded | | 0 | |
 | `assembly.closed` | always | | 0 | `passed` or `failed` |
 
-A report whose outcome is still pending emits nothing. Every event names the file it comes from and the links that evidence it. Events taken from an assembly report also carry the report's git blob hash, which binds them to its exact text. Unit records and resource requests can change after they are accepted, for example when a unit updates who can speak for it, so their events name the file without a hash.
+A report whose outcome is still pending emits nothing. Every event names the file it comes from and the links that evidence it. Events taken from an assembly report also carry the report's git blob hash, which binds them to its exact text. Unit records and resource requests can change after they are accepted, for example when a unit updates who can speak for it, so their events name the file without a hash, and a request event names no holder: the request file says who asked. `check` stops when a decided request's file no longer exists. The repository stores these files with LF line endings, and the hash is computed the same way on every system.
 
 ### 6.2 The exact form
 

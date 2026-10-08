@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync, spawnSync } = require('node:child_process');
-const { ROOT, FIX, tmpCopy, run, read, write, comment, vote, pendingReport } = require('./helpers');
+const { ROOT, FIX, tmpCopy, run, read, write, comment, vote, pendingReport, commitAll } = require('./helpers');
 const { USAGE } = require('../daf');
 
 const ISSUES = path.join(FIX, 'issues-2026-04.json');
@@ -33,7 +33,7 @@ test('cli: check passes on the basic fixture only with --allow-undetermined, and
   const r = run(['check', '--root', dir, '--allow-undetermined']);
   assert.equal(r.code, 0, r.err);
   assert.equal(r.err, 'WARNING: ' + FOUNDING, 'the flag downgrades exactly this error to a warning');
-  assert.match(r.out, /3 unit records, 3 assembly reports, 1 request; 20 events, head 4e0553ad0fb2\. 0 errors, 1 warning\./);
+  assert.match(r.out, /3 unit records, 3 assembly reports, 1 request; 20 events, head 65c6a3a9446a\. 0 errors, 1 warning\./);
 });
 
 test('cli: check fails on planted errors', () => {
@@ -114,7 +114,10 @@ test('cli: draft builds the report from the cycle and claim issues', () => {
   const r = run(['draft', '2026-04', '--root', dir, '--issues', ISSUES]);
   assert.equal(r.code, 0, r.err);
   const md = read(dir, 'federation/assemblies/2026-04.md');
-  assert.match(md, /^<!-- not drafted: #113 "The result" is not one https URL or #n reference -->\n/);
+  assert.match(md, /^<!-- Rows drafted from claims: #111 Deliveries row 1 \(`example-willow`\); #112 Deliveries row 2 \(`example-river`\); #115 Module completions row 1 \(`example-delta`\); #118 Deliveries row 3 \(`example-aspen`\)\. -->\n/);
+  assert.match(md, /\n<!-- not drafted: #113 "The result" is not one https URL or #n reference -->\n/);
+  // #112 is closed (not as not planned): drafted, with a marker for a person.
+  assert.match(md, /\n<!-- TODO\(person\): claim #112 is closed; check in its thread that the claim still stands before keeping its row\. -->\n/);
   assert.match(md, /<!-- TODO\(person\): `example-willow` has no unit record\./);
   assert.match(md, /\n# Assembly 2026-04\n/);
   assert.match(md, /\*\*Window:\*\* opens 2026-04-01, closes 2026-04-08 \(seven days\)\. \*\*Cycle issue:\*\* #110/);
@@ -153,6 +156,7 @@ test('cli: draft builds the report from the cycle and claim issues', () => {
 
 test('cli: close writes the tally, joined and LEDGER, and nothing else', () => {
   const dir = tmpCopy('basic');
+  const base = commitAll(dir);
   assert.equal(run(['draft', '2026-04', '--root', dir, '--issues', ISSUES]).code, 0);
   const report = 'federation/assemblies/2026-04.md';
   const before = read(dir, report);
@@ -162,11 +166,11 @@ test('cli: close writes the tally, joined and LEDGER, and nothing else', () => {
     comment(1, 'example-delta-gh', IN, vote('for', 'example-delta')),
     comment(2, 'example-river-gh', IN, vote('against', 'example-river'))
   ], [comment(3, 'example-willow-gh', IN, vote('for', 'example-willow'))]]));
-  const refused = run(['close', '2026-04', '--root', dir, '--comments', comments]);
+  const refused = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base]);
   assert.equal(refused.code, 1, 'close folds the founding assembly, so it needs the flag');
   assert.match(refused.err, /refusing to close 2026-04: federation\/assemblies\/2026-01\.md: the outcome "passed" stands, but no holder had weight before this assembly/);
   assert.equal(read(dir, report), before);
-  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--allow-undetermined']);
+  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base, '--allow-undetermined']);
   assert.equal(r.code, 0, r.err);
   assert.match(r.out, /rewrote federation\/assemblies\/2026-04\.md/);
   assert.match(r.out, /set joined: 2026-04 in federation\/units\/example-willow\.yml/);
@@ -179,7 +183,7 @@ test('cli: close writes the tally, joined and LEDGER, and nothing else', () => {
   assert.match(read(dir, 'federation/LEDGER.md'), /\*\*As of:\*\* assembly 2026-04\./);
   const check = run(['check', '--root', dir, '--allow-undetermined']);
   assert.equal(check.code, 0, check.err);
-  const twice = run(['close', '2026-04', '--root', dir, '--comments', comments, '--allow-undetermined']);
+  const twice = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base, '--allow-undetermined']);
   assert.equal(twice.code, 1);
   assert.match(twice.err, /already closed/);
 });
@@ -189,11 +193,12 @@ test('cli: close refuses an undetermined (founding) outcome', () => {
   write(dir, 'federation/parameters.yml', read(FIX, 'basic/federation/parameters.yml'));
   write(dir, 'federation/LEDGER.md', read(ROOT, 'federation/LEDGER.md'));
   write(dir, 'federation/units/example-river.yml', read(FIX, 'basic/federation/units/example-river.yml'));
+  const base = commitAll(dir);
   write(dir, 'federation/assemblies/2026-04.md', pendingReport({ newRecord: 'example-river' }));
   const before = read(dir, 'federation/assemblies/2026-04.md');
   const comments = path.join(dir, 'c.json');
   fs.writeFileSync(comments, JSON.stringify([comment(1, 'example-river-gh', IN, vote('for', 'example-river'))]));
-  const r = run(['close', '2026-04', '--root', dir, '--comments', comments]);
+  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base]);
   assert.equal(r.code, 1);
   assert.match(r.err, /refusing to close 2026-04: the outcome is undetermined\. No holder had weight before this assembly/);
   assert.equal(read(dir, 'federation/assemblies/2026-04.md'), before);
@@ -235,7 +240,7 @@ test('cli: snapshot keeps the site keys and adds the new ones', () => {
   assert.deepEqual(s.issues.map((i) => [i.num, i.pr]), [[118, false], [117, false], [116, true], [115, false], [114, false], [113, false], [111, false], [110, false]]);
   assert.deepEqual(Object.keys(s.issues[0]), ['num', 'title', 'url', 'pr']);
   assert.equal(s.source_commit, 'abc1234');
-  assert.equal(s.events.head, '4e0553ad0fb2621a95df6c8423d65f077a0977613cb0326c00888324074199f9');
+  assert.equal(s.events.head, '65c6a3a9446a70174761d475f3ef0f7ec0ce94077c20c2b5758217959e73cbd7');
   assert.equal(s.ledger.totals.points, 6);
   assert.ok(fs.existsSync(path.join(out, 'events.json')) && fs.existsSync(path.join(out, 'events.log')));
   const empty = run(['snapshot', '--root', ROOT, '--out', path.join(dir, 'real')]);

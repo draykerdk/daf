@@ -49,14 +49,15 @@ Nothing in this directory is edited directly on `master`. Every change arrives a
 
    A holder's last comment of this form counts. Votes written in a review or on a line of the diff are not counted.
 6. **Compute the tally** whenever it helps, by running the **Federation tally** workflow from the Actions tab with the pull-request number. It takes the unit records, parameters and earlier assemblies from `master` and only the report from the pull request, and writes the arithmetic to the run summary, or to one comment on the pull request when `post` is ticked. It merges and labels nothing.
-7. **Close** after the window:
+7. **Close** after the window, in a checkout of the pull request:
 
    ```bash
+   git fetch origin
    gh api --paginate --slurp repos/draykerdk/daf/issues/<pr>/comments > comments.json
    node tools/daf.js close YYYY-MM --comments comments.json
    ```
 
-   This writes the vote tables and the outcome into the report, sets `joined` on the records the assembly accepts and regenerates `LEDGER.md`. Review the diff, push it to the pull request, and merge. A failed assembly is merged too, and recorded as failed.
+   Like the tally, `close` takes unit records, parameters and earlier assemblies from `origin/master` and only the report from the pull request, and it refuses to run before the window has closed. It writes the vote tables and the outcome into the report, sets `joined` on the records the assembly accepts and regenerates `LEDGER.md`. Review the diff and push it to the pull request. Then merge, unless a justified veto against one of its decisions awaits triage ([DAF-003 §4](../dafp/daf-003-justified-vetoes.md#4-what-a-veto-does-to-the-decision-it-contests)); the report lists those vetoes and their state under *Justified vetoes*. A failed assembly is merged too, and recorded as failed.
 
 The first assembly cannot be recorded yet. Weight comes from the assemblies before it, and before the first there are none, so no participation can be computed. DAF-000 and DAF-001 do not say how a founding assembly is decided: the tally reports that case as undetermined, `close` does not write it, and `check` stops on a report that records it, until DAF-001 §4 says how ([DAF-002 §7](../dafp/daf-002-phase-0-instruments.md#7-what-stays-unspecified)).
 

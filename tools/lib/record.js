@@ -19,11 +19,35 @@ const REQUEST_HEADINGS = ['## 1. What was tried first', '## 2. What this serves'
 
 const skipName = (name) => /^TEMPLATE\./i.test(name) || /^README/i.test(name);
 
-/** git blob sha1 of a byte buffer: sha1("blob <len>\0" + bytes). */
+/**
+ * CRLF to LF, byte for byte, as git's clean filter does for a text file
+ * (.gitattributes: federation/** text eol=lf). A lone CR stays.
+ */
+function toLf(buf) {
+  let n = 0;
+  for (let i = 0; i + 1 < buf.length; i++) if (buf[i] === 0x0d && buf[i + 1] === 0x0a) n++;
+  if (!n) return buf;
+  const out = Buffer.allocUnsafe(buf.length - n);
+  let j = 0;
+  for (let i = 0; i < buf.length; i++) {
+    if (buf[i] === 0x0d && buf[i + 1] === 0x0a) continue;
+    out[j++] = buf[i];
+  }
+  return out;
+}
+
+/**
+ * git blob sha1 of a text file's bytes: sha1("blob <len>\0" + bytes), after
+ * CRLF is turned into LF. The object git stores for a text file has LF line
+ * endings whatever the checkout has, so a checkout with core.autocrlf=true
+ * (the Git for Windows default) gives the same blob, and the same event head,
+ * as one with LF.
+ */
 function gitBlobSha(buf) {
+  const b = toLf(Buffer.isBuffer(buf) ? buf : Buffer.from(buf));
   const h = crypto.createHash('sha1');
-  h.update('blob ' + buf.length + '\0');
-  h.update(buf);
+  h.update('blob ' + b.length + '\0');
+  h.update(b);
   return h.digest('hex');
 }
 
@@ -187,4 +211,4 @@ function withReport(record, file, cycle) {
   return Object.assign({}, record, { assemblies });
 }
 
-module.exports = { loadRecord, withReport, validateUnit, parseRequest, gitBlobSha, LOGIN_RE, REQUEST_HEADINGS, skipName };
+module.exports = { loadRecord, withReport, validateUnit, parseRequest, gitBlobSha, toLf, LOGIN_RE, REQUEST_HEADINGS, skipName };

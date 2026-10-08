@@ -16,7 +16,12 @@
  * pull request, chosen by its author), the whole `github` context (as in
  * `toJSON(github)`), or `inputs`. Expressions stay allowed where GitHub does not
  * paste them into a script: `if:`, `concurrency`, `env:` and the other `with:`
- * inputs. Zero dependencies.
+ * inputs.
+ *
+ * It also fails on any `uses:` whose ref is not a full 40-hex commit SHA: a tag
+ * or a branch can be moved to other code after review. Two kinds are exempt:
+ * a local action or workflow (`./…`), and the organization's own reusable
+ * workflows (`draykerdk/…`, called at @master). Zero dependencies.
  *
  * Usage:
  *   node tools/check-workflows.js [--root <dir>] [file ...]
@@ -40,6 +45,8 @@ const TAINTED = new RegExp([
 ].join('|'));
 const RUN_KEY = /^(\s*)(-\s+)?run\s*:(.*)$/;
 const SCRIPT_KEY = /^(\s*)(-\s+)?script\s*:(.*)$/;
+const USES_KEY = /^(\s*)(-\s+)?uses\s*:\s*(['"]?)([^'"\s#]*)\3/;
+const PINNED = /^[^@\s]+@[0-9a-f]{40}$/;
 const indentOf = (l) => l.length - l.trimStart().length;
 
 /**
@@ -140,6 +147,22 @@ function findViolations(text) {
   return out.sort((a, b) => a.line - b.line);
 }
 
+/**
+ * Every `uses:` not pinned to a commit: [{ line, ref }]. Local refs (./…) and
+ * the organization's own (draykerdk/…) are exempt.
+ */
+function findUnpinned(text) {
+  const out = [];
+  splitLines(text).forEach((l, i) => {
+    const m = USES_KEY.exec(l);
+    if (!m) return;
+    const ref = m[4];
+    if (ref.startsWith('./') || ref.startsWith('draykerdk/')) return;
+    if (!PINNED.test(ref)) out.push({ line: i + 1, ref });
+  });
+  return out;
+}
+
 function workflowFiles(root) {
   const dir = path.join(root, '.github', 'workflows');
   if (!fs.existsSync(dir)) return [];
@@ -158,16 +181,21 @@ function main(argv, io) {
   let bad = 0;
   for (const f of list) {
     const rel = path.relative(root, f) || f;
-    for (const v of findViolations(fs.readFileSync(f, 'utf8'))) {
+    const text = fs.readFileSync(f, 'utf8');
+    for (const v of findViolations(text)) {
       bad++;
       io.err('ERROR: ' + rel + ':' + v.line + ': ' + v.expr + ' inside ' + v.key + ':; pass it through env: and validate it in the script');
+    }
+    for (const u of findUnpinned(text)) {
+      bad++;
+      io.err('ERROR: ' + rel + ':' + u.line + ': uses: ' + (u.ref || '(empty)') + ' is not pinned to a commit; write owner/repo@<40-hex commit SHA> # <tag>');
     }
   }
   io.out('check-workflows: ' + list.length + ' workflow' + (list.length === 1 ? '' : 's') + ', ' + bad + ' problem' + (bad === 1 ? '' : 's') + '.');
   return bad ? 1 : 0;
 }
 
-module.exports = { main, findViolations, runBlocks, scriptBlocks };
+module.exports = { main, findViolations, findUnpinned, runBlocks, scriptBlocks };
 
 if (require.main === module) {
   process.exitCode = main(process.argv.slice(2), {

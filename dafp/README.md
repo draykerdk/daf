@@ -6,12 +6,15 @@ Proposals that specify how the federation works. A proposal here is a document u
 | --- | --- | --- |
 | [DAF-000](./daf-000-federation-constitution.md) | Minimal constitution of the federation | draft |
 | [DAF-001](./daf-001-phase-0-github-federation.md) | Phase 0: the federation on a repository | draft |
+| [DAF-002](./daf-002-phase-0-instruments.md) | Phase 0 instruments: recomputation, drafting and a portable record | proposal |
 
 **DAF-000** is substrate-independent: participants and units, how a federative point is earned, how points become voting weight, quorum and majority, how a resource request is judged against the last-resort rule, penalties and exit.
 
 **DAF-001** is the initial version, the MVP, implemented now on this repository, with no chain and no unit of account. No unit has been recorded and no assembly has been held yet. It also states what is deliberately deferred to later phases, so that the small thing implemented now is not confused with the whole design.
 
-Both are drafts of the same consolidation, and both leave things open on purpose. What neither settles is listed in [DAF-000 §9](./daf-000-federation-constitution.md#9-what-this-document-does-not-settle).
+**DAF-002** adds the instruments that keep the Phase 0 record: checks of its structure and arithmetic, a generated ledger, a drafting tool for assembly reports, the arithmetic of a vote for the person who writes the report, and an event log that a later substrate can replay. It changes no rule of DAF-000 and no step of DAF-001.
+
+DAF-000 and DAF-001 are drafts of the same consolidation, and both leave things open on purpose. What neither settles is listed in [DAF-000 §9](./daf-000-federation-constitution.md#9-what-this-document-does-not-settle).
 
 ## Proposing a change
 

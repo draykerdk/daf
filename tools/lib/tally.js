@@ -140,6 +140,11 @@ function computeTally(input) {
     const u = input.masterRecord ? input.masterRecord.units.get(id) : record.units.get(id);
     return u ? u.logins : null;
   };
+  // Whether the pull request carries a record for a holder: its report lists
+  // the holder under New records, or, read beside the default branch's record,
+  // its own record has the unit file.
+  const inPullRequest = (id) => (report.newRecords || []).some((r) => r.holder === id)
+    || (!!input.masterRecord && record.units.has(id));
 
   const comments = flattenPages(input.comments || []);
   const reviews = flattenPages(input.reviews || []);
@@ -166,7 +171,14 @@ function computeTally(input) {
     const h = weights.get(v.holder);
     if (!founding && (!h || h.points <= 0)) return reject('`' + v.holder + '` has no weight in the ledger before ' + cycle);
     const logins = speakers(v.holder);
-    if (!logins) return reject('no unit record for `' + v.holder + '`');
+    if (!logins) {
+      // A record that is only in the pull request (the report's New records, or
+      // a unit file beside it) does not speak yet: the founding case and every
+      // first delivery. The reason says so; what is counted does not change.
+      return reject(inPullRequest(v.holder)
+        ? 'the record of `' + v.holder + '` is not on master yet; a holder exists from the assembly that accepts its record'
+        : 'no unit record for `' + v.holder + '`');
+    }
     if (!who || !logins.includes(who.toLowerCase())) return reject('the author is not listed in speaks_for of `' + v.holder + '`');
     const created = ts(c.created_at);
     const updated = ts(c.updated_at);

@@ -13,7 +13,7 @@ body:
     id: holder
     attributes:
       label: Claimed as
-      description: The unit or participant id that holds the points. It must match a record in federation/units/.
+      description: "The unit or participant id that holds the points: the id of its record in federation/units/, or, for a first delivery, the new lowercase id you choose (see Record below)."
       placeholder: river-unit
     validations:
       required: true

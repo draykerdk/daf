@@ -226,3 +226,13 @@ test('check: 13 --base warns about modified unit records and changed parameters,
   assert.match(r.err, new RegExp('WARNING: federation/parameters\\.yml: M since ' + base + '\\. The parameters change only with the text of DAF-000 or DAF-001 \\(DAF-000 §5\\); the tally reads them from the default branch, never from a pull request\\.'));
   assert.doesNotMatch(r.err, /example-gamma\.yml: A since/, 'an added unit record is not a warning');
 });
+
+test('check: your-unit-id, the placeholder daf.drayker.org writes for an empty field, fails like the template ids', () => {
+  const request = check(planted('federation/requests/1-example-tooling.md', [['**From:** `example-delta`', '**From:** `your-unit-id`']]));
+  assert.equal(request.code, 1);
+  assert.match(request.err, /ERROR: federation\/requests\/1-example-tooling\.md: \*\*From:\*\* is still the template placeholder "your-unit-id"/);
+  const report = check(planted('federation/assemblies/2026-03.md', [['| --- | --- | --- | --- | --- |\n',
+    '| --- | --- | --- | --- | --- |\n| `your-unit-id` | What was finished | #issue | link to the merged result | 1 |\n']]));
+  assert.equal(report.code, 1);
+  assert.match(report.err, /2026-03\.md:\d+: template placeholder row left in "Deliveries"/);
+});

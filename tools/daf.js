@@ -711,8 +711,18 @@ function cmdDraft(opts, io) {
   const claims = issues.filter((i) => !isPr(i) && /^\s*\[Claim\]/i.test(i.title || '')).sort((x, y) => x.number - y.number);
   for (const c of claims) {
     const f = formFields(c.body);
-    if ((f.get('Cycle') || '').trim() !== cycle) continue;
     const skip = (reason) => notDrafted.push('#' + c.number + ' ' + reason);
+    const claimCycle = (f.get('Cycle') || '').trim();
+    if (claimCycle !== cycle) {
+      // A claim for another cycle belongs to that cycle. A Cycle field that is
+      // not exactly YYYY-MM names no cycle, so it is listed instead of lost; a
+      // claim closed as not planned was withdrawn and stays out.
+      if (!CYCLE_RE.test(claimCycle) && !(c.state === 'closed' && c.state_reason === 'not_planned')) {
+        const said = claimCycle ? '"' + claimCycle.replace(/[^A-Za-z0-9 ._()-]/g, '').slice(0, 40) + '"' : 'empty';
+        skip('has a "Cycle" field that is not exactly YYYY-MM (' + said + '); with the cycle written as YYYY-MM it is drafted in that cycle');
+      }
+      continue;
+    }
     // A claim closed as not planned was withdrawn or turned down in its thread.
     if (c.state === 'closed' && c.state_reason === 'not_planned') { skip('was closed as not planned'); continue; }
     const holder = (f.get('Claimed as') || '').replace(/`/g, '').trim();

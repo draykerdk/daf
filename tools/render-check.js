@@ -5,6 +5,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const yaml = require('./lib/yaml-lite');
+const { validateUnit } = require('./lib/record');
 
 const root = path.resolve(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -103,8 +105,8 @@ const context = vm.createContext({
   DCLogic, window: windowStub, document: documentStub, localStorage,
   navigator: { clipboard: null }, fetch: async () => { throw new Error('offline'); }
 });
-vm.runInContext(match[1] + '\n;globalThis.__daf = { Component, ROUTE_META, NAV, safeHref, forumHref };', context, { filename: 'index.html#logic' });
-const { Component, ROUTE_META, NAV, safeHref, forumHref } = context.__daf;
+vm.runInContext(match[1] + '\n;globalThis.__daf = { Component, ROUTE_META, NAV, safeHref, forumHref, DAF_OPEN, FOUNDING_LINE, FOUNDING_URL };', context, { filename: 'index.html#logic' });
+const { Component, ROUTE_META, NAV, safeHref, forumHref, DAF_OPEN, FOUNDING_LINE, FOUNDING_URL } = context.__daf;
 check(ROUTE_META.home.d.includes('no assembly held yet'), 'Route metadata must preserve the pre-assembly state.');
 check(NAV.length === 7, 'All federation navigation destinations must remain available.');
 
@@ -477,6 +479,91 @@ async function loadWith(fetchImpl) {
   check(/\.phase-row,\.ex-deliv\{grid-template-columns:1fr/.test(phone) && /\.phase-head\{display:none\}/.test(phone),
     'Below 720px the phase map and the example deliveries stack, and the phase map header is hidden.');
   check(!/style="[^"]*grid-template-columns:minmax\(110px,(1fr|0\.7fr)\)/.test(html), 'The two wide grids are no longer set inline.');
+
+  // The founding caveat: beside every invitation to open or run the first
+  // assembly, in the words of federation/README.md, only while none is held.
+  const CAVEAT = 'The first assembly cannot be recorded yet: DAF-000 and DAF-001 do not say how a founding assembly is decided.';
+  const README_URL = 'https://github.com/draykerdk/daf/blob/master/federation/README.md#running-an-assembly';
+  const fedReadme = fs.readFileSync(path.join(root, 'federation', 'README.md'), 'utf8');
+  check(FOUNDING_LINE === CAVEAT && FOUNDING_URL === README_URL && safeHref(FOUNDING_URL) === FOUNDING_URL, 'The founding caveat and its link are the documented ones.');
+  check(/^## Running an assembly$/m.test(fedReadme) && fedReadme.includes('The first assembly cannot be recorded yet.')
+    && fedReadme.includes('DAF-000 and DAF-001 do not say how a founding assembly is decided'), 'The caveat repeats federation/README.md, and its anchor exists.');
+  const IF_FOUNDING = '<sc-if value="{{ foundingOpen }}" hint-placeholder-val="{{ true }}">\n';
+  const CAVEAT_P = '{{ foundingLine }} <a href="{{ foundingUrl }}" target="_blank" rel="noreferrer">Running an assembly →</a></p>';
+  check(html.split(IF_FOUNDING).length === 4 && html.split(CAVEAT_P).length === 4, 'Three founding caveats are gated on foundingOpen.');
+  check(/>Run the first assembly →<\/div>\s*<sc-if value="\{\{ foundingOpen \}\}"[^>]*>\s*<p[^>]*>\{\{ foundingLine \}\}/.test(html), 'The home card that runs the first assembly carries the caveat.');
+  check(/<sc-if value="\{\{ foundingOpen \}\}"[^>]*>\s*<p[^>]*>\{\{ foundingLine \}\}[^\n]*\n\s*<\/sc-if>\s*<\/div>\s*<div role="button"[^>]*>Open one →<\/div>/.test(html), 'The "Open one" card carries the caveat.');
+  check(/>Open the cycle →<\/a>\s*<a [^>]*>Start the report →<\/a>\s*<\/div>\s*<sc-if value="\{\{ foundingOpen \}\}"/.test(html), 'Opening the cycle on #/assembly carries the caveat.');
+  check(/<sc-if value="\{\{ n\.hasNote \}\}"[^>]*>\s*<p[^>]*>\{\{ n\.note \}\} <a href="\{\{ n\.noteUrl \}\}"/.test(html), 'A step of "What happens next" can carry the caveat.');
+  const caveatOn = (view, label) => {
+    check(view.foundingOpen === true && view.foundingLine === CAVEAT && view.foundingUrl === README_URL, label + ': the caveat is shown.');
+    check(view.joinNext[0].n === '01' && view.joinNext[0].hasNote && view.joinNext[0].note === CAVEAT && view.joinNext[0].noteUrl === README_URL
+      && view.joinNext.slice(1).every((n) => !n.hasNote && n.note === ''), label + ': step 01 of #/join carries it, and only step 01.');
+  };
+  const caveatOff = (view, label) => {
+    check(view.foundingOpen === false && view.foundingLine === '' && view.joinNext.every((n) => !n.hasNote && n.note === ''), label + ': the caveat is gone.');
+    check(Object.values(view).every((v) => v !== CAVEAT), label + ': no value carries the caveat.');
+  };
+  caveatOn(idleView, 'Before the record is read');
+  caveatOn(empty.renderVals(), 'With an empty record');
+  caveatOn(offline.renderVals(), 'Offline');
+  caveatOff(used.renderVals(), 'Once an assembly is held');
+  caveatOff(heldNone.renderVals(), 'Once an assembly is held with no points');
+
+  // #/open: the founding assembly is one of the things the constitution does not settle.
+  const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  const openCount = /What follows is the whole of it: (\w+) things the constitution does not settle,/.exec(html);
+  check(openCount && WORDS.indexOf(openCount[1]) === DAF_OPEN.length && DAF_OPEN.length === 5, '#/open counts the things it lists as unsettled.');
+  check(html.includes('<sc-for list="{{ dafOpen }}" as="o" hint-placeholder-count="' + DAF_OPEN.length + '">'), 'The #/open placeholder count follows the list.');
+  const openView = idleView.dafOpen;
+  const founding0 = openView[0];
+  check(founding0.t === 'The founding assembly' && founding0.span === '1 / -1' && openView.slice(1).every((o) => o.span === 'auto')
+    && html.includes('style="grid-column:{{ o.span }};'), 'The founding assembly leads #/open across the row, and the other four fill theirs.');
+  check(founding0.d.includes('DAF-000 and DAF-001 do not say how a founding assembly is decided'), 'The #/open item repeats the documented gap.');
+  const body0 = decodeURIComponent(founding0.href.split('&body=')[1] || '');
+  check(founding0.href.startsWith('https://github.com/draykerdk/daf/issues/new?title=') && body0.includes(README_URL) && !body0.includes('DAF-000 §9'),
+    'The founding issue cites federation/README.md, not DAF-000 §9, which does not list it.');
+  check(openView.slice(1).every((o) => decodeURIComponent(o.href.split('&body=')[1] || '').startsWith('DAF-000 §9 lists this as unsettled.')),
+    'The other four still cite DAF-000 §9.');
+
+  // DAF-001 §4 has no subsections, so the site cites §4.
+  check(!/DAF-001 §4\.2/.test(html) && html.includes("'Contesting this claim — DAF-000 §3.1 / DAF-001 §4.'"), 'The site cites DAF-001 §4, not §4.2.');
+
+  // The record from #/join is YAML that yaml-lite reads and the unit validation accepts.
+  const recordOf = (fields) => {
+    const c = makeComponent();
+    c.setState({ dafU: Object.assign({ id: '', name: '', kind: 'unit', fn: '', who: '', work: '' }, fields) });
+    const text = c.dafYaml();
+    let doc = null;
+    let error = '';
+    try { doc = yaml.parse(text, 'site.yml'); } catch (e) { error = e.message; }
+    const v = doc ? validateUnit(doc, 'site.yml', c.dafUnitId()) : { unit: null, problems: [error] };
+    return { text, doc, unit: v.unit, problems: v.problems };
+  };
+  const cases = [
+    { fields: { id: 'river', name: 'River: the translation unit', fn: 'Translate DAF-000.', who: 'https://github.com/river-gh', work: 'https://github.com/river-gh/docs' },
+      name: 'River: the translation unit' },
+    { fields: { id: 'team-one', name: 'Team #1', fn: 'One thing.', who: 'https://github.com/team-gh', work: 'https://github.com/team-gh/repo' }, name: 'Team #1' },
+    { fields: { id: 'cedar', name: 'Cedar', fn: 'Review proposals\nbefore they are voted on,\r\n\twith the evidence.', who: 'https://github.com/cedar-gh', work: 'https://github.com/cedar-gh/x' },
+      name: 'Cedar', fn: 'Review proposals before they are voted on, with the evidence.' },
+    { fields: { id: 'aspen', name: 'Aspen', kind: 'participant', fn: 'Write guides.', who: '@aspen-gh', work: '@aspen-gh, https://github.com/aspen-gh/guides' },
+      name: 'Aspen', who: ['https://github.com/aspen-gh'], work: ['https://github.com/aspen-gh', 'https://github.com/aspen-gh/guides'] },
+    { fields: { id: 'birch', name: 'Birch "the second" \\ unit\nwith a line break', fn: 'x', who: 'birch-gh @birch-two', work: 'https://github.com/birch-gh/r' },
+      name: 'Birch "the second" \\ unit with a line break', who: ['https://github.com/birch-gh', 'https://github.com/birch-two'] }
+  ];
+  for (const k of cases) {
+    const r = recordOf(k.fields);
+    check(r.problems.length === 0 && r.unit, 'The site record passes validation: ' + JSON.stringify(k.fields) + '\n' + r.problems.join('\n') + '\n' + r.text);
+    check(r.unit.name === k.name && r.unit.id === k.fields.id, 'The name reads back as typed: ' + k.name);
+    if (k.fn) check(r.unit.founding_function === k.fn, 'Line breaks in the founding function become spaces.');
+    if (k.who) check(JSON.stringify(r.unit.speaks_for) === JSON.stringify(k.who), 'An @login or bare login in speaks_for becomes its GitHub link.');
+    if (k.work) check(JSON.stringify(r.unit.work) === JSON.stringify(k.work), 'An @login in work becomes its GitHub link.');
+  }
+  const blank = recordOf({});
+  check(blank.doc && blank.doc.unit.name === 'Example Unit' && blank.doc.unit.id === 'example-unit', 'The empty form still writes the template record.');
+  // Entries that are not links still parse, so check names the entry instead of failing on the YAML.
+  const odd2 = recordOf({ id: 'odd', name: 'Odd', fn: 'x', who: 'example.com/x: ~ null', work: '%x' });
+  check(odd2.doc && odd2.problems.length > 0 && odd2.problems.every((x) => /must be/.test(x)), 'Entries that are not links reach validation as text.');
 
   console.log(`${checks} DAF contract checks passed`);
 })().catch((error) => {

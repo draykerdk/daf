@@ -7,7 +7,8 @@
 
 const ISSUE_URL = 'https://github.com/draykerdk/daf/issues/';
 const ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
-const PLACEHOLDER_HOLDERS = new Set(['unit-id', 'example-unit']);
+// The template's ids, and the one daf.drayker.org writes while a field is empty.
+const PLACEHOLDER_HOLDERS = new Set(['unit-id', 'example-unit', 'your-unit-id']);
 
 const SECTION_NAMES = {
   'where the federation is': 'where',

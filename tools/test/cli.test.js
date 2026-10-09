@@ -154,6 +154,31 @@ test('cli: draft builds the report from the cycle and claim issues', () => {
   assert.match(again.err, /already exists/);
 });
 
+test('cli: draft lists a claim whose Cycle field is not exactly YYYY-MM instead of dropping it', () => {
+  const dir = tmpCopy('basic');
+  const flat = JSON.parse(read(FIX, 'issues-2026-04.json')).flat();
+  const base = flat.find((i) => i.number === 111);
+  const withCycle = (number, value, extra) => Object.assign({}, base, { number, title: '[Claim] A fictional claim ' + number,
+    html_url: 'https://github.com/draykerdk/daf/issues/' + number,
+    body: base.body.replace(/### Cycle\n\n2026-04$/, '### Cycle\n\n' + value) }, extra);
+  assert.ok(withCycle(119, 'x').body.endsWith('### Cycle\n\nx'), 'the fixture claim ends with its Cycle field');
+  const issues = path.join(dir, 'issues.json');
+  fs.writeFileSync(issues, JSON.stringify(flat.concat([
+    withCycle(119, '2026-04 (April)'),
+    withCycle(120, '_No response_'),
+    withCycle(121, 'April 2026', { state: 'closed', state_reason: 'not_planned' })
+  ])));
+  const r = run(['draft', '2026-04', '--root', dir, '--issues', issues]);
+  assert.equal(r.code, 0, r.err);
+  const md = read(dir, 'federation/assemblies/2026-04.md');
+  assert.match(md, /\n<!-- not drafted: #119 has a "Cycle" field that is not exactly YYYY-MM \("2026-04 \(April\)"\); with the cycle written as YYYY-MM it is drafted in that cycle -->\n/);
+  assert.match(md, /\n<!-- not drafted: #120 has a "Cycle" field that is not exactly YYYY-MM \(empty\);/);
+  assert.match(r.out, /not drafted: #119 has a "Cycle" field that is not exactly YYYY-MM/);
+  assert.doesNotMatch(md, /#121|#114/, 'a withdrawn claim and a claim for another cycle are not listed');
+  assert.match(md, /^<!-- Rows drafted from claims: #111 Deliveries row 1 \(`example-willow`\); #112 Deliveries row 2 \(`example-river`\); #115 Module completions row 1 \(`example-delta`\); #118 Deliveries row 3 \(`example-aspen`\)\. -->\n/,
+    'the well-formed claims are drafted as before');
+});
+
 test('cli: close writes the tally, joined and LEDGER, and nothing else', () => {
   const dir = tmpCopy('basic');
   const base = commitAll(dir);
@@ -392,7 +417,8 @@ test('cli: 13 the tally workflow invocation reads the default branch record and 
   assert.match(first.stdout, /^## The vote\n/);
   assert.match(first.stdout, /\| \*\*Outcome\*\* \| \*\*undetermined\*\* \|/);
   assert.match(first.stdout, /\| `example-river` \| for \| 0 \| — \|/);
-  assert.match(first.stdout, /`example-gamma` by `example-gamma-gh`, `for`: no unit record for `example-gamma`/, 'a record only in the pull request does not speak');
+  assert.match(first.stdout, /`example-gamma` by `example-gamma-gh`, `for`: the record of `example-gamma` is not on master yet; a holder exists from the assembly that accepts its record/,
+    'a record only in the pull request does not speak, and the reason says why');
   assert.match(first.stdout, /Computed from 5 comments on PR #42 at head 0123456, window from 2026-04-01 00:00 to 2026-04-08 00:00 UTC/);
   assert.match(first.stderr, /NOTE: the outcome is undetermined; `close` will not write it\./);
   assert.ok(!fs.existsSync(path.join(empty, 'federation/assemblies/2026-04.md')), 'the report is read in memory only');

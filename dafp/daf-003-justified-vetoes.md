@@ -29,7 +29,7 @@ Anything the federation decides under [DAF-000 §5.1](./daf-000-federation-const
 
 ## 3. How it is filed and recorded
 
-1. **Filing.** The veto is opened with the [justified veto form](../.github/ISSUE_TEMPLATE/veto.yml), against a decision that is open or already recorded.
+1. **Filing.** The veto is opened with the [justified veto form](https://github.com/draykerdk/daf/issues/new?template=veto.yml), against a decision that is open or already recorded.
 2. **Recording.** The veto is copied into `federation/vetoes/<issue-number>.md`, from [`federation/vetoes/TEMPLATE.md`](../federation/vetoes/TEMPLATE.md), by pull request, like every other part of the record. The triage is appended to the same file as it happens, and the file stays even when the veto does not pass.
 3. **Triage.** The grounds pass through the five steps UID specifies: verification of the facts claimed, interpretation of what they mean for this decision, detection of error, misunderstanding or manipulation, proportion (a bounded test or a temporary exception before a general change), and human recourse.
 4. **Outcome.** The triage ends in one of two ways, each written with its reasons, so whoever vetoed can see how their grounds were read:

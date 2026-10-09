@@ -164,6 +164,35 @@ test('tally: the founding assembly is undetermined, never failed', () => {
   assert.ok(md.includes(FOUNDING));
 });
 
+test('tally: in the founding case, a holder whose record is only in the pull request is said to be not on master yet', () => {
+  const fs = require('node:fs');
+  const fixture = (f) => fs.readFileSync(require('node:path').join(__dirname, 'fixtures/basic/federation', f), 'utf8');
+  // The default branch: parameters only, no unit and no assembly.
+  const master = tmpCopy(null);
+  write(master, 'federation/parameters.yml', fixture('parameters.yml'));
+  // The pull request: the report records example-river and example-gamma, and carries example-river's file.
+  const pr = tmpCopy(null);
+  write(pr, 'federation/parameters.yml', fixture('parameters.yml'));
+  write(pr, 'federation/units/example-river.yml', fixture('units/example-river.yml'));
+  write(pr, 'federation/assemblies/2026-04.md', pendingReport({ newRecord: 'example-gamma' }));
+  const comments = [
+    comment(1, 'example-river-gh', IN, vote('for', 'example-river')),
+    comment(2, 'example-gamma-gh', IN, vote('for', 'example-gamma')),
+    comment(3, 'example-nobody-gh', IN, vote('for', 'example-nobody'))
+  ];
+  const NOT_YET = (id) => id + ': the record of `' + id + '` is not on master yet; a holder exists from the assembly that accepts its record';
+  const t = computeTally({ record: loadRecord(pr), masterRecord: loadRecord(master), cycle: '2026-04', comments });
+  assert.equal(t.outcome, 'undetermined');
+  assert.deepEqual(reasons(t), [NOT_YET('example-river'), NOT_YET('example-gamma'), 'example-nobody: no unit record for `example-nobody`']);
+  // The tally workflow's reading: the record is the default branch's, the report the pull request's.
+  const { withReport } = require('../lib/record');
+  const asWorkflow = computeTally({ record: withReport(loadRecord(master), require('node:path').join(pr, 'federation/assemblies/2026-04.md'), '2026-04'),
+    cycle: '2026-04', comments });
+  assert.deepEqual(reasons(asWorkflow), ['example-river: no unit record for `example-river`', NOT_YET('example-gamma'), 'example-nobody: no unit record for `example-nobody`'],
+    'without the pull request\'s unit files, the report\'s New records still say which holders the pull request records');
+  assert.deepEqual([t.votes.length, t.cast, asWorkflow.votes.length, asWorkflow.cast], [0, 0, 0, 0], 'nothing more is counted');
+});
+
 test('tally: quorum_base total counts dormant points in the base', () => {
   const record = underVote();
   const params = Object.assign({}, record.parameters, { quorum_base: 'total' });

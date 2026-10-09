@@ -217,6 +217,9 @@
               <div>
                 <p style="font-size:15px;line-height:1.66;color:var(--tx2);margin:0 0 16px;text-wrap:pretty">Which means the first function is unclaimed and the door is wider than it will ever be again: open the cycle, claim a delivery that already happened, and take it through the procedure to see where it breaks.</p>
                 <div role="button" tabindex="0" onClick="{{ goAssembly }}" style="display:inline-block;border:1px solid var(--line3);color:var(--tx);padding:12px 20px;font-size:13.5px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">Run the first assembly →</div>
+                <sc-if value="{{ foundingOpen }}" hint-placeholder-val="{{ true }}">
+                  <p style="font-size:13px;line-height:1.6;color:var(--tx3);margin:14px 0 0;text-wrap:pretty">{{ foundingLine }} <a href="{{ foundingUrl }}" target="_blank" rel="noreferrer">Running an assembly →</a></p>
+                </sc-if>
               </div>
             </div>
           </sc-if>
@@ -304,6 +307,9 @@
             <div>
               <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.16em;color:var(--tx3);margin-bottom:8px">NO CYCLE IS OPEN</div>
               <div style="font-size:15px;line-height:1.62;color:var(--tx2);max-width:62ch;text-wrap:pretty">Nothing is up for decision right now, which means nothing is waiting on anyone else. Opening a cycle is itself a function, and it earns a point like any other.</div>
+              <sc-if value="{{ foundingOpen }}" hint-placeholder-val="{{ true }}">
+                <p style="font-size:13px;line-height:1.6;color:var(--tx3);margin:10px 0 0;max-width:62ch;text-wrap:pretty">{{ foundingLine }} <a href="{{ foundingUrl }}" target="_blank" rel="noreferrer">Running an assembly →</a></p>
+              </sc-if>
             </div>
             <div role="button" tabindex="0" onClick="{{ goAssembly }}" style="border:1px solid var(--line3);color:var(--tx);padding:13px 22px;font-size:13.5px;font-weight:500;cursor:pointer;flex-shrink:0" style-hover="border-color:#3FA9FF;color:#3FA9FF">Open one →</div>
           </div>
@@ -392,7 +398,7 @@
       <section style="max-width:1320px;margin:0 auto;padding:clamp(38px,5.5vw,80px) clamp(16px,4vw,44px) clamp(24px,3vw,40px)">
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#3FA9FF;margin-bottom:20px">The rules</div>
         <h1 style="font-size:clamp(34px,4.6vw,64px);line-height:1;letter-spacing:-0.04em;font-weight:700;margin:0 0 24px;max-width:20ch;text-wrap:balance">A constitution short enough to be read before it is obeyed.</h1>
-        <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);max-width:62ch;margin:0 0 26px;text-wrap:pretty">DAF-000 says what has to be true, independent of any platform. DAF-001 says how it runs today, on a repository. Both are drafts, open to argument, and neither overrides GOVERNANCE.md — the governance actually in force during the founding phase. Where they disagree, that file wins.</p>
+        <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);max-width:62ch;margin:0 0 26px;text-wrap:pretty">DAF-000 says what has to be true, independent of any platform. DAF-001 says how it runs today, on a repository. Both are drafts, open to argument, and neither overrides GOVERNANCE.md — the governance actually in force during the founding phase. Where they disagree, that file wins. The vote they describe is transitional: each mechanism of version 1.0 that is reproduced and tested replaces part of it (DAF-000 §1).</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
           <a href="{{ daf000 }}" target="_blank" rel="noreferrer" style="border:1px solid var(--line3);color:var(--tx);padding:14px 24px;font-size:13.5px;font-weight:500" style-hover="border-color:#3FA9FF;color:#3FA9FF">DAF-000 in full →</a>
           <a href="{{ daf001 }}" target="_blank" rel="noreferrer" style="border:1px solid var(--line3);color:var(--tx);padding:14px 24px;font-size:13.5px;font-weight:500" style-hover="border-color:#3FA9FF;color:#3FA9FF">DAF-001 in full →</a>
@@ -727,6 +733,9 @@
                 <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#3FA9FF">{{ n.n }}</div>
                 <div style="font-size:16px;font-weight:600;letter-spacing:-0.015em">{{ n.t }}</div>
                 <div style="font-size:13.5px;line-height:1.6;color:var(--tx2)">{{ n.d }}</div>
+                <sc-if value="{{ n.hasNote }}" hint-placeholder-val="{{ false }}">
+                  <p style="font-size:12.5px;line-height:1.6;color:var(--tx3);margin:4px 0 0;text-wrap:pretty">{{ n.note }} <a href="{{ n.noteUrl }}" target="_blank" rel="noreferrer">Running an assembly →</a></p>
+                </sc-if>
               </div>
             </sc-for>
           </div>
@@ -782,6 +791,9 @@
                   <a href="{{ aCycleUrl }}" target="_blank" rel="noreferrer" style="background:#3FA9FF;color:#0A0A0C;padding:15px 26px;font-size:14px;font-weight:600;box-shadow:0 0 20px rgba(63,169,255,0.2)" style-hover="background:#6FC1FF">Open the cycle →</a>
                   <a href="{{ aReportUrl }}" target="_blank" rel="noreferrer" style="border:1px solid var(--line3);color:var(--tx);padding:15px 24px;font-size:13px;font-weight:500" style-hover="border-color:#3FA9FF;color:#3FA9FF">Start the report →</a>
                 </div>
+                <sc-if value="{{ foundingOpen }}" hint-placeholder-val="{{ true }}">
+                  <p style="font-size:13px;line-height:1.6;color:var(--tx3);margin:0;text-wrap:pretty">{{ foundingLine }} <a href="{{ foundingUrl }}" target="_blank" rel="noreferrer">Running an assembly →</a></p>
+                </sc-if>
                 <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--tx3)">{{ aPath }}</div>
               </div>
             </div>
@@ -1081,14 +1093,14 @@
       <section style="max-width:1320px;margin:0 auto;padding:clamp(38px,5.5vw,80px) clamp(16px,4vw,44px) clamp(24px,3vw,40px)">
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#3FA9FF;margin-bottom:20px">What is open</div>
         <h1 style="font-size:clamp(34px,4.6vw,64px);line-height:1;letter-spacing:-0.04em;font-weight:700;margin:0 0 24px;max-width:22ch;text-wrap:balance">The parameters are written. No use has tested them yet.</h1>
-        <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);max-width:64ch;margin:0;text-wrap:pretty">Where a rule is unspecified the federation says so, rather than filling the gap with practice — undocumented custom is how a structure without an owner acquires one. What follows is the whole of it: four things the constitution does not settle, five things this substrate does not buy, and four conditions that would end Phase 0. They are open functions, not oversights.</p>
+        <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);max-width:64ch;margin:0;text-wrap:pretty">Where a rule is unspecified the federation says so, rather than filling the gap with practice — undocumented custom is how a structure without an owner acquires one. What follows is the whole of it: five things the constitution does not settle, five things this substrate does not buy, and four conditions that would end Phase 0. They are open functions, not oversights.</p>
       </section>
 
       <section style="border-top:1px solid var(--line)">
         <div style="max-width:1320px;margin:0 auto;padding:clamp(32px,4vw,58px) clamp(16px,4vw,44px)">
           <div style="display:grid;grid-template-columns:{{ fourCol }};gap:1px">
-            <sc-for list="{{ dafOpen }}" as="o" hint-placeholder-count="4">
-              <a href="{{ o.href }}" target="_blank" rel="noreferrer" style="background:var(--surf);padding:26px 24px;display:flex;flex-direction:column;gap:10px;min-height:212px;color:var(--tx);outline:1px solid var(--line)" style-hover="background:var(--surf2)">
+            <sc-for list="{{ dafOpen }}" as="o" hint-placeholder-count="5">
+              <a href="{{ o.href }}" target="_blank" rel="noreferrer" style="grid-column:{{ o.span }};background:var(--surf);padding:26px 24px;display:flex;flex-direction:column;gap:10px;min-height:212px;color:var(--tx);outline:1px solid var(--line)" style-hover="background:var(--surf2)">
                 <div style="font-size:18px;font-weight:600;letter-spacing:-0.02em">{{ o.t }}</div>
                 <div style="font-size:14px;line-height:1.6;color:var(--tx2);flex:1">{{ o.d }}</div>
                 <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#3FA9FF">WRITE IT →</div>
@@ -1475,12 +1487,12 @@ const DAF_PIPE = [
     tool: 'claim', tl: 'See how a claim is made' },
   { n: '03', k: 'CLAIM', t: 'You link the declaration and the result at the open cycle.',
     b: 'A cycle opens as an issue listing what is up for decision. Anyone who delivered links the issue that declared the function and the merged result. Claims are public and can be contested by anyone in the thread — that argument is the review, and there is no committee behind it.',
-    r: 'DAF-001 §4.2 — claims are made in public and can be contested.', ref: DAF_001 + '#4-the-cycle',
+    r: 'DAF-001 §4 — claims are made in public and can be contested.', ref: DAF_001 + '#4-the-cycle',
     g: 'A comment on the cycle issue, or a claim issue of its own.',
     tool: 'claim', tl: 'Compose the claim' },
   { n: '04', k: 'DRAFT', t: 'The assembly report is written as a pull request.',
     b: 'One report per cycle: what was delivered, what was decided, which points were awarded and removed and for which specific delivery, and what the federation would change about itself. Every line names the delivery it answers to. A line without a link is not evidence.',
-    r: 'DAF-001 §4.3 — awards, penalties and decisions written out, each attributed.', ref: DAF_001 + '#4-the-cycle',
+    r: 'DAF-001 §4 — awards, penalties and decisions written out, each attributed.', ref: DAF_001 + '#4-the-cycle',
     g: 'A pull request adding federation/assemblies/YYYY-MM.md, open for seven days.',
     tool: 'cycle', tl: 'Open the cycle and the report' },
   { n: '05', k: 'VOTE', t: 'Seven days, one comment per holder, counted in the open.',
@@ -1553,7 +1565,18 @@ const DAF_TRIGGERS = [
   { t: 'A contributor is put at risk by publicity', d: 'Anonymous participation stops being theoretical.' }
 ];
 
+// The founding gap, as federation/README.md ("Running an assembly") and DAF-002 §7
+// state it. Shown beside every invitation to open or run the first assembly, and
+// only while no assembly has been held.
+const FOUNDING_URL = 'https://github.com/draykerdk/daf/blob/master/federation/README.md#running-an-assembly';
+const FOUNDING_LINE = 'The first assembly cannot be recorded yet: DAF-000 and DAF-001 do not say how a founding assembly is decided.';
+
 const DAF_OPEN = [
+  // Not in DAF-000 §9: federation/README.md and DAF-002 §7 state it, so its issue
+  // cites them. It spans the row, so the four below still fill theirs.
+  { t: 'The founding assembly', d: 'Weight comes from the assemblies before an assembly, and before the first there are none, so no participation can be computed. DAF-000 and DAF-001 do not say how a founding assembly is decided; until DAF-001 §4 says how, the first assembly cannot be recorded. Two smaller cases are unspecified in the same way, and the tools stop on both: a quorum base of zero, when every holder is dormant, and points below zero.',
+    q: 'How the founding assembly is decided', span: '1 / -1',
+    why: 'federation/README.md ("Running an assembly") and DAF-002 §7 state this as unspecified. This issue is where it gets written.', src: FOUNDING_URL },
   { t: 'The substrate beyond Phase 0', d: 'Which platform holds the federation when a repository is no longer enough, and what triggers the move.', q: 'Substrate after Phase 0' },
   { t: 'The transferable instrument', d: 'Earlier drafts describe a claim on the treasury, convertible to local currency and later to the ecosystem unit of value. It is not specified, not issued, and cannot exist on this substrate. It stays out until there is one that can hold it.', q: 'The transferable instrument' },
   { t: 'Where councils fit', d: 'advices develops the member councils, formed for each question and composed by Dknowledge from the best informed and the most affected. How a council’s conclusion bears on a federation vote remains to be specified.', q: 'Council composition and authority' },
@@ -2071,18 +2094,33 @@ class Component extends DCLogic {
   };
 
   // ---- the artifacts -------------------------------------------------------
+  // The record is read by tools/lib/yaml-lite.js, so whatever is typed stays one
+  // valid value: the name double-quoted, the founding function on one line, and
+  // an @login or a bare login in speaks_for or work written as its GitHub link.
   dafYaml = () => {
     const u = this.state.dafU;
     const id = this.dafSlug(u.id || u.name, 'example-unit');
+    const oneLine = (s) => String(s || '').replace(/[\t\r\n]+/g, ' ').trim();
+    const quoted = (s) => '"' + s.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+    const login = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/;
+    // An entry that would not read back as itself unquoted (a leading indicator,
+    // a trailing colon, a word YAML reads as a value) is quoted, so check names
+    // the entry rather than a YAML error.
+    const plain = (v) => /^[A-Za-z0-9]/.test(v) && !/:$/.test(v) && !/^(null|true|false|[-+]?[0-9]+)$/i.test(v);
+    const entry = (x) => {
+      const v = x.replace(/^@+/, '');
+      if (login.test(v)) return 'https://github.com/' + v;
+      return plain(v) ? v : quoted(v);
+    };
     const lines = (raw, ph) => {
-      const arr = String(raw || '').split(/[\s,]+/).filter(Boolean);
+      const arr = String(raw || '').split(/[\s,]+/).filter((x) => x.replace(/^@+/, '')).map(entry);
       return (arr.length ? arr : [ph]).map((x) => '    - ' + x).join('\n');
     };
     return ['schema_version: 1', 'unit:', '  id: ' + id,
-      '  name: ' + (u.name || 'Example Unit'),
+      '  name: ' + quoted(oneLine(u.name) || 'Example Unit'),
       '  kind: ' + u.kind,
       '  founding_function: >-',
-      '    ' + (u.fn || 'Describe the one thing this unit exists to do.'),
+      '    ' + (oneLine(u.fn) || 'Describe the one thing this unit exists to do.'),
       '  speaks_for:', lines(u.who, 'https://github.com/your-account'),
       '  work:', lines(u.work, 'https://github.com/your-account/repository'),
       '  joined: null', ''].join('\n');
@@ -2128,9 +2166,9 @@ class Component extends DCLogic {
       cycle: this.dafMonth()
     });
   };
-  // Contesting is the review. §4.2 asks for the same rigour as the claim: which
+  // Contesting is the review. DAF-001 §4 asks for the same rigour as the claim: which
   // condition fails, and the evidence for saying so.
-  contestBody = () => ['Contesting this claim — DAF-000 §3.1 / DAF-001 §4.2.',
+  contestBody = () => ['Contesting this claim — DAF-000 §3.1 / DAF-001 §4.',
     '',
     '**Which condition fails**',
     '',
@@ -2621,9 +2659,16 @@ class Component extends DCLogic {
 
       daf000: DAF_000, daf001: DAF_001, dafRepo: DAF_R, dafRecord: DAF_REC,
       dafSources: DAF_SOURCES, dafLimits: DAF_LIMITS, dafTriggers: DAF_TRIGGERS,
-      rules: RULES, phaseMap: PHASE_MAP, neighbours: NEIGHBOURS, joinNext: JOIN_NEXT,
-      dafOpen: DAF_OPEN.map((o) => ({ ...o,
-        href: DAF_R + '/issues/new?title=' + encodeURIComponent('[Open] ' + o.q) + '&body=' + encodeURIComponent('DAF-000 §9 lists this as unsettled. This issue is where it gets written.\n\n' + o.d + '\n\n' + DAF_000 + '#9-what-this-document-does-not-settle') })),
+      rules: RULES, phaseMap: PHASE_MAP, neighbours: NEIGHBOURS,
+      // Step 01 carries the founding caveat while no assembly has been held.
+      joinNext: JOIN_NEXT.map((n) => ({ ...n, hasNote: n.n === '01' && held === 0, note: n.n === '01' && held === 0 ? FOUNDING_LINE : '', noteUrl: FOUNDING_URL })),
+      dafOpen: DAF_OPEN.map((o) => ({ ...o, span: o.span || 'auto',
+        href: DAF_R + '/issues/new?title=' + encodeURIComponent('[Open] ' + o.q) + '&body=' + encodeURIComponent((o.why || 'DAF-000 §9 lists this as unsettled. This issue is where it gets written.') + '\n\n' + o.d + '\n\n' + (o.src || DAF_000 + '#9-what-this-document-does-not-settle')) })),
+      // The founding caveat: shown while no assembly has been held (or before the
+      // record is read), like the other empty-state sentences.
+      foundingOpen: held === 0,
+      foundingLine: held === 0 ? FOUNDING_LINE : '',
+      foundingUrl: FOUNDING_URL,
 
       // Specified, structured, operating — three different things. The site is
       // careful never to let the first two read as the third.

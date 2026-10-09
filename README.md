@@ -75,4 +75,4 @@ Related: [`dfmp`](https://dfmp.drayker.org) (how proposals are validated) · [`u
 
 ---
 
-Drayker is non-profit, and its work is primarily voluntary. Content licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Drayker has no owner, no shareholders and no profit distribution, and its work is primarily voluntary. Content licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

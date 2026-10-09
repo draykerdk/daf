@@ -135,7 +135,7 @@ The report is the record. Every award and every penalty in it is attributable to
 
 ## 6. Resources
 
-The federation is funded by grants, donations, and side projects. It is non-profit, and it holds no reserve it is not prepared to justify.
+The federation is funded by grants, donations, and side projects. It has no owner, no shareholders and no profit distribution, and it holds no reserve it is not prepared to justify.
 
 **Support is requested only where there is no alternative.** This rule is published deliberately: a federation that treats shared resources as a first resort stops being able to fund anything that matters. The main projects are the priority, and resource efficiency is a condition of every request, not an aspiration.
 

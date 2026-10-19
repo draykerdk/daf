@@ -2,6 +2,8 @@
 
 DAF, the Distributed Autonomous Federation, is an autonomous federation of autonomous units, distributed like Dk: the groups and organizations of people working on different questions and projects in Drayker. It is a basic and primitive form of [PAP](https://pap.drayker.org), implemented now on GitHub (Phase 0): its rules, instruments and public record exist. No unit has been recorded and no assembly has been held yet. Its dynamics are tested as the very way Drayker is built. It explores coordination among the units while the broader member constitution and Projects & Applications develop. It provides a place to test federative rules in public.
 
+DAF serves to build Drayker's own infrastructure, including UID and the network, together: the infrastructure that will make DAF unnecessary. In doing so it prepares its own dissolution into PAP.
+
 Documented proposals examine decision rules, a distinct federative points ledger and review procedures. Useful functions can later migrate into PAP and member governance.
 
 DAF serves the development of durable coordination. Its functions may migrate or dissolve as the wider system becomes able to carry them.
@@ -38,7 +40,7 @@ That rule is published on purpose. A federation that treats its shared resources
 
 It is also enforceable rather than decorative: a request that does not say what was tried first is returned unjudged, and funding is granted one function at a time, each grant evaluated against the evidence of the last.
 
-**Protection of honest failure vs. bad-faith penalties:** Genuine technological and cognitive exploration entails uncertainty. An honest failure to complete a committed function does not deduct previously earned points; it simply concludes the cycle without awarding new points, and any unspent project resources revert to the common capacity reserve. Penalties (point forfeiture, balance deduction, or expulsion) are strictly bounded to proven bad-faith actions: falsification of delivery evidence, cryptographic fraud, malicious collusion, or unwithdrawn resource hoarding. Inactivity is never penalized.
+**Protection of honest failure vs. bad-faith penalties:** Genuine technological and cognitive exploration entails uncertainty. An honest failure to complete a committed function does not deduct previously earned points; it simply concludes the cycle without awarding new points, and any unspent project resources revert to the common capacity reserve. Penalties (point forfeiture, balance deduction, or expulsion) are strictly bounded to proven bad-faith actions: falsification of delivery evidence, fraud, malicious collusion, or unwithdrawn resource hoarding. The review keeps distinct what is not the same: failing while trying, hiding information, abandoning a commitment without communicating, fraud, exploiting members and deliberately sabotaging the federation. Only the first is an honest outcome. Inactivity is never penalized, and a holder who lost points can earn again by delivering.
 
 ## How it fits the whole
 

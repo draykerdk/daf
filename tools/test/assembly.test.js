@@ -28,7 +28,8 @@ test('assembly: a passed report with **Module completions**, #n refs and markdow
   assert.equal(a.deliveries[1].declared, 'https://github.com/example-org/example-repo/issues/12');
   assert.equal(a.deliveries[1].delivered, 'https://github.com/example-org/example-repo/pull/2', 'backticks are stripped');
   assert.deepEqual(a.newRecords.map((r) => [r.holder, r.kind]), [['example-river', 'participant'], ['example-delta', 'unit']]);
-  assert.deepEqual(a.votes, [{ holder: 'example-river', vote: 'for', weight: 0, line: 57 }, { holder: 'example-delta', vote: 'for', weight: 0, line: 58 }]);
+  assert.deepEqual(a.votes, [{ holder: 'example-river', vote: 'for', weight: 1, line: 57 }]);
+  assert.deepEqual([a.vote.baseLabel, a.vote.active, a.vote.cast], ['participants with a delivery', 1, 1], 'the founding base row is read');
   assert.equal(a.vote.outcome, 'passed');
   assert.deepEqual(a.steward, { none: true }, 'the guidance blockquote is not intervention text');
 });

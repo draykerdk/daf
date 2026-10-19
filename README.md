@@ -63,7 +63,9 @@ The record itself lives in [`federation/`](./federation): unit records, assembly
 
 DAF is implemented now on GitHub (Phase 0): its rules, instruments and public record exist. The point mechanics and the voting procedure are specified as drafts open to argument. **No unit has been recorded and no assembly has been held yet.** No points have been issued, and there is no deployed contract. The record is first used at the first assembly that records a real delivery.
 
-Several things are still unspecified on purpose. The substrate beyond Phase 0 was identified as **ICP** (Internet Computer Protocol), but no migration has occurred. The authority of councils, the migration of useful DAF functions into PAP and member governance, and the limits of federative points remain open. Federative points should not be converted wholesale into [contextual reputation](https://dknowledge.drayker.org/papers/main-projects/ecosystem/value-management-ecosystem#reputation); at most, verified DAF history may become one contextual input among several. These questions are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle).
+Several things are still unspecified on purpose. The substrate beyond Phase 0 was identified as **ICP** (Internet Computer Protocol), but no migration has occurred. The authority of councils, the migration of useful DAF functions into PAP and member governance, and the limits of federative points remain open. These questions are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle).
+
+When UID enters use, the history of deliveries recorded in the DAF's Phase 0 enters the UIDs of those who made them as contextual history. It does not change base representation, which is the same for every active member. When the federation dissolves into PAP, federative points stay as a historical record and stop counting as voting weight, and Dk recalculates [contextual reputation](https://dknowledge.drayker.org/papers/main-projects/ecosystem/value-management-ecosystem#reputation) from the verified history of deliveries, as one input among the others that inform it.
 
 ## Contributing
 
@@ -77,4 +79,4 @@ Related: [`dfmp`](https://dfmp.drayker.org) (how proposals are validated) · [`u
 
 ---
 
-Drayker has no owner, no shareholders and no profit distribution, and its work is primarily voluntary. Content licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Drayker belongs to its members, has no shareholders and distributes no profit, and its work is primarily voluntary. Content licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

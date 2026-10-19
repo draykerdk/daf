@@ -12,7 +12,7 @@ const { deriveEvents, serialize } = require('../lib/events');
 const { computeTally, PROVISIONAL } = require('../lib/tally');
 const { renderTally } = require('../lib/render');
 
-const GOLDEN_HEAD = '65c6a3a9446a70174761d475f3ef0f7ec0ce94077c20c2b5758217959e73cbd7';
+const GOLDEN_HEAD = '7d0c81f251d8cd8ec9687b17781dc89a5c685d01e964d809ef7a187a91019af7';
 const IN = '2026-04-02T10:00:00Z';
 const OUTSIDER_UNIT = (text) => text.replace('    - https://github.com/Example-Delta-Two-GH', '    - https://github.com/Example-Delta-Two-GH\n    - https://github.com/outsider-gh');
 
@@ -43,7 +43,7 @@ function outsiderPr() {
 
 test('audit C1: an outsider added to speaks_for in the pull request is not counted by close', () => {
   const { dir, base, comments } = outsiderPr();
-  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base, '--allow-undetermined']);
+  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base]);
   assert.equal(r.code, 0, r.err);
   assert.match(r.err, /WARNING: federation\/units\/example-delta\.yml: modified in the working tree versus [0-9a-f]{40}\. close reads unit records, parameters and earlier assemblies from [0-9a-f]{40}, so this change is not part of the count\./);
   assert.doesNotMatch(r.err, /2026-04\.md: added/, 'the report under vote is not listed');
@@ -56,14 +56,14 @@ test('audit C1: an outsider added to speaks_for in the pull request is not count
   // The same count as the tally workflow: the default branch plus the report file.
   const master = tmpCopy('basic');
   write(master, 'report.md', pendingReport());
-  const t = run(['tally', '--root', master, '--cycle', '2026-04', '--report', path.join(master, 'report.md'), '--comments', comments, '--allow-undetermined', '--json']);
+  const t = run(['tally', '--root', master, '--cycle', '2026-04', '--report', path.join(master, 'report.md'), '--comments', comments, '--json']);
   assert.equal(t.code, 0, t.err);
   const j = JSON.parse(t.out);
   assert.deepEqual([j.for, j.against, j.abstain, j.outcome], [0, 2, 0, 'failed']);
   assert.match(after, /\| For \/ against \/ abstain \| 0 \/ 2 \/ 0 \|/);
   assert.ok(j.notCounted.some((n) => n.login === 'outsider-gh' && /not listed in speaks_for of `example-delta`/.test(n.reason)));
   // check after the close agrees with what was written.
-  const check = run(['check', '--root', dir, '--allow-undetermined']);
+  const check = run(['check', '--root', dir]);
   assert.equal(check.code, 0, check.err);
 });
 
@@ -88,13 +88,13 @@ test('audit C1: close writes joined on the working tree records it accepts, and 
   write(dir, 'federation/assemblies/2026-04.md', pendingReport({ newRecord: 'example-gamma' }));
   const comments = path.join(dir, 'c.json');
   fs.writeFileSync(comments, JSON.stringify([comment(1, 'example-delta-gh', IN, vote('for', 'example-delta'))]));
-  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base, '--allow-undetermined']);
+  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base]);
   assert.equal(r.code, 0, r.err);
   assert.doesNotMatch(r.err, /example-gamma\.yml/, 'an added unit record is not a warning');
   assert.match(r.out, /set joined: 2026-04 in federation\/units\/example-gamma\.yml/);
   assert.match(read(dir, 'federation/units/example-gamma.yml'), /joined: 2026-04/);
   assert.match(read(dir, 'federation/LEDGER.md'), /\| `example-gamma` \| participant \| 0 \| no \| 2026-04 \|/);
-  assert.equal(run(['check', '--root', dir, '--allow-undetermined']).code, 0);
+  assert.equal(run(['check', '--root', dir]).code, 0);
 });
 
 test('audit C1: close warns about parameters and other assemblies changed versus the base', () => {
@@ -107,7 +107,7 @@ test('audit C1: close warns about parameters and other assemblies changed versus
   fs.writeFileSync(comments, JSON.stringify([comment(1, 'example-delta-gh', IN, vote('for', 'example-delta'))]));
   // The edited parameters break the cross-check of check, not close: close
   // counts with the parameters of the base and says so.
-  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base, '--allow-undetermined']);
+  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base]);
   assert.match(r.err, /WARNING: federation\/parameters\.yml: modified in the working tree versus /);
   assert.match(r.err, /WARNING: federation\/assemblies\/2026-02\.md: modified in the working tree versus /);
   assert.equal(r.code, 0, r.err);
@@ -122,14 +122,14 @@ test('audit C1: close refuses when the base ref is missing, and writes nothing',
   const ledger = read(dir, 'federation/LEDGER.md');
   const comments = path.join(dir, 'c.json');
   fs.writeFileSync(comments, JSON.stringify([comment(1, 'example-delta-gh', IN, vote('for', 'example-delta'))]));
-  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--allow-undetermined']);
+  const r = run(['close', '2026-04', '--root', dir, '--comments', comments]);
   assert.equal(r.code, 1);
   assert.match(r.err, /error: the base ref origin\/master is not in this checkout\. .*run `git fetch origin`/);
   assert.equal(read(dir, 'federation/assemblies/2026-04.md'), before);
   assert.equal(read(dir, 'federation/LEDGER.md'), ledger);
   // An origin/master ref is the default.
   git(dir, 'update-ref', 'refs/remotes/origin/master', 'HEAD');
-  assert.equal(run(['close', '2026-04', '--root', dir, '--comments', comments, '--allow-undetermined']).code, 0);
+  assert.equal(run(['close', '2026-04', '--root', dir, '--comments', comments]).code, 0);
   // --record, --master-record and an option-like ref are refused.
   for (const extra of [['--record', dir], ['--master-record', dir], ['--base-ref=-x']]) {
     assert.match(run(['close', '2026-05', '--root', dir, '--comments', comments].concat(extra)).err, /usage error/, extra.join(' '));
@@ -148,7 +148,7 @@ test('audit C5: close refuses while the window is open; tally marks the count pr
   const ledger = read(dir, 'federation/LEDGER.md');
   const comments = path.join(dir, 'c.json');
   fs.writeFileSync(comments, JSON.stringify([comment(1, 'example-delta-gh', '2026-10-06T10:00:00Z', vote('for', 'example-delta'))]));
-  const close = (now) => run(['close', '2026-10', '--root', dir, '--comments', comments, '--base-ref', base, '--allow-undetermined', '--now', now]);
+  const close = (now) => run(['close', '2026-10', '--root', dir, '--comments', comments, '--base-ref', base, '--now', now]);
   for (const now of ['2026-10-08T13:40:00Z', '2026-10-11T23:59:59Z', '2026-10-11']) {
     const r = close(now);
     assert.equal(r.code, 1, now);
@@ -156,7 +156,7 @@ test('audit C5: close refuses while the window is open; tally marks the count pr
     assert.equal(read(dir, 'federation/assemblies/2026-10.md'), before, now);
     assert.equal(read(dir, 'federation/LEDGER.md'), ledger, now);
   }
-  const tally = (now) => run(['tally', '--root', dir, '--cycle', '2026-10', '--comments', comments, '--allow-undetermined', '--now', now]);
+  const tally = (now) => run(['tally', '--root', dir, '--cycle', '2026-10', '--comments', comments, '--now', now]);
   const open = tally('2026-10-08T13:40:00Z');
   assert.equal(open.code, 0, open.err);
   assert.match(open.out, /\| \*\*Outcome\*\* \| \*\*passed\*\* \|\n\nThe window is still open: this count is provisional\.\n/);
@@ -187,7 +187,7 @@ test('audit C5: computeTally is provisional only before the close instant', () =
 test('audit C3: editing or deleting a decided request leaves the head unchanged; deleting it fails check', () => {
   const REQ = 'federation/requests/1-example-tooling.md';
   const head = (dir) => deriveEvents(loadRecord(dir)).head;
-  const check = (dir, ...extra) => run(['check', '--root', dir, '--allow-undetermined', ...extra]);
+  const check = (dir, ...extra) => run(['check', '--root', dir, ...extra]);
 
   // The requester changed after the decision (the audit's ev-rq case).
   const edited = tmpCopy('basic');
@@ -196,7 +196,7 @@ test('audit C3: editing or deleting a decided request leaves the head unchanged;
   assert.equal(head(edited), GOLDEN_HEAD);
   let r = check(edited);
   assert.equal(r.code, 0, r.err);
-  assert.match(r.out, /head 65c6a3a9446a\. 0 errors/);
+  assert.match(r.out, /head 7d0c81f251d8\. 0 errors/);
   git(edited, 'commit', '-q', '-am', 'edit a decided request');
   r = check(edited, '--base', base);
   assert.equal(r.code, 0, r.err);
@@ -249,9 +249,9 @@ test('audit C4: the fixture checked out with CRLF gives the same head, events an
   // The audit's ev-lf and ev-crlf exports: before the fix they differed.
   assert.equal(serialize(deriveEvents(loadRecord(crlf))).json, serialize(deriveEvents(loadRecord(lf))).json);
   assert.equal(deriveEvents(loadRecord(crlf)).head, GOLDEN_HEAD);
-  const r = run(['check', '--root', crlf, '--allow-undetermined']);
+  const r = run(['check', '--root', crlf]);
   assert.equal(r.code, 0, r.err);
-  assert.match(r.out, /20 events, head 65c6a3a9446a\. 0 errors, 1 warning\./);
+  assert.match(r.out, /19 events, head 7d0c81f251d8\. 0 errors, 0 warnings\./);
 });
 
 test('audit C4: gitBlobSha hashes CRLF as git stores a text file', () => {
@@ -310,7 +310,7 @@ test('audit C6: draft skips a claim closed as not planned and marks a claim file
   assert.doesNotMatch(md, /claim #143 was filed by/, 'speaks_for is compared without case');
   assert.match(md, /\n<!-- TODO\(person\): claim #142 is closed \(completed\); check in its thread that the claim still stands before keeping its row\. -->\n/);
   assert.doesNotMatch(md, /claim #140 is closed/);
-  const check = run(['check', '--root', dir, '--allow-pending', '--allow-undetermined']);
+  const check = run(['check', '--root', dir, '--allow-pending']);
   assert.equal(check.code, 0, check.err);
   assert.match(check.err, /2026-04\.md: TODO\(person\) markers left/);
 });

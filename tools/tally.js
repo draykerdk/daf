@@ -16,27 +16,28 @@
  * is read from that file, as `node tools/daf.js tally --report` does.
  *
  * This is a thin wrapper: it fetches the comments with the GitHub CLI and hands
- * them to tools/lib/tally.js, the same arithmetic as `node tools/daf.js tally`,
- * with the same refusals: a record holding a closed report whose outcome cannot
- * be recomputed (the founding case) is not folded without --allow-undetermined,
- * as `close` and `ledger --write` do not fold it. An undetermined outcome for
- * the report under vote is printed, and `close` will not write it.
- * The tally is still written into the report and merged by a person.
+ * them to tools/lib/tally.js, the same arithmetic as `node tools/daf.js tally`.
+ * In the founding assembly (DAF-001 §4), the accounts that speak for a new
+ * participant come from the records the pull request adds: the working tree's
+ * own when it is the pull request, or --founding-units <dir> with --report. An
+ * undetermined outcome for the report under vote is printed, and `close` will
+ * not write it. The tally is still written into the report and merged by a
+ * person.
  *
  * Usage:
  *   node tools/tally.js <pr-number> [--cycle <YYYY-MM>] [--root <dir>]
- *                       [--report <file>] [--allow-undetermined]
+ *                       [--report <file>] [--founding-units <dir>]
  *
  * Requires: the GitHub CLI (`gh`), authenticated. No dependencies.
  */
 
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const { loadRecord, withReport } = require('./lib/record');
-const { computeTally, requireDetermined } = require('./lib/tally');
+const { loadRecord, loadUnitsDir, withReport } = require('./lib/record');
+const { computeTally } = require('./lib/tally');
 const { renderTally } = require('./lib/render');
 
-const USAGE = 'usage: node tools/tally.js <pr-number> [--cycle <YYYY-MM>] [--root <dir>] [--report <file>] [--allow-undetermined]';
+const USAGE = 'usage: node tools/tally.js <pr-number> [--cycle <YYYY-MM>] [--root <dir>] [--report <file>] [--founding-units <dir>]';
 
 function main(argv) {
   const args = argv.slice();
@@ -55,8 +56,7 @@ function main(argv) {
     take('--ledger-ref');
     process.stderr.write('note: --ledger-ref is ignored. Weights now come from the assemblies before the cycle under vote (DAF-001 §4.5), folded from the record in the working tree.\n');
   }
-  const allowUndetermined = args.includes('--allow-undetermined');
-  if (allowUndetermined) args.splice(args.indexOf('--allow-undetermined'), 1);
+  const unitsArg = take('--founding-units');
   const cycleArg = take('--cycle');
   const reportArg = take('--report');
   const root = path.resolve(take('--root') || path.resolve(__dirname, '..'));
@@ -101,11 +101,16 @@ function main(argv) {
 
     let record = loadRecord(root);
     if (!record.parameters) throw new Error('federation/parameters.yml is missing or invalid');
-    for (const w of requireDetermined(record, record.parameters, allowUndetermined, 'tally ' + cycle, cycle)) process.stderr.write('WARNING: ' + w + '\n');
     if (reportArg) record = withReport(record, path.resolve(reportArg), cycle);
     const report = record.assemblies.find((a) => a.cycle === cycle);
     if (report) for (const p of report.problems) process.stderr.write('WARNING: ' + p + '\n');
-    const t = computeTally({ record, cycle, comments, reviews, reviewComments, pr, head });
+    let foundingUnits;
+    if (unitsArg !== undefined) {
+      const u = loadUnitsDir(path.resolve(unitsArg));
+      for (const p of u.problems) process.stderr.write('WARNING: ' + p + ' (not used)\n');
+      foundingUnits = u.units;
+    }
+    const t = computeTally({ record, cycle, comments, reviews, reviewComments, pr, head, foundingUnits });
     if (t.outcome === 'undetermined') process.stderr.write('NOTE: the outcome is undetermined; `close` will not write it.\n');
     process.stdout.write(renderTally(t));
     return 0;

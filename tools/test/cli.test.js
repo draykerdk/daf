@@ -23,17 +23,12 @@ test('cli: ledger prints the real LEDGER.md unchanged', () => {
   assert.equal(r.out + '\n', read(ROOT, 'federation/LEDGER.md'));
 });
 
-test('cli: check passes on the basic fixture only with --allow-undetermined, and says what it cannot recompute', () => {
+test('cli: check passes on the basic fixture, whose founding assembly is recomputed by participant', () => {
   const dir = tmpCopy('basic');
-  const FOUNDING = 'federation/assemblies/2026-01.md: the outcome "passed" cannot be recomputed: no holder had weight before this assembly. DAF-000 and DAF-001 do not specify how the founding assembly is decided; this outcome cannot be recomputed from the record (DAF-000 §8)';
-  const strict = run(['check', '--root', dir]);
-  assert.equal(strict.code, 1);
-  assert.equal(strict.err, 'ERROR: ' + FOUNDING, 'exactly one error, the founding outcome');
-  assert.match(strict.out, /0 warnings\./);
-  const r = run(['check', '--root', dir, '--allow-undetermined']);
+  const r = run(['check', '--root', dir]);
   assert.equal(r.code, 0, r.err);
-  assert.equal(r.err, 'WARNING: ' + FOUNDING, 'the flag downgrades exactly this error to a warning');
-  assert.match(r.out, /3 unit records, 3 assembly reports, 1 request; 20 events, head 65c6a3a9446a\. 0 errors, 1 warning\./);
+  assert.equal(r.err, '', 'no error and no warning');
+  assert.match(r.out, /3 unit records, 3 assembly reports, 1 request; 19 events, head 7d0c81f251d8\. 0 errors, 0 warnings\./);
 });
 
 test('cli: check fails on planted errors', () => {
@@ -42,7 +37,7 @@ test('cli: check fails on planted errors', () => {
     const text = read(dir, rel);
     assert.ok(text.includes(from), 'fixture contains ' + from);
     write(dir, rel, text.replace(from, to));
-    return run(['check', '--root', dir, '--allow-undetermined']);
+    return run(['check', '--root', dir]);
   };
   const placeholder = plant('federation/assemblies/2026-03.md', '| --- | --- | --- | --- | --- |\n', '| --- | --- | --- | --- | --- |\n| `unit-id` | What was finished | #issue | link to the merged result | 1 |\n');
   assert.equal(placeholder.code, 1);
@@ -75,7 +70,7 @@ test('cli: check fails on planted errors', () => {
   const unitId = (() => {
     const dir = tmpCopy('basic');
     write(dir, 'federation/units/example-unit.yml', read(ROOT, 'federation/units/TEMPLATE.yml'));
-    return run(['check', '--root', dir, '--allow-undetermined']);
+    return run(['check', '--root', dir]);
   })();
   assert.match(unitId.err, /example-unit\.yml: the unit id is still the template placeholder "example-unit"/);
 });
@@ -83,10 +78,10 @@ test('cli: check fails on planted errors', () => {
 test('cli: a pending report fails on master and passes with --allow-pending', () => {
   const dir = tmpCopy('basic');
   write(dir, 'federation/assemblies/2026-04.md', pendingReport());
-  const master = run(['check', '--root', dir, '--allow-undetermined']);
+  const master = run(['check', '--root', dir]);
   assert.equal(master.code, 1);
   assert.match(master.err, /2026-04\.md: the outcome is pending; a report on master must say passed or failed/);
-  const pr = run(['check', '--root', dir, '--allow-pending', '--allow-undetermined']);
+  const pr = run(['check', '--root', dir, '--allow-pending']);
   assert.equal(pr.code, 0, pr.err);
   assert.match(pr.out, /4 assembly reports \(1 pending\)/);
 });
@@ -103,7 +98,7 @@ test('cli: check --base warns when a past assembly was edited', () => {
   write(dir, 'federation/assemblies/2026-04.md', pendingReport());
   git('add', '-A');
   git('commit', '-q', '-m', 'edit');
-  const r = run(['check', '--root', dir, '--base', base, '--allow-pending', '--allow-undetermined']);
+  const r = run(['check', '--root', dir, '--base', base, '--allow-pending']);
   assert.equal(r.code, 0, r.err);
   assert.match(r.err, /WARNING: federation\/assemblies\/2026-02\.md: M since [0-9a-f]+\. federation\/README\.md: "a mistake in a past assembly is corrected by a later one that says what was wrong, not by editing the original"\./);
   assert.doesNotMatch(r.err, /2026-04\.md: A/);
@@ -146,7 +141,7 @@ test('cli: draft builds the report from the cycle and claim issues', () => {
   assert.match(aspen, /speaks_for:\n {4}- https:\/\/github\.com\/example-aspen-gh\n/);
   // "I already have a record" for a holder that has one: no new record.
   assert.doesNotMatch(md, /\| `example-river` \| (participant|unit) \|/);
-  const check = run(['check', '--root', dir, '--allow-pending', '--allow-undetermined']);
+  const check = run(['check', '--root', dir, '--allow-pending']);
   assert.equal(check.code, 0, check.err);
   assert.match(check.err, /TODO\(person\) markers left/);
   const again = run(['draft', '2026-04', '--root', dir, '--issues', ISSUES]);
@@ -191,11 +186,7 @@ test('cli: close writes the tally, joined and LEDGER, and nothing else', () => {
     comment(1, 'example-delta-gh', IN, vote('for', 'example-delta')),
     comment(2, 'example-river-gh', IN, vote('against', 'example-river'))
   ], [comment(3, 'example-willow-gh', IN, vote('for', 'example-willow'))]]));
-  const refused = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base]);
-  assert.equal(refused.code, 1, 'close folds the founding assembly, so it needs the flag');
-  assert.match(refused.err, /refusing to close 2026-04: federation\/assemblies\/2026-01\.md: the outcome "passed" stands, but no holder had weight before this assembly/);
-  assert.equal(read(dir, report), before);
-  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base, '--allow-undetermined']);
+  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base]);
   assert.equal(r.code, 0, r.err);
   assert.match(r.out, /rewrote federation\/assemblies\/2026-04\.md/);
   assert.match(r.out, /set joined: 2026-04 in federation\/units\/example-willow\.yml/);
@@ -206,26 +197,65 @@ test('cli: close writes the tally, joined and LEDGER, and nothing else', () => {
   assert.equal(outside(after), outside(before));
   assert.equal(read(dir, 'federation/units/example-willow.yml'), unitBefore.replace('joined: null', 'joined: 2026-04'));
   assert.match(read(dir, 'federation/LEDGER.md'), /\*\*As of:\*\* assembly 2026-04\./);
-  const check = run(['check', '--root', dir, '--allow-undetermined']);
+  const check = run(['check', '--root', dir]);
   assert.equal(check.code, 0, check.err);
-  const twice = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base, '--allow-undetermined']);
+  const twice = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base]);
   assert.equal(twice.code, 1);
   assert.match(twice.err, /already closed/);
 });
 
-test('cli: close refuses an undetermined (founding) outcome', () => {
+/** A founding pull request on an empty default branch: the report and the records it adds. */
+function foundingCheckout(holders) {
   const dir = tmpCopy(null);
   write(dir, 'federation/parameters.yml', read(FIX, 'basic/federation/parameters.yml'));
   write(dir, 'federation/LEDGER.md', read(ROOT, 'federation/LEDGER.md'));
-  write(dir, 'federation/units/example-river.yml', read(FIX, 'basic/federation/units/example-river.yml'));
+  for (const f of ['daf-000-federation-constitution.md', 'daf-001-phase-0-github-federation.md']) write(dir, 'dafp/' + f, read(FIX, 'basic/dafp/' + f));
   const base = commitAll(dir);
-  write(dir, 'federation/assemblies/2026-04.md', pendingReport({ newRecord: 'example-river' }));
+  const river = read(FIX, 'basic/federation/units/example-river.yml');
+  const unitFile = (id, kind) => river.replace(/example-river/g, id).replace('kind: participant', 'kind: ' + kind).replace(/joined: \S+/, 'joined: null');
+  const RIVER_ROW = '| `example-river` | A fictional delivery under vote | #41 | https://github.com/example-org/example-repo/pull/10 | 1 |';
+  const rows = holders.map(([id], i) => '| `' + id + '` | A fictional founding delivery | #' + (60 + i) + ' | https://github.com/example-org/example-repo/pull/' + (60 + i) + ' | 1 |');
+  const records = holders.map(([id, kind], i) => '| `' + id + '` | ' + kind + ' | https://github.com/example-org/example-repo/pull/' + (60 + i) + ' |');
+  for (const [id, kind] of holders) write(dir, 'federation/units/' + id + '.yml', unitFile(id, kind));
+  write(dir, 'federation/assemblies/2026-04.md', pendingReport().replace(RIVER_ROW, rows.join('\n'))
+    .replace('| Holder | Kind | First delivery |\n| --- | --- | --- |\n', '| Holder | Kind | First delivery |\n| --- | --- | --- |\n' + records.join('\n') + '\n'));
+  return { dir, base };
+}
+
+test('cli: close decides the founding assembly with one vote for each participant with a delivery', () => {
+  const { dir, base } = foundingCheckout([['example-river', 'participant'], ['example-gamma', 'participant'], ['example-delta', 'unit']]);
   const before = read(dir, 'federation/assemblies/2026-04.md');
   const comments = path.join(dir, 'c.json');
-  fs.writeFileSync(comments, JSON.stringify([comment(1, 'example-river-gh', IN, vote('for', 'example-river'))]));
+  fs.writeFileSync(comments, JSON.stringify([
+    comment(1, 'example-river-gh', IN, vote('for', 'example-river')),
+    comment(2, 'example-delta-gh', IN, vote('against', 'example-delta'))
+  ]));
+  const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base]);
+  assert.equal(r.code, 0, r.err);
+  assert.match(r.out, /Outcome: passed\./);
+  const after = read(dir, 'federation/assemblies/2026-04.md');
+  assert.match(after, /\n## The vote\n\nFounding assembly: each participant with a delivery in this report counts once\.\n\n\| \| \|\n\| --- \| --- \|\n\| Participants with a delivery \| 2 \|\n\| Votes cast \| 1 \|\n\| Participation \| 50% \(quorum 30%\) \|\n\| For \/ against \/ abstain \| 1 \/ 0 \/ 0 \|\n\| \*\*Outcome\*\* \| \*\*passed\*\* \|\n/);
+  assert.match(after, /\| Holder \| Vote \| Weight \|\n\| --- \| --- \| --- \|\n\| `example-river` \| for \| 1 \|\n\n/, 'the unit example-delta does not vote in the founding assembly');
+  assert.doesNotMatch(after, /Weight from the ledger/);
+  const outside = (x) => x.split('\n').filter((l) => !/^(\| (Active points|Participants with a delivery|Votes cast|Participation|For \/|\*\*Outcome|`example-river` \| for)|Weight from the ledger|Founding assembly: )/.test(l)).join('\n');
+  assert.equal(outside(after), outside(before));
+  for (const id of ['example-river', 'example-gamma', 'example-delta']) assert.match(read(dir, 'federation/units/' + id + '.yml'), /joined: 2026-04/, id);
+  assert.match(read(dir, 'federation/LEDGER.md'), /\| `example-delta` \| unit \| 1 \| yes \| 2026-04 \|\n\| `example-gamma` \| participant \| 1 \| yes \| 2026-04 \|\n\| `example-river` \| participant \| 1 \| yes \| 2026-04 \|/);
+  const check = run(['check', '--root', dir]);
+  assert.equal(check.code, 0, check.err);
+  assert.equal(check.err, '');
+  // The next assembly is weighed by points again.
+  assert.match(check.out, /0 errors, 0 warnings\./);
+});
+
+test('cli: close refuses a founding assembly with no participant delivery', () => {
+  const { dir, base } = foundingCheckout([['example-delta', 'unit']]);
+  const before = read(dir, 'federation/assemblies/2026-04.md');
+  const comments = path.join(dir, 'c.json');
+  fs.writeFileSync(comments, JSON.stringify([comment(1, 'example-delta-gh', IN, vote('for', 'example-delta'))]));
   const r = run(['close', '2026-04', '--root', dir, '--comments', comments, '--base-ref', base]);
   assert.equal(r.code, 1);
-  assert.match(r.err, /refusing to close 2026-04: the outcome is undetermined\. No holder had weight before this assembly/);
+  assert.match(r.err, /refusing to close 2026-04: the outcome is undetermined\. No assembly has passed before this one, so it is the founding assembly: each participant with a delivery in this report counts once \(DAF-001 §4\)\. No participant has a delivery in this founding assembly/);
   assert.equal(read(dir, 'federation/assemblies/2026-04.md'), before);
   const t = run(['tally', '--root', dir, '--cycle', '2026-04', '--comments', comments, '--json']);
   assert.equal(t.code, 0, t.err);
@@ -237,12 +267,12 @@ test('cli: tally prints the vote block from a slurped comments file', () => {
   write(dir, 'federation/assemblies/2026-04.md', pendingReport());
   const comments = path.join(dir, 'c.json');
   fs.writeFileSync(comments, JSON.stringify([[comment(1, 'example-delta-gh', IN, vote('for', 'example-delta'))], []]));
-  const r = run(['tally', '--root', dir, '--cycle', '2026-04', '--comments', comments, '--pr', '42', '--head', '0123456789abcdef', '--allow-undetermined']);
+  const r = run(['tally', '--root', dir, '--cycle', '2026-04', '--comments', comments, '--pr', '42', '--head', '0123456789abcdef']);
   assert.equal(r.code, 0, r.err);
   assert.match(r.out, /^## The vote\n/);
   assert.match(r.out, /\| \*\*Outcome\*\* \| \*\*passed\*\* \|/);
   assert.match(r.out, /on PR #42 at head 0123456/);
-  const missing = run(['tally', '--root', dir, '--cycle', '2026-04', '--allow-undetermined']);
+  const missing = run(['tally', '--root', dir, '--cycle', '2026-04']);
   assert.equal(missing.code, 1);
   assert.match(missing.err, /--comments <file> is required/);
 });
@@ -250,11 +280,7 @@ test('cli: tally prints the vote block from a slurped comments file', () => {
 test('cli: snapshot keeps the site keys and adds the new ones', () => {
   const dir = tmpCopy('basic');
   const out = path.join(dir, 'data');
-  const refused = run(['snapshot', '--root', dir, '--out', out, '--issues', ISSUES]);
-  assert.equal(refused.code, 1);
-  assert.match(refused.err, /refusing to build the snapshot: federation\/assemblies\/2026-01\.md/);
-  assert.ok(!fs.existsSync(out), 'nothing is written');
-  const r = run(['snapshot', '--root', dir, '--out', out, '--issues', ISSUES, '--commit', 'abc1234', '--allow-undetermined']);
+  const r = run(['snapshot', '--root', dir, '--out', out, '--issues', ISSUES, '--commit', 'abc1234']);
   assert.equal(r.code, 0, r.err);
   const s = JSON.parse(fs.readFileSync(path.join(out, 'federation.json'), 'utf8'));
   assert.deepEqual(Object.keys(s), ['generated', 'units', 'assemblies', 'requests', 'issues', 'source_commit', 'parameters', 'ledger', 'events']);
@@ -265,7 +291,7 @@ test('cli: snapshot keeps the site keys and adds the new ones', () => {
   assert.deepEqual(s.issues.map((i) => [i.num, i.pr]), [[118, false], [117, false], [116, true], [115, false], [114, false], [113, false], [111, false], [110, false]]);
   assert.deepEqual(Object.keys(s.issues[0]), ['num', 'title', 'url', 'pr']);
   assert.equal(s.source_commit, 'abc1234');
-  assert.equal(s.events.head, '65c6a3a9446a70174761d475f3ef0f7ec0ce94077c20c2b5758217959e73cbd7');
+  assert.equal(s.events.head, '7d0c81f251d8cd8ec9687b17781dc89a5c685d01e964d809ef7a187a91019af7');
   assert.equal(s.ledger.totals.points, 6);
   assert.ok(fs.existsSync(path.join(out, 'events.json')) && fs.existsSync(path.join(out, 'events.log')));
   const empty = run(['snapshot', '--root', ROOT, '--out', path.join(dir, 'real')]);
@@ -336,7 +362,7 @@ test('cli: site-4 the snapshot keeps every open [Cycle], [Claim], [Request] and 
   const file = path.join(dir, 'issues.json');
   fs.writeFileSync(file, JSON.stringify([page1, page2]));
   const out = path.join(dir, 'data');
-  const r = run(['snapshot', '--root', dir, '--out', out, '--issues', file, '--allow-undetermined']);
+  const r = run(['snapshot', '--root', dir, '--out', out, '--issues', file]);
   assert.equal(r.code, 0, r.err);
   const nums = JSON.parse(fs.readFileSync(path.join(out, 'federation.json'), 'utf8')).issues.map((i) => i.num);
   const rest = [304, 303, 302, 301, 300];
@@ -355,9 +381,9 @@ test('cli: 13 tally --report reads the record from the root and only the report 
   write(head, 'report.md', pendingReport());
   const comments = path.join(dir, 'c.json');
   fs.writeFileSync(comments, JSON.stringify([[comment(1, 'example-delta-gh', IN, vote('for', 'example-delta'))]]));
-  const local = run(['tally', '--root', dir, '--cycle', '2026-04', '--comments', comments, '--allow-undetermined']);
+  const local = run(['tally', '--root', dir, '--cycle', '2026-04', '--comments', comments]);
   assert.match(local.out, /not counted: no window in the report/);
-  const r = run(['tally', '--root', dir, '--cycle', '2026-04', '--report', path.join(head, 'report.md'), '--comments', comments, '--allow-undetermined', '--json']);
+  const r = run(['tally', '--root', dir, '--cycle', '2026-04', '--report', path.join(head, 'report.md'), '--comments', comments, '--json']);
   assert.equal(r.code, 0, r.err);
   const t = JSON.parse(r.out);
   assert.deepEqual([t.outcome, t.base, t.cast], ['passed', 6, 4]);
@@ -365,13 +391,13 @@ test('cli: 13 tally --report reads the record from the root and only the report 
   // --record still works as before, and --report reads the record it names.
   const other = tmpCopy('basic');
   write(other, 'federation/assemblies/2026-04.md', pendingReport());
-  assert.equal(JSON.parse(run(['tally', '--record', other, '--cycle', '2026-04', '--comments', comments, '--allow-undetermined', '--json']).out).outcome, 'passed');
-  assert.equal(JSON.parse(run(['tally', '--record', dir, '--report', path.join(head, 'report.md'), '--cycle', '2026-04', '--comments', comments, '--allow-undetermined', '--json']).out).outcome, 'passed');
+  assert.equal(JSON.parse(run(['tally', '--record', other, '--cycle', '2026-04', '--comments', comments, '--json']).out).outcome, 'passed');
+  assert.equal(JSON.parse(run(['tally', '--record', dir, '--report', path.join(head, 'report.md'), '--cycle', '2026-04', '--comments', comments, '--json']).out).outcome, 'passed');
   // A report whose title names another cycle is a problem, printed as a warning.
   write(head, 'other.md', pendingReport({ cycle: '2026-05' }));
-  const wrong = run(['tally', '--root', dir, '--cycle', '2026-04', '--report', path.join(head, 'other.md'), '--comments', comments, '--allow-undetermined']);
+  const wrong = run(['tally', '--root', dir, '--cycle', '2026-04', '--report', path.join(head, 'other.md'), '--comments', comments]);
   assert.match(wrong.err, /WARNING: federation\/assemblies\/2026-04\.md: the title says assembly 2026-05 but the report is read as 2026-04/);
-  const missing = run(['tally', '--root', dir, '--cycle', '2026-04', '--report', path.join(head, 'nope.md'), '--comments', comments, '--allow-undetermined']);
+  const missing = run(['tally', '--root', dir, '--cycle', '2026-04', '--report', path.join(head, 'nope.md'), '--comments', comments]);
   assert.equal(missing.code, 1);
   assert.match(missing.err, /cannot read the report/);
   assert.equal(run(['tally', '--root', dir, '--cycle', '2026-04', '--report', path.join(head, 'report.md'), '--master-record', dir, '--comments', comments]).code, 1);
@@ -389,8 +415,8 @@ function checkout(federationFrom) {
 }
 
 /** The Count step of .github/workflows/federation-tally.yml, verbatim but for the paths. */
-function countStep(cwd, temp, extra) {
-  return spawnSync(process.execPath, ['tools/daf.js', 'tally', '--cycle', '2026-04', '--report', path.join(temp, 'report.md'),
+function countStep(cwd, temp, extra, report) {
+  return spawnSync(process.execPath, ['tools/daf.js', 'tally', '--cycle', '2026-04', '--report', path.join(temp, report || 'report.md'),
     '--comments', path.join(temp, 'comments.json'),
     '--reviews', path.join(temp, 'reviews.json'),
     '--review-comments', path.join(temp, 'review-comments.json'),
@@ -409,27 +435,37 @@ test('cli: 13 the tally workflow invocation reads the default branch record and 
   write(temp, 'report.md', pendingReport({ newRecord: 'example-gamma' }));
 
   // The real default branch today: an empty record. The first report under
-  // vote is the founding case; the tally prints it and exits 0.
+  // vote is the founding assembly (DAF-001 §4), and its participants' records
+  // come with it: the workflow writes the unit files the pull request adds to
+  // a directory and passes it as --founding-units.
+  const RIVER_ROW = '| `example-river` | A fictional delivery under vote | #41 | https://github.com/example-org/example-repo/pull/10 | 1 |';
+  const GAMMA_ROW = '| `example-gamma` | A fictional founding delivery | #43 | https://github.com/example-org/example-repo/pull/15 | 1 |';
+  write(temp, 'founding.md', pendingReport({ newRecord: 'example-gamma' }).replace(RIVER_ROW, RIVER_ROW + '\n' + GAMMA_ROW)
+    .replace('| `example-gamma` | participant |', '| `example-river` | participant | https://github.com/example-org/example-repo/pull/10 |\n| `example-gamma` | participant |'));
+  const river = read(FIX, 'basic/federation/units/example-river.yml').replace(/joined: \S+/, 'joined: null');
+  write(temp, 'units/example-river.yml', river);
+  write(temp, 'units/example-gamma.yml', river.replace(/example-river/g, 'example-gamma'));
   const empty = checkout(path.join(ROOT, 'federation'));
-  write(empty, 'federation/units/example-river.yml', read(FIX, 'basic/federation/units/example-river.yml'));
-  const first = countStep(empty, temp);
+  const blind = countStep(empty, temp, [], 'founding.md');
+  assert.equal(blind.status, 0, blind.stderr);
+  assert.match(blind.stdout, /^## The vote\n\nFounding assembly: each participant with a delivery in this report counts once\.\n/);
+  assert.match(blind.stdout, /\| \*\*Outcome\*\* \| \*\*undetermined\*\* \|/);
+  assert.match(blind.stdout, /The record of `example-gamma`, `example-river` is not in this count\. In the founding assembly the accounts that may vote for a new participant come from the record the pull request adds \(--founding-units\)/);
+  assert.match(blind.stderr, /NOTE: the outcome is undetermined; `close` will not write it\./);
+  const first = countStep(empty, temp, ['--founding-units', path.join(temp, 'units')], 'founding.md');
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /^## The vote\n/);
-  assert.match(first.stdout, /\| \*\*Outcome\*\* \| \*\*undetermined\*\* \|/);
-  assert.match(first.stdout, /\| `example-river` \| for \| 0 \| — \|/);
-  assert.match(first.stdout, /`example-gamma` by `example-gamma-gh`, `for`: the record of `example-gamma` is not on master yet; a holder exists from the assembly that accepts its record/,
-    'a record only in the pull request does not speak, and the reason says why');
-  assert.match(first.stdout, /Computed from 5 comments on PR #42 at head 0123456, window from 2026-04-01 00:00 to 2026-04-08 00:00 UTC/);
-  assert.match(first.stderr, /NOTE: the outcome is undetermined; `close` will not write it\./);
+  assert.match(first.stdout, /\| Participants with a delivery \| 2 \|\n\| Votes cast \| 2 \|\n\| Participation \| 100% \(quorum 30%\) \|\n\| For \/ against \/ abstain \| 2 \/ 0 \/ 0 \|\n\| \*\*Outcome\*\* \| \*\*passed\*\* \|/);
+  assert.match(first.stdout, /\| `example-gamma` \| for \| 1 \| 50% \|\n\| `example-river` \| for \| 1 \| 50% \|/);
+  assert.match(first.stdout, /`example-delta` by `example-delta-gh`, `for`: `example-delta` is not a participant with a delivery in this founding assembly; only those vote in it, once each \(DAF-001 §4\)/);
+  assert.match(first.stdout, /Computed from 5 comments on PR #42 at head 0123456, window from 2026-04-01 00:00 to 2026-04-08 00:00 UTC \(a vote at or after the close is not counted\), one vote for each participant with a delivery in the report of 2026-04\./);
+  assert.doesNotMatch(first.stderr, /undetermined/);
   assert.ok(!fs.existsSync(path.join(empty, 'federation/assemblies/2026-04.md')), 'the report is read in memory only');
+  assert.ok(!fs.existsSync(path.join(empty, 'federation/units/example-gamma.yml')), 'the added records are read in memory only');
 
-  // A default branch with history: weights and speakers come from it. Its
-  // founding report needs the same flag as every other command that folds it.
+  // A default branch with history: weights and speakers come from it, and the
+  // added records are not read, since this is not the founding assembly.
   const basic = checkout(path.join(FIX, 'basic/federation'));
-  const refused = countStep(basic, temp);
-  assert.equal(refused.status, 1);
-  assert.match(refused.stderr, /refusing to tally 2026-04: federation\/assemblies\/2026-01\.md/);
-  const r = countStep(basic, temp, ['--allow-undetermined']);
+  const r = countStep(basic, temp, ['--founding-units', path.join(temp, 'units')]);
   assert.equal(r.status, 0, r.stderr);
   assert.match(r.stdout, /\| Active points \| 6 \|\n\| Votes cast \| 5 \|\n\| Participation \| 83\.3% \(quorum 30%\) \|\n\| For \/ against \/ abstain \| 5 \/ 0 \/ 0 \|\n\| \*\*Outcome\*\* \| \*\*passed\*\* \|/);
   assert.match(r.stdout, /`example-delta` by `example-mallory-gh`, `against`: the author is not listed in speaks_for of `example-delta`/);
@@ -437,9 +473,9 @@ test('cli: 13 the tally workflow invocation reads the default branch record and 
   assert.match(r.stdout, /`example-delta` by `example-delta-gh`, `against`: posted as a line comment on the diff/);
 });
 
-test('cli: F2 the tally.js wrapper takes --report and --allow-undetermined', () => {
+test('cli: F2 the tally.js wrapper takes --report and --founding-units', () => {
   const help = spawnSync(process.execPath, [path.join(ROOT, 'tools/tally.js'), '--help'], { encoding: 'utf8' });
-  assert.match(help.stdout, /\[--report <file>\] \[--allow-undetermined\]/);
+  assert.match(help.stdout, /\[--report <file>\] \[--founding-units <dir>\]/);
   const badCycle = spawnSync(process.execPath, [path.join(ROOT, 'tools/tally.js'), '42', '--cycle', '2026-13'], { encoding: 'utf8' });
   assert.equal(badCycle.status, 1);
   assert.match(badCycle.stderr, /^usage: node tools\/tally\.js/);

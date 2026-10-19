@@ -381,7 +381,7 @@ async function loadWith(fetchImpl) {
   // DAF-C2: the browser count is an unverified reading, never an outcome.
   const TALLY_WF = 'https://github.com/draykerdk/daf/actions/workflows/federation-tally.yml';
   const UNVERIFIED = 'This reading does not check the window or who may speak for each holder. The count that does is the <a href="{{ tallyWorkflowUrl }}" target="_blank" rel="noreferrer">Federation tally workflow</a>.';
-  const FOUNDING = 'No holder had weight before this assembly. DAF-000 and DAF-001 do not specify how the founding assembly is decided; the outcome cannot be computed.';
+  const FOUNDING = 'No holder had weight before this assembly, so it is the founding assembly: each participant with a delivery in its report counts once (DAF-001 §4). This page does not read the report, so it does not count it; the Federation tally workflow does.';
   check(html.includes(UNVERIFIED) && safeHref(TALLY_WF) === TALLY_WF, 'The reading names what it does not check and links to the Federation tally workflow.');
   const countWith = async ({ title, prStatus = 200, comments, ledger }) => {
     const urls = [];
@@ -399,11 +399,12 @@ async function loadWith(fetchImpl) {
   const noOutcome = (view) => Object.keys(view).filter((k) => k.startsWith('tally'))
     .every((k) => typeof view[k] !== 'string' || !/\b(PASSED|FAILED)\b/i.test(view[k]));
 
-  // The founding case: no holder had weight before, so the outcome cannot be computed.
+  // The founding assembly: no holder had weight before, and this page does not
+  // read the report's deliveries, so it names the rule and counts nothing.
   const founding = await countWith({ title: 'Assembly 2026-10', ledger: [],
     comments: [vote('VOTE: for\nAS: example-delta', 'someone')] });
-  check(founding.view.tallyOutcome === 'UNDETERMINED' && founding.view.tallyWhy === FOUNDING && founding.view.tallyHasWhy,
-    'With no weight before the assembly, the reading is undetermined, with the founding sentence.');
+  check(founding.view.tallyOutcome === 'FOUNDING ASSEMBLY' && founding.view.tallyWhy === FOUNDING && founding.view.tallyHasWhy,
+    'With no weight before the assembly, the reading names the founding assembly and its rule.');
   check(noOutcome(founding.view) && !founding.view.tallyNotAssembly, 'The founding case states no outcome.');
   check(founding.view.tallyWorkflowUrl === TALLY_WF, 'The founding case links to the workflow that counts.');
   check(founding.urls.filter((u) => u === 'https://api.github.com/repos/draykerdk/daf/pulls/30').length === 1,
@@ -480,14 +481,16 @@ async function loadWith(fetchImpl) {
     'Below 720px the phase map and the example deliveries stack, and the phase map header is hidden.');
   check(!/style="[^"]*grid-template-columns:minmax\(110px,(1fr|0\.7fr)\)/.test(html), 'The two wide grids are no longer set inline.');
 
-  // The founding caveat: beside every invitation to open or run the first
-  // assembly, in the words of federation/README.md, only while none is held.
-  const CAVEAT = 'The first assembly cannot be recorded yet: DAF-000 and DAF-001 do not say how a founding assembly is decided.';
+  // The founding line: beside every invitation to open or run the first
+  // assembly, in the words of DAF-001 §4 and federation/README.md, only while
+  // none is held.
+  const CAVEAT = 'In the first assembly, each participant with a delivery in its report counts once, as DAF-001 §4 says.';
   const README_URL = 'https://github.com/draykerdk/daf/blob/master/federation/README.md#running-an-assembly';
   const fedReadme = fs.readFileSync(path.join(root, 'federation', 'README.md'), 'utf8');
-  check(FOUNDING_LINE === CAVEAT && FOUNDING_URL === README_URL && safeHref(FOUNDING_URL) === FOUNDING_URL, 'The founding caveat and its link are the documented ones.');
-  check(/^## Running an assembly$/m.test(fedReadme) && fedReadme.includes('The first assembly cannot be recorded yet.')
-    && fedReadme.includes('DAF-000 and DAF-001 do not say how a founding assembly is decided'), 'The caveat repeats federation/README.md, and its anchor exists.');
+  const daf001 = fs.readFileSync(path.join(root, 'dafp', 'daf-001-phase-0-github-federation.md'), 'utf8');
+  check(FOUNDING_LINE === CAVEAT && FOUNDING_URL === README_URL && safeHref(FOUNDING_URL) === FOUNDING_URL, 'The founding line and its link are the documented ones.');
+  check(/^## Running an assembly$/m.test(fedReadme) && fedReadme.includes('In the first assembly, each participant with a delivery in its report counts once')
+    && daf001.includes('In the founding assembly only, each participant with a delivery already in the record counts once'), 'The founding line repeats federation/README.md and DAF-001 §4, and its anchor exists.');
   const IF_FOUNDING = '<sc-if value="{{ foundingOpen }}" hint-placeholder-val="{{ true }}">\n';
   const CAVEAT_P = '{{ foundingLine }} <a href="{{ foundingUrl }}" target="_blank" rel="noreferrer">Running an assembly →</a></p>';
   check(html.split(IF_FOUNDING).length === 4 && html.split(CAVEAT_P).length === 4, 'Three founding caveats are gated on foundingOpen.');
@@ -510,21 +513,16 @@ async function loadWith(fetchImpl) {
   caveatOff(used.renderVals(), 'Once an assembly is held');
   caveatOff(heldNone.renderVals(), 'Once an assembly is held with no points');
 
-  // #/open: the founding assembly is one of the things the constitution does not settle.
+  // #/open: what DAF-000 §9 leaves unsettled. The founding assembly is no
+  // longer among them: DAF-001 §4 decides it.
   const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
   const openCount = /What follows is the whole of it: (\w+) things the constitution does not settle,/.exec(html);
-  check(openCount && WORDS.indexOf(openCount[1]) === DAF_OPEN.length && DAF_OPEN.length === 5, '#/open counts the things it lists as unsettled.');
+  check(openCount && WORDS.indexOf(openCount[1]) === DAF_OPEN.length && DAF_OPEN.length === 4, '#/open counts the things it lists as unsettled.');
   check(html.includes('<sc-for list="{{ dafOpen }}" as="o" hint-placeholder-count="' + DAF_OPEN.length + '">'), 'The #/open placeholder count follows the list.');
   const openView = idleView.dafOpen;
-  const founding0 = openView[0];
-  check(founding0.t === 'The founding assembly' && founding0.span === '1 / -1' && openView.slice(1).every((o) => o.span === 'auto')
-    && html.includes('style="grid-column:{{ o.span }};'), 'The founding assembly leads #/open across the row, and the other four fill theirs.');
-  check(founding0.d.includes('DAF-000 and DAF-001 do not say how a founding assembly is decided'), 'The #/open item repeats the documented gap.');
-  const body0 = decodeURIComponent(founding0.href.split('&body=')[1] || '');
-  check(founding0.href.startsWith('https://github.com/draykerdk/daf/issues/new?title=') && body0.includes(README_URL) && !body0.includes('DAF-000 §9'),
-    'The founding issue cites federation/README.md, not DAF-000 §9, which does not list it.');
-  check(openView.slice(1).every((o) => decodeURIComponent(o.href.split('&body=')[1] || '').startsWith('DAF-000 §9 lists this as unsettled.')),
-    'The other four still cite DAF-000 §9.');
+  check(openView.every((o) => o.span === 'auto') && !openView.some((o) => /founding assembly/i.test(o.t + o.d)), 'The founding assembly is not listed as unsettled.');
+  check(openView.every((o) => decodeURIComponent(o.href.split('&body=')[1] || '').startsWith('DAF-000 §9 lists this as unsettled.')),
+    'Each item cites DAF-000 §9.');
 
   // DAF-001 §4 has no subsections, so the site cites §4.
   check(!/DAF-001 §4\.2/.test(html) && html.includes("'Contesting this claim — DAF-000 §3.1 / DAF-001 §4.'"), 'The site cites DAF-001 §4, not §4.2.');

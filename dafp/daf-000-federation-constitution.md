@@ -15,7 +15,7 @@ The rules below are substrate-independent: they say what has to be true, not whi
 
 The federation is an autonomous, distributed federation of autonomous units: the groups and organizations of people working on different questions and projects in Drayker. It is our way of implementing, now, a basic and primitive notion of what [PAP](https://pap.drayker.org) will be, and of testing its dynamics as the very way Drayker is built. It is a transitional layer where those units can test cooperation on Drayker's main projects without being absorbed into one organization. It has no head office and no staff. Within its bounded scope it may record shared resources, recognize delivered work, and decide what it supports.
 
-Useful functions are expected to migrate into PAP, member governance and specialized councils as those layers mature. The federation may become progressively thinner or functionally dissolve; institutional survival is not one of its purposes.
+Useful functions are expected to migrate into PAP, member governance and member councils formed for each question as those layers mature. The federation may become progressively thinner or functionally dissolve; institutional survival is not one of its purposes.
 
 Voting is transitional. It holds only until the federation can reproduce and test what version 1.0 is designed around: contextual weighing by Dk Global, justified vetoes weighed by their grounds rather than counted, and member councils formed for each question. Each of these mechanisms that is reproduced and tested replaces part of the vote.
 

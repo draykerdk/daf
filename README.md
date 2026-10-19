@@ -14,7 +14,7 @@ A group could propose a shared activity, document its resource commitments and r
 
 DAF is implemented early and kept simple inside that direction: a way to make decisions and resource rules inspectable before the durable environment exists.
 
-DAF is not Drayker's final constitution and is not the permanent reason the system has no head office. Functions that prove useful here are expected to migrate into [PAP](https://pap.drayker.org), member governance and specialized councils. DAF may therefore become progressively thinner or functionally dissolve rather than survive for its own sake.
+DAF is not Drayker's final constitution and is not the permanent reason the system has no head office. Functions that prove useful here are expected to migrate into [PAP](https://pap.drayker.org), member governance and member councils formed for each question. DAF may therefore become progressively thinner or functionally dissolve rather than survive for its own sake.
 
 If DAF reaches a phase that experiments with units of account, **ICP is only a probable provisional substrate**, not a final dependency or the destination of Drayker's infrastructure. That phase is meant to help build and test Drayker's own infrastructure and system inside DAF. When PAP exists at the required maturity, DAF's useful functions and that transitional infrastructure are expected to be absorbed into PAP; DAF dissolves into the durable environment rather than remaining a parallel institution.
 
@@ -32,7 +32,7 @@ The mechanics are specified in [DAF-000](./dafp/daf-000-federation-constitution.
 
 ## How resources work
 
-The initial federation is funded by grants and side projects. **All support requests must be made in situations where there are no other alternatives**. Resource efficiency matters here, and the major projects are the priority.
+The initial federation is funded by grants, donations, and side projects. **All support requests must be made in situations where there are no other alternatives**. Resource efficiency matters here, and the major projects are the priority.
 
 That rule is published on purpose. A federation that treats its shared resources as a first resort stops being able to fund anything that matters.
 
@@ -61,7 +61,7 @@ The record itself lives in [`federation/`](./federation): unit records, assembly
 
 DAF is implemented now on GitHub (Phase 0): its rules, instruments and public record exist. The point mechanics and the voting procedure are specified as drafts open to argument. **No unit has been recorded and no assembly has been held yet.** No points have been issued, and there is no deployed contract. The record is first used at the first assembly that records a real delivery.
 
-Several things are still unspecified on purpose. The substrate beyond Phase 0 was identified as **ICP** (Internet Computer Protocol), but no migration has occurred. The authority of councils, the migration of useful DAF functions into PAP and member governance, and the limits of federative points remain open. Federative points should not be converted wholesale into [`uid`](https://uid.drayker.org) reputation; at most, verified DAF history may become one contextual input among several. These questions are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle).
+Several things are still unspecified on purpose. The substrate beyond Phase 0 was identified as **ICP** (Internet Computer Protocol), but no migration has occurred. The authority of councils, the migration of useful DAF functions into PAP and member governance, and the limits of federative points remain open. Federative points should not be converted wholesale into [contextual reputation](https://dknowledge.drayker.org/papers/main-projects/ecosystem/value-management-ecosystem#reputation); at most, verified DAF history may become one contextual input among several. These questions are listed in [DAF-000 §9](./dafp/daf-000-federation-constitution.md#9-what-this-document-does-not-settle).
 
 ## Contributing
 

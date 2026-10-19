@@ -13,7 +13,7 @@ The rules below are substrate-independent: they say what has to be true, not whi
 
 ## 1. What the federation is
 
-The federation is an autonomous, distributed federation of autonomous units: the groups and organizations of people working on different questions and projects in Drayker. It is our way of implementing, now, a basic and primitive notion of what [PAP](https://pap.drayker.org) will be, and of testing its dynamics as the very way Drayker is built. It is a transitional layer where those units can test cooperation on Drayker's main projects without being absorbed into one organization. It has no head office and no staff. Within its bounded scope it may record shared resources, recognize delivered work, and decide what it supports.
+The federation is an autonomous, distributed federation of autonomous units: the groups and organizations of people working on different questions and projects in Drayker. It is our way of implementing, now, a basic and primitive notion of what [PAP](https://pap.drayker.org) will be, and of testing its dynamics as the very way Drayker is built. DAF serves to build Drayker's own infrastructure, including UID and the network, together: the infrastructure that will make DAF unnecessary. In doing so it prepares its own dissolution into PAP. It is a transitional layer where those units can test cooperation on Drayker's main projects without being absorbed into one organization. It has no head office and no staff. Within its bounded scope it may record shared resources, recognize delivered work, and decide what it supports.
 
 Useful functions are expected to migrate into PAP, member governance and member councils formed for each question as those layers mature. The federation may become progressively thinner or functionally dissolve; institutional survival is not one of its purposes.
 
@@ -121,7 +121,7 @@ Below 30% participation nothing passes, whatever the split. The threshold is del
 
 ### 5.4 The founding steward
 
-During the founding phase, the authority the drafts call the Embassy is exercised by the founding steward described in [GOVERNANCE.md](https://github.com/draykerdk/.github/blob/master/GOVERNANCE.md). While the total number of points is small, that steward's share is a majority by construction, because the steward has done most of the delivered work. This is stated rather than hidden.
+During the founding phase, the authority of the Embassy of Drayker, the core that founds the construction and answers for it until the system works as designed, is exercised on GitHub by the founding steward described in [GOVERNANCE.md](https://github.com/draykerdk/.github/blob/master/GOVERNANCE.md). While the total number of points is small, that steward's share is a majority by construction, because the steward has done most of the delivered work. This is stated rather than hidden.
 
 The steward's intervention is limited to proposals that are misaligned with Drayker's published values and purpose, and to fraud, spam, and attacks on the federation. It is not a preference veto, and every use of it is recorded with its reason.
 
@@ -161,7 +161,7 @@ Federative points are the only instrument this constitution creates, and they ar
 
 **Joining.** A participant or unit submits a record, who it is, its founding function, how to reach it, and delivers a first function. The record and the first award are accepted in the same assembly. There is no fee and no invitation.
 
-**Penalties.** Honest failure to deliver is reviewed as an outcome and does not by itself remove points. The review records what was committed, what was attempted, the evidence available and any resources to be returned. Sanctions concern established misconduct, including collusion or fraud; where either is established, the holder loses its accumulated points. Responsibility and any sanction must be justified against the documented conduct and reviewed through the applicable decision procedure.
+**Penalties.** Honest failure to deliver is reviewed as an outcome and does not by itself remove points. The review records what was committed, what was attempted, the evidence available and any resources to be returned. The review keeps distinct what is not the same: failing while trying, hiding information, abandoning a commitment without communicating, fraud, exploiting members and deliberately sabotaging the federation. Only the first is an honest outcome. Stepping away is never penalized. A holder who lost points can earn again by delivering. Sanctions concern established misconduct, including collusion or fraud; where either is established, the holder loses its accumulated points. Responsibility and any sanction must be justified against the documented conduct and reviewed through the applicable decision procedure.
 
 Every penalty is proposed, justified against a specific commitment, and voted like anything else. Absence of activity is never a penalty. A dormant holder loses no points (§3.4).
 

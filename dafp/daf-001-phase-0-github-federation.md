@@ -30,8 +30,8 @@ What belongs to this MVP, and what is deliberately deferred:
 | **Treasury** | None held. Requests are decided and recorded. Any actual disbursement happens outside and is reported. | Federation-held funds under the decided rules. |
 | **Transferable instrument** | Does not exist ([DAF-000 §6.1](./daf-000-federation-constitution.md#61-what-is-not-in-scope-here)). | Out of scope until a substrate and a review permit it. |
 | **Automated evaluation of functions** | None. Humans judge, in public. | Proposed for the Dk platform. Not specified anywhere. |
-| **Anonymous participation** | Not supported. Participation is a public account. | Open problem across the drafts. Unsolved. |
-| **Councils** | Not represented. Review is public and open to anyone. | [`advices`](https://advices.drayker.org), unspecified. |
+| **Anonymous participation** | Not supported. Participation is a public account. | Designed in [UID](https://uid.drayker.org): a member's standing is proven without revealing who they are, as in the anonymous justified veto. Not available on this substrate. |
+| **Councils** | Not represented. Review is public and open to anyone. | [`advices`](https://advices.drayker.org) specifies how councils are formed; their authority over a federation proposal is not specified ([DAF-000 §9](./daf-000-federation-constitution.md#9-what-this-document-does-not-settle)). |
 
 The right-hand column is not a roadmap and carries no dates. It is a record of what was deliberately left out, so that Phase 0 is not mistaken for the whole design and the rest is not mistaken for work in progress.
 

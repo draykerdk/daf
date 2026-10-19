@@ -106,6 +106,41 @@ function validateUnit(doc, rel, expectedId) {
   };
 }
 
+/**
+ * Read and validate the <id>.yml unit records of one directory, named as
+ * federation/units/<id>.yml. Returns { units: Map id -> unit, problems }.
+ */
+function readUnits(dir) {
+  const units = new Map();
+  const problems = [];
+  for (const name of listDir(dir)) {
+    const rel = 'federation/units/' + name;
+    if (!/\.yml$/.test(name)) { problems.push(rel + ': unexpected file; unit records are <id>.yml'); continue; }
+    const raw = fs.readFileSync(path.join(dir, name));
+    let doc;
+    try { doc = yaml.parse(raw.toString('utf8'), rel); } catch (e) { problems.push(e.message); continue; }
+    const v = validateUnit(doc, rel, name.replace(/\.yml$/, ''));
+    problems.push(...v.problems);
+    if (v.unit) {
+      v.unit.file = rel;
+      v.unit.raw = raw;
+      v.unit.blob = gitBlobSha(raw);
+      units.set(v.unit.id, v.unit);
+    }
+  }
+  return { units, problems };
+}
+
+/**
+ * The unit records a pull request adds, given as a directory of <id>.yml files
+ * (the tally workflow writes them there, as data). Used for the founding
+ * assembly only. A missing directory is an error; an empty one is no record.
+ */
+function loadUnitsDir(dir) {
+  if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) throw new Error('--founding-units: ' + dir + ' is not a directory');
+  return readUnits(dir);
+}
+
 /** Parse a request file: structure only. */
 function parseRequest(text, rel) {
   const problems = [];
@@ -144,21 +179,9 @@ function loadRecord(root, opts) {
   problems.push(...pr.problems);
 
   // Units.
-  for (const name of listDir(path.join(fed, 'units'))) {
-    const rel = 'federation/units/' + name;
-    if (!/\.yml$/.test(name)) { problems.push(rel + ': unexpected file; unit records are <id>.yml'); continue; }
-    const raw = fs.readFileSync(path.join(fed, 'units', name));
-    let doc;
-    try { doc = yaml.parse(raw.toString('utf8'), rel); } catch (e) { problems.push(e.message); continue; }
-    const v = validateUnit(doc, rel, name.replace(/\.yml$/, ''));
-    problems.push(...v.problems);
-    if (v.unit) {
-      v.unit.file = rel;
-      v.unit.raw = raw;
-      v.unit.blob = gitBlobSha(raw);
-      record.units.set(v.unit.id, v.unit);
-    }
-  }
+  const units = readUnits(path.join(fed, 'units'));
+  problems.push(...units.problems);
+  record.units = units.units;
 
   // Assemblies.
   const seen = new Map();
@@ -211,4 +234,4 @@ function withReport(record, file, cycle) {
   return Object.assign({}, record, { assemblies });
 }
 
-module.exports = { loadRecord, withReport, validateUnit, parseRequest, gitBlobSha, toLf, LOGIN_RE, REQUEST_HEADINGS, skipName };
+module.exports = { loadRecord, loadUnitsDir, withReport, validateUnit, parseRequest, gitBlobSha, toLf, LOGIN_RE, REQUEST_HEADINGS, skipName };

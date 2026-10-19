@@ -135,7 +135,7 @@ The report is the record. Every award and every penalty in it is attributable to
 
 ## 6. Resources
 
-The federation is funded by grants, donations, and side projects. It has no owner, no shareholders and no profit distribution, and it holds no reserve it is not prepared to justify.
+The federation is funded by grants, donations, and side projects. It belongs to its members, with no shareholders and no profit distribution, and it holds no reserve it is not prepared to justify.
 
 **Support is requested only where there is no alternative.** This rule is published deliberately: a federation that treats shared resources as a first resort stops being able to fund anything that matters. The main projects are the priority, and resource efficiency is a condition of every request, not an aspiration.
 
@@ -178,9 +178,9 @@ Where a rule is unspecified, the federation says so rather than filling the gap 
 - **The substrate beyond Phase 0.** [DAF-001](./daf-001-phase-0-github-federation.md) runs on a repository and names ICP only as a probable provisional substrate for a DAF phase that experiments with units of account. What that migration costs, what it carries, which condition triggers it, and how the phase builds Drayker's own infrastructure before being absorbed into PAP are not settled.
 - **The transferable instrument** (§6.1).
 - **Where councils fit.** [`advices`](https://advices.drayker.org) is the proposed council layer, and specialist review before a federation vote is described across the drafts. Councils are formed for each question and composed by Dknowledge, as described in advices. Their authority over a federation proposal is not specified.
-- **The relationship to UID.** [`uid`](https://uid.drayker.org) is meant to preserve identity and attributable contribution history. DAF points must remain a distinct ledger; verified history may inform contextual reputation, but no wholesale conversion or cross-system authority is specified.
+- **The relationship to UID.** [`uid`](https://uid.drayker.org) is meant to preserve identity and attributable contribution history. DAF points remain a distinct ledger. When UID enters use, the history of deliveries recorded in the DAF's Phase 0 enters the UIDs of those who made them as contextual history. It does not change base representation, which is the same for every active member. How that history is carried, without a wholesale conversion of points or authority across systems, is not specified.
 - **The transition into PAP and member governance.** DAF is expected to dissolve into PAP once the durable environment can absorb its useful functions and transitional infrastructure. The evidence, sequence and safeguards for that transition are not specified.
-- **The dissolution protocol.** A future proposal must define the technical and constitutional criteria that show PAP and the member constitution can absorb DAF's useful functions, the decision procedure that formally ends DAF, and the migration record that preserves attribution. At that transition, federative points must be frozen and archived as historical evidence rather than carried into PAP as permanent voting weight, inherited privilege or dynastic authority.
+- **The dissolution protocol.** A future proposal must define the technical and constitutional criteria that show PAP and the member constitution can absorb DAF's useful functions, the decision procedure that formally ends DAF, and the migration record that preserves attribution. When the federation dissolves into PAP, federative points stay as a historical record and stop counting as voting weight. Dk recalculates contextual reputation from the verified history of deliveries, as one input among the others that inform it; no point becomes inherited or permanent authority.
 
 These are open functions, not oversights. Anyone can write them.
 

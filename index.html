@@ -256,7 +256,7 @@
                   <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:var(--tx3)">{{ cycLeftLabel }}</div>
                 </div>
                 <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx3);letter-spacing:0.08em;text-transform:uppercase">OPENS {{ cyc.opens }} · {{ cycClosesAt }}</div>
-                <div style="font-size:14px;line-height:1.62;color:var(--tx2);text-wrap:pretty">Claims are made in the thread and can be contested by anyone in it. Weight comes from the ledger as it stood at the previous assembly, so the awards under vote cannot change the votes that approve them.</div>
+                <div style="font-size:14px;line-height:1.62;color:var(--tx2);text-wrap:pretty">Claims are made in the thread and can be contested by anyone in it. Weight comes from the ledger as it stood at the previous assembly, so the awards under vote cannot change the votes that approve them. In the founding assembly only, each participant with a delivery already in the record counts once.</div>
                 <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:2px">
                   <a href="{{ cyc.url }}" target="_blank" rel="noreferrer" style="background:#3FA9FF;color:#0A0A0C;padding:13px 22px;font-size:13.5px;font-weight:600" style-hover="background:#6FC1FF">Open the cycle · #{{ cyc.num }} →</a>
                   <div role="button" tabindex="0" onClick="{{ goAssembly }}" style="border:1px solid var(--line3);color:var(--tx);padding:13px 22px;font-size:13.5px;font-weight:500;cursor:pointer" style-hover="border-color:#3FA9FF;color:#3FA9FF">Claim, vote or count</div>
@@ -1014,7 +1014,7 @@
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#3FA9FF;margin-bottom:20px">Resources</div>
         <h1 style="font-size:clamp(34px,4.6vw,64px);line-height:1;letter-spacing:-0.04em;font-weight:700;margin:0 0 24px;max-width:20ch;text-wrap:balance">Ask only where there is no other way.</h1>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(24px,4vw,60px)">
-          <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);margin:0;text-wrap:pretty">The federation is funded by grants, donations and side projects. It has no owner, no shareholders and no profit distribution, and it holds no reserve it is not prepared to justify. Support is a last resort — published on purpose, because a federation that treats shared resources as a first resort stops being able to fund anything that matters.</p>
+          <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);margin:0;text-wrap:pretty">The federation is funded by grants, donations and side projects. It belongs to its members, with no shareholders and no profit distribution, and it holds no reserve it is not prepared to justify. Support is a last resort — published on purpose, because a federation that treats shared resources as a first resort stops being able to fund anything that matters.</p>
           <p style="font-size:15.5px;line-height:1.66;color:var(--tx2);margin:0;text-wrap:pretty">The rule is enforceable rather than decorative: a request that does not say what was tried first is returned unjudged. Funding is granted one function at a time, each grant evaluated against the evidence of the last — and undelivered work does not merely fail to earn points, it degrades every proposal that references it.</p>
         </div>
       </section>
@@ -1093,13 +1093,13 @@
       <section style="max-width:1320px;margin:0 auto;padding:clamp(38px,5.5vw,80px) clamp(16px,4vw,44px) clamp(24px,3vw,40px)">
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#3FA9FF;margin-bottom:20px">What is open</div>
         <h1 style="font-size:clamp(34px,4.6vw,64px);line-height:1;letter-spacing:-0.04em;font-weight:700;margin:0 0 24px;max-width:22ch;text-wrap:balance">The parameters are written. No use has tested them yet.</h1>
-        <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);max-width:64ch;margin:0;text-wrap:pretty">Where a rule is unspecified the federation says so, rather than filling the gap with practice — undocumented custom is how a structure without an owner acquires one. What follows is the whole of it: five things the constitution does not settle, five things this substrate does not buy, and four conditions that would end Phase 0. They are open functions, not oversights.</p>
+        <p style="font-size:clamp(16px,1.3vw,19px);line-height:1.62;color:var(--tx2);max-width:64ch;margin:0;text-wrap:pretty">Where a rule is unspecified the federation says so, rather than filling the gap with practice — undocumented custom is how a structure without an owner acquires one. What follows is the whole of it: four things the constitution does not settle, five things this substrate does not buy, and four conditions that would end Phase 0. They are open functions, not oversights.</p>
       </section>
 
       <section style="border-top:1px solid var(--line)">
         <div style="max-width:1320px;margin:0 auto;padding:clamp(32px,4vw,58px) clamp(16px,4vw,44px)">
           <div style="display:grid;grid-template-columns:{{ fourCol }};gap:1px">
-            <sc-for list="{{ dafOpen }}" as="o" hint-placeholder-count="5">
+            <sc-for list="{{ dafOpen }}" as="o" hint-placeholder-count="4">
               <a href="{{ o.href }}" target="_blank" rel="noreferrer" style="grid-column:{{ o.span }};background:var(--surf);padding:26px 24px;display:flex;flex-direction:column;gap:10px;min-height:212px;color:var(--tx);outline:1px solid var(--line)" style-hover="background:var(--surf2)">
                 <div style="font-size:18px;font-weight:600;letter-spacing:-0.02em">{{ o.t }}</div>
                 <div style="font-size:14px;line-height:1.6;color:var(--tx2);flex:1">{{ o.d }}</div>
@@ -1496,7 +1496,7 @@ const DAF_PIPE = [
     g: 'A pull request adding federation/assemblies/YYYY-MM.md, open for seven days.',
     tool: 'cycle', tl: 'Open the cycle and the report' },
   { n: '05', k: 'VOTE', t: 'Seven days, one comment per holder, counted in the open.',
-    b: 'Weight comes from the ledger as it stood at the previous assembly, so the awards being voted on cannot change the votes that approve them. A vote is a single comment in a fixed format, so it can be found and counted mechanically. The last one you post is the one that counts. Voting is transitional: it holds only until contextual weighing by Dk Global, justified vetoes weighed by their grounds and councils formed for each question can be reproduced and tested, and each one that is replaces part of the vote.',
+    b: 'Weight comes from the ledger as it stood at the previous assembly, so the awards being voted on cannot change the votes that approve them. In the founding assembly only, each participant with a delivery already in the record counts once. A vote is a single comment in a fixed format, so it can be found and counted mechanically. The last one you post is the one that counts. Voting is transitional: it holds only until contextual weighing by Dk Global, justified vetoes weighed by their grounds and councils formed for each question can be reproduced and tested, and each one that is replaces part of the vote.',
     r: 'DAF-000 §5.3 — 30% participation of active points, then a simple majority of votes cast.', ref: DAF_000 + '#53-quorum-and-majority',
     g: 'A comment on that pull request reading VOTE: for | against | abstain, then AS: your-unit-id.',
     tool: 'vote', tl: 'Compose your vote' },
@@ -1565,18 +1565,13 @@ const DAF_TRIGGERS = [
   { t: 'A contributor is put at risk by publicity', d: 'Anonymous participation stops being theoretical.' }
 ];
 
-// The founding gap, as federation/README.md ("Running an assembly") and DAF-002 §7
-// state it. Shown beside every invitation to open or run the first assembly, and
-// only while no assembly has been held.
+// How the first assembly is decided, as DAF-001 §4 and federation/README.md
+// ("Running an assembly") state it. Shown beside every invitation to open or run
+// the first assembly, and only while no assembly has been held.
 const FOUNDING_URL = 'https://github.com/draykerdk/daf/blob/master/federation/README.md#running-an-assembly';
-const FOUNDING_LINE = 'The first assembly cannot be recorded yet: DAF-000 and DAF-001 do not say how a founding assembly is decided.';
+const FOUNDING_LINE = 'In the first assembly, each participant with a delivery in its report counts once, as DAF-001 §4 says.';
 
 const DAF_OPEN = [
-  // Not in DAF-000 §9: federation/README.md and DAF-002 §7 state it, so its issue
-  // cites them. It spans the row, so the four below still fill theirs.
-  { t: 'The founding assembly', d: 'Weight comes from the assemblies before an assembly, and before the first there are none, so no participation can be computed. DAF-000 and DAF-001 do not say how a founding assembly is decided; until DAF-001 §4 says how, the first assembly cannot be recorded. Two smaller cases are unspecified in the same way, and the tools stop on both: a quorum base of zero, when every holder is dormant, and points below zero.',
-    q: 'How the founding assembly is decided', span: '1 / -1',
-    why: 'federation/README.md ("Running an assembly") and DAF-002 §7 state this as unspecified. This issue is where it gets written.', src: FOUNDING_URL },
   { t: 'The substrate beyond Phase 0', d: 'Which platform holds the federation when a repository is no longer enough, and what triggers the move.', q: 'Substrate after Phase 0' },
   { t: 'The transferable instrument', d: 'Earlier drafts describe a claim on the treasury, convertible to local currency and later to the ecosystem unit of value. It is not specified, not issued, and cannot exist on this substrate. It stays out until there is one that can hold it.', q: 'The transferable instrument' },
   { t: 'Where councils fit', d: 'advices develops the member councils, formed for each question and composed by Dknowledge from the best informed and the most affected. How a council’s conclusion bears on a federation vote remains to be specified.', q: 'Council composition and authority' },
@@ -2495,8 +2490,9 @@ class Component extends DCLogic {
           sub: tab === id ? 'rgba(10,10,12,0.6)' : 'var(--tx3)' });
         const t = s.tally;
         const part = t && t.active > 0 ? (t.cast / t.active) * 100 : 0;
-        // No holder had weight before this assembly: the founding case, which
-        // tools/daf.js tally reports as undetermined.
+        // No holder had weight before this assembly: the founding assembly, in
+        // which each participant with a delivery counts once (DAF-001 §4). This
+        // page does not read the report's deliveries, so it does not count it.
         const founding = !!t && t.active === 0;
         const cyc = s.cycle;
         const left = cyc ? this.daysLeft(cyc.closes) : null;
@@ -2608,12 +2604,12 @@ class Component extends DCLogic {
           ] : [],
           // This page reads the thread without the window or speaks_for, so it
           // never states an outcome: the Federation tally workflow does.
-          tallyOutcome: !t ? '—' : (founding ? 'UNDETERMINED' : 'UNVERIFIED READING'),
+          tallyOutcome: !t ? '—' : (founding ? 'FOUNDING ASSEMBLY' : 'UNVERIFIED READING'),
           tallyOutFg: 'var(--tx)',
           tallyOutLine: 'var(--line2)',
           tallySums: !t ? '' : 'FOR ' + t.yes + ' · AGAINST ' + t.no + ' · ABSTAIN ' + t.abs + ' · CAST ' + t.cast + ' OF ' + t.active + ' ACTIVE POINTS',
           tallyWhy: founding
-            ? 'No holder had weight before this assembly. DAF-000 and DAF-001 do not specify how the founding assembly is decided; the outcome cannot be computed.'
+            ? 'No holder had weight before this assembly, so it is the founding assembly: each participant with a delivery in its report counts once (DAF-001 §4). This page does not read the report, so it does not count it; the Federation tally workflow does.'
             : '',
           tallyHasWhy: founding,
           tallyNotAssembly: !!t && t.assembly === false,

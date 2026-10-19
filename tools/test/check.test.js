@@ -12,7 +12,6 @@ const { computeTally, BELOW_ZERO } = require('../lib/tally');
 const { loadRecord } = require('../lib/record');
 
 const IN = '2026-04-03T12:00:00Z';
-const FOUNDING_ERROR = 'ERROR: federation/assemblies/2026-01.md: the outcome "passed" cannot be recomputed: no holder had weight before this assembly. DAF-000 and DAF-001 do not specify how the founding assembly is decided; this outcome cannot be recomputed from the record (DAF-000 §8)';
 
 /** A copy of the basic fixture with string replacements applied to one file. */
 function planted(rel, pairs) {
@@ -25,7 +24,7 @@ function planted(rel, pairs) {
   write(dir, rel, text);
   return dir;
 }
-const check = (dir, ...extra) => run(['check', '--root', dir, '--allow-undetermined', ...extra]);
+const check = (dir, ...extra) => run(['check', '--root', dir, ...extra]);
 const lines = (s) => s.split('\n').filter(Boolean);
 
 /** Write a pending report for `cycle` and close it with the given comments. */
@@ -34,7 +33,7 @@ function closeCycle(dir, cycle, text, comments) {
   write(dir, 'federation/assemblies/' + cycle + '.md', text);
   const file = path.join(dir, 'c-' + cycle + '.json');
   fs.writeFileSync(file, JSON.stringify(comments));
-  const r = run(['close', cycle, '--root', dir, '--comments', file, '--base-ref', base, '--allow-undetermined']);
+  const r = run(['close', cycle, '--root', dir, '--comments', file, '--base-ref', base]);
   assert.equal(r.code, 0, r.err);
   return r;
 }
@@ -42,45 +41,59 @@ const GAMMA = 'schema_version: 1\nunit:\n  id: example-gamma\n  name: Example Ga
 const RIVER_ROW = '| `example-river` | A fictional delivery under vote | #41 | https://github.com/example-org/example-repo/pull/10 | 1 |';
 const GAMMA_ROW = '| `example-gamma` | A fictional delivery by a new holder | #43 | https://github.com/example-org/example-repo/pull/15 | 1 |';
 
-test('check: F2 the founding outcome is an error unless --allow-undetermined, which downgrades exactly it', () => {
-  const dir = tmpCopy('basic');
-  const strict = run(['check', '--root', dir]);
-  assert.equal(strict.code, 1);
-  assert.deepEqual(lines(strict.err), [FOUNDING_ERROR]);
-  const allowed = check(dir);
-  assert.equal(allowed.code, 0, allowed.err);
-  assert.deepEqual(lines(allowed.err), [FOUNDING_ERROR.replace(/^ERROR/, 'WARNING')]);
-  // A failed founding assembly cannot be recomputed either.
-  const failed = planted('federation/assemblies/2026-01.md', [['| **Outcome** | **passed** |', '| **Outcome** | **failed** |']]);
-  assert.match(run(['check', '--root', failed]).err, /2026-01\.md: the outcome "failed" cannot be recomputed: no holder had weight before this assembly/);
-  // The flag does not hide anything else.
+test('check: F2 the founding assembly is recomputed with one vote for each participant with a delivery (DAF-001 §4)', () => {
+  // 2026-01 of the basic fixture: example-river (participant) and example-delta
+  // (unit) delivered; only example-river votes, with weight 1, out of a base of 1.
+  const clean = run(['check', '--root', tmpCopy('basic')]);
+  assert.equal(clean.code, 0, clean.err);
+  assert.equal(clean.err, '');
+  const f = 'federation/assemblies/2026-01.md';
+  const weight = check(planted(f, [['| `example-river` | for | 1 |', '| `example-river` | for | 2 |']]));
+  assert.match(weight.err, /ERROR: federation\/assemblies\/2026-01\.md:57: weight of `example-river` must be 1: in the founding assembly each participant with a delivery counts once \(DAF-001 §4\), found 2/);
+  const unit = check(planted(f, [['| `example-river` | for | 1 |\n', '| `example-river` | for | 1 |\n| `example-delta` | for | 1 |\n']]));
+  assert.match(unit.err, /2026-01\.md:58: `example-delta` is not a participant with a delivery in this founding assembly; only those vote in it, once each \(DAF-001 §4\)/);
+  const label = check(planted(f, [['| Participants with a delivery | 1 |', '| Active points | 1 |']]));
+  assert.match(label.err, /2026-01\.md:47: the vote table says "Active points", but this is the founding assembly \(DAF-001 §4\); the row is "Participants with a delivery"/);
+  const base = check(planted(f, [['| Participants with a delivery | 1 |', '| Participants with a delivery | 2 |']]));
+  assert.match(base.err, /2026-01\.md: Participants with a delivery is 2 but the Deliveries table of this founding assembly gives 1 participant(\n|$)/);
+  const outcome = check(planted(f, [['| **Outcome** | **passed** |', '| **Outcome** | **failed** |']]));
+  assert.match(outcome.err, /2026-01\.md: the outcome is failed but the votes give passed \(DAF-000 §5\.3\)/);
+  // After a passed assembly, no report is the founding one.
+  const later = check(planted('federation/assemblies/2026-02.md', [['| Active points | 3 |', '| Participants with a delivery | 3 |']]));
+  assert.match(later.err, /2026-02\.md:48: the vote table says "Participants with a delivery", but an assembly has passed before this one, so it is not the founding assembly; the row is "Active points"/);
+  // The rest of the arithmetic is checked as before.
   const other = planted('federation/assemblies/2026-03.md', [['| **Outcome** | **failed** |', '| **Outcome** | **passed** |']]);
   const r = check(other);
   assert.equal(r.code, 1);
   assert.match(r.err, /ERROR: federation\/assemblies\/2026-03\.md: the outcome is passed but the votes give failed/);
 });
 
-test('check: F2 ledger --write and events refuse a founding outcome without --allow-undetermined', () => {
+test('check: F2 a founding assembly with no participant delivery cannot be recomputed', () => {
+  // example-river's deliveries leave the founding report; only the unit example-delta delivered.
+  const f = 'federation/assemblies/2026-01.md';
+  const text = read(tmpCopy('basic'), f);
+  const rows = text.split('\n').filter((l) => /^\| `example-river` \| (Wrote|Translated) /.test(l));
+  assert.equal(rows.length, 2);
+  const dir = planted(f, rows.map((l) => [l + '\n', '']).concat([['| Participants with a delivery | 1 |', '| Participants with a delivery | 0 |'], ['| `example-river` | for | 1 |\n', ''],
+    ['| Votes cast | 1 |', '| Votes cast | 0 |'], ['| 100% (quorum 30%) |', '| — (quorum 30%) |'], ['| 1 / 0 / 0 |', '| 0 / 0 / 0 |']]));
+  const r = check(dir);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /ERROR: federation\/assemblies\/2026-01\.md: the outcome "passed" cannot be recomputed: no participant has a delivery in this founding assembly, so no participation can be computed \(DAF-001 §4, DAF-000 §8\)\./);
+  assert.doesNotMatch(r.err, /2026-01\.md:\d+: Participation is/, '"—" is what such a report writes');
+});
+
+test('check: F2 ledger --write and events fold the founding assembly like any other', () => {
   const dir = tmpCopy('basic');
   const ledger = read(dir, 'federation/LEDGER.md');
   write(dir, 'federation/LEDGER.md', 'stale\n');
-  const refused = run(['ledger', '--write', '--root', dir]);
-  assert.equal(refused.code, 1);
-  assert.match(refused.err, /^error: refusing to write LEDGER\.md: federation\/assemblies\/2026-01\.md: the outcome "passed" stands, but no holder had weight before this assembly\. DAF-000 and DAF-001 do not specify how the founding assembly is decided; this outcome cannot be recomputed from the record \(DAF-000 §8\)\. Pass --allow-undetermined/);
-  assert.equal(read(dir, 'federation/LEDGER.md'), 'stale\n', 'nothing is written');
-  const written = run(['ledger', '--write', '--root', dir, '--allow-undetermined']);
+  const written = run(['ledger', '--write', '--root', dir]);
   assert.equal(written.code, 0, written.err);
-  assert.match(written.err, /^WARNING: federation\/assemblies\/2026-01\.md: the outcome "passed" stands/);
+  assert.equal(written.err, '');
   assert.equal(read(dir, 'federation/LEDGER.md'), ledger);
   const out = path.join(dir, 'ev');
-  const ev = run(['events', '--root', dir, '--out', out]);
-  assert.equal(ev.code, 1);
-  assert.match(ev.err, /refusing to export the events: federation\/assemblies\/2026-01\.md/);
-  assert.ok(!fs.existsSync(out));
-  assert.equal(run(['events', '--root', dir, '--out', out, '--allow-undetermined']).code, 0);
-  const tally = run(['tally', '--root', dir, '--cycle', '2026-04', '--comments', path.join(dir, 'none.json')]);
-  assert.equal(tally.code, 1);
-  assert.match(tally.err, /refusing to tally 2026-04: federation\/assemblies\/2026-01\.md/);
+  assert.equal(run(['events', '--root', dir, '--out', out]).code, 0);
+  assert.ok(fs.existsSync(path.join(out, 'events.json')));
+  assert.match(run(['check', '--root', dir, '--allow-undetermined']).err, /unknown option --allow-undetermined/, 'the flag that let the tests fold a founding report is gone');
 });
 
 test('check: T1 a penalty that takes a holder below zero is an error, and the tally leaves the outcome open', () => {
@@ -186,8 +199,8 @@ test('check: T5 every vote summary row is present and numeric, and participation
   assert.match(check(planted(f3, [['| 16.6% (quorum 30%) |', '| 16.6% |']])).err, /2026-03\.md:43: Participation must read "<percent>% \(quorum 30%\)", found "16\.6%"/);
   assert.match(check(planted(f3, [['| Votes cast | 1 |', '| Votes cast | 2 |']])).err, /2026-03\.md: Votes cast is 2 but the Votes table sums to 1/);
   assert.match(check(planted(f3, [['| 1 / 0 / 0 |', '| 0 / 1 / 0 |']])).err, /2026-03\.md: For \/ against \/ abstain is 0 \/ 1 \/ 0 but the Votes table sums to 1 \/ 0 \/ 0/);
-  // The founding report can say no percentage, and only "—".
-  assert.match(check(planted('federation/assemblies/2026-01.md', [['| — (quorum 30%) |', '| 0% (quorum 30%) |']])).err, /2026-01\.md:49: Participation is "0%", but no participation can be computed for this report; write "—"/);
+  // The founding report is recomputed like the others: 1 of 1 participant.
+  assert.match(check(planted('federation/assemblies/2026-01.md', [['| 100% (quorum 30%) |', '| — (quorum 30%) |']])).err, /2026-01\.md:49: Participation is "—", but 1 of 1 gives 100% \(truncated to one decimal\)/);
   // The unchanged fixture passes all of it.
   assert.equal(check(tmpCopy('basic')).code, 0);
 });

@@ -13,13 +13,13 @@ const os = require('node:os');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 
-const { loadRecord, withReport, gitBlobSha, LOGIN_RE } = require('./lib/record');
+const { loadRecord, loadUnitsDir, withReport, gitBlobSha, LOGIN_RE } = require('./lib/record');
 const { crossCheck, numberWord } = require('./lib/params');
 const { renderAssemblyVote, extractRefs, ID_RE, PLACEHOLDER_HOLDERS } = require('./lib/assembly');
 const { foldLedger } = require('./lib/ledger');
-const { computeTally, flattenPages, voteBase, requireDetermined, noWeight, belowZero, FOUNDING_CHECK, BELOW_ZERO } = require('./lib/tally');
+const { computeTally, flattenPages, voteBase, belowZero, isFounding, foundingVoters, BELOW_ZERO } = require('./lib/tally');
 const { deriveEvents, serialize } = require('./lib/events');
-const { renderLedger, renderTally, voteSummaryLines, votesTableLines, code, pct } = require('./lib/render');
+const { renderLedger, renderTally, voteSummaryLines, votesTableLines, code, pct, FOUNDING_LABEL, WEIGHT_LINE, FOUNDING_WEIGHT_LINE } = require('./lib/render');
 
 const DEFAULT_ROOT = path.resolve(__dirname, '..');
 const REPO_BLOB = 'https://github.com/draykerdk/daf/blob/master/federation/';
@@ -33,31 +33,32 @@ Instruments for the federation record in federation/. They compute arithmetic
 and check structure; they never judge merit, merge or decide.
 
 Commands:
-  check [--base <git-sha>] [--allow-pending] [--allow-undetermined]
+  check [--base <git-sha>] [--allow-pending]
       Validate the record: units, parameters (against DAF-000 and DAF-001),
       assembly reports, requests, LEDGER.md and the event log. With --base,
       warn about assembly reports, unit records and parameters changed rather
       than added since <git-sha>, and about requests already decided by an
       assembly that were changed or deleted since then.
-  ledger [--write] [--before <YYYY-MM>] [--allow-undetermined]
+  ledger [--write] [--before <YYYY-MM>]
       Print LEDGER.md as folded from the assemblies, or write it.
   tally --cycle <YYYY-MM> --comments <file> [--reviews <file>]
         [--review-comments <file>] [--record <dir>] [--master-record <dir>]
-        [--report <file>] [--pr <n>] [--head <sha>] [--json] [--now <ISO>]
-        [--allow-undetermined]
+        [--report <file>] [--founding-units <dir>] [--pr <n>] [--head <sha>]
+        [--json] [--now <ISO>]
       Count the votes for the report of <cycle>. Comment files are JSON from
       \`gh api --paginate --slurp\` (array of pages) or a flat array. With
       --report, units, parameters and earlier assemblies come from the record
       (--record or --root, the default branch) and only the report under vote
       comes from <file>, read in memory as federation/assemblies/<cycle>.md.
       Before the close of the window (now, or --now) the count is marked
-      provisional.
+      provisional. --founding-units <dir> holds the <id>.yml unit records the
+      pull request adds, read as data for the founding assembly only.
   draft <YYYY-MM> [--issues <file>]
       Write federation/assemblies/<YYYY-MM>.md from the template, the open
       [Cycle] issue and the [Claim] issues of that cycle. Outcome: pending.
   close <YYYY-MM> --comments <file> [--reviews <file>]
         [--review-comments <file>] [--pr <n>] [--head <sha>]
-        [--base-ref <ref>] [--now <ISO>] [--allow-undetermined]
+        [--base-ref <ref>] [--now <ISO>]
       Count the votes as the tally workflow does: unit records, parameters and
       earlier assemblies come from <ref> (default origin/master, extracted with
       git archive), and only the report under vote from the working tree. Then
@@ -66,24 +67,25 @@ Commands:
       regenerate LEDGER.md. Refuses before the window closes. Warns about
       unit records, parameters and assemblies the working tree changed versus
       <ref>. Never commits.
-  snapshot --out <dir> [--issues <file>] [--commit <sha>] [--allow-undetermined]
+  snapshot --out <dir> [--issues <file>] [--commit <sha>]
       Write <dir>/federation.json, <dir>/events.json and <dir>/events.log.
-  events --out <dir> [--allow-undetermined]
+  events --out <dir>
       Write <dir>/events.json and <dir>/events.log.
 
-A closed report decided before any holder had weight (the founding case)
-cannot be recomputed: DAF-000 and DAF-001 do not specify it. \`check\` reports
-it as an error, and the commands that fold the record (ledger --write, tally,
-close, snapshot, events) refuse it. --allow-undetermined turns that error into
-a warning and lets them fold it; it is meant for the fictional test records.
+The founding assembly is the one before which no assembly has passed. In it,
+as DAF-001 §4 says, each participant with a delivery in the report counts
+once: the voters are the holders of a Deliveries row whose kind is
+participant, each weighs 1, and the base is their number. Their records come
+with the report, so tally and close read the accounts that may speak for them
+from the records the pull request adds when the default branch has none.
 
 Options for every command:
   --root <dir>   repository root (default: the parent of tools/)
   --help         print this text
 `;
 
-const VALUE_FLAGS = new Set(['root', 'base', 'base-ref', 'before', 'cycle', 'comments', 'reviews', 'review-comments', 'record', 'master-record', 'report', 'pr', 'head', 'issues', 'out', 'commit', 'now']);
-const BOOL_FLAGS = new Set(['write', 'json', 'allow-pending', 'allow-undetermined', 'help']);
+const VALUE_FLAGS = new Set(['root', 'base', 'base-ref', 'before', 'cycle', 'comments', 'reviews', 'review-comments', 'record', 'master-record', 'report', 'founding-units', 'pr', 'head', 'issues', 'out', 'commit', 'now']);
+const BOOL_FLAGS = new Set(['write', 'json', 'allow-pending', 'help']);
 
 class UsageError extends Error {}
 
@@ -150,7 +152,7 @@ function firstDiffLine(a, b) {
 
 /**
  * Run every structural and arithmetic check. Pure apart from reading files (and
- * git with base). Options: base, allowPending, allowUndetermined, crossCheck.
+ * git with base). Options: base, allowPending, crossCheck.
  */
 function runCheck(root, opts) {
   opts = opts || {};
@@ -222,7 +224,7 @@ function runCheck(root, opts) {
         }
       }
     }
-    if (outcome === 'passed' || outcome === 'failed') checkVote(rec, a, params, { errors, warnings, allowUndetermined: !!opts.allowUndetermined });
+    if (outcome === 'passed' || outcome === 'failed') checkVote(rec, a, params, { errors, warnings });
   }
 
   // Unit files against the assemblies that accepted them.
@@ -310,7 +312,11 @@ function checkParticipation(a, v, params, cast, base, determinable, err) {
   if (p !== want) err(at + 'Participation is "' + p + '", but ' + cast + ' of ' + base + ' gives ' + want + ' (truncated to one decimal)');
 }
 
-/** The vote tables of a closed report against the arithmetic of DAF-000 §5.3. */
+/**
+ * The vote tables of a closed report against the arithmetic of DAF-000 §5.3.
+ * In the founding assembly (no assembly passed before it), each participant
+ * with a delivery in the report counts once (DAF-001 §4).
+ */
 function checkVote(rec, a, params, out) {
   const errors = out.errors;
   const err = (m) => errors.push(m);
@@ -318,34 +324,49 @@ function checkVote(rec, a, params, out) {
   if (v.placeholder) { err(a.file + ': the vote table still holds placeholder values (n)'); return; }
   const prior = foldLedger(rec, { before: a.cycle, params });
   const byId = new Map(prior.holders.map((h) => [h.id, h]));
-  const founding = noWeight(prior);
-  const negative = belowZero(prior);
+  const founding = isFounding(rec, a.cycle);
+  const eligible = founding ? foundingVoters(a, (id) => rec.units.get(id) || null) : null;
+  const negative = founding ? [] : belowZero(prior);
   let sumFor = 0, sumAgainst = 0, sumAbstain = 0;
   const seen = new Set();
   const counted = [];
   for (const r of a.votes) {
     if (seen.has(r.holder)) err(a.file + ':' + r.line + ': `' + r.holder + '` appears twice in Votes');
     seen.add(r.holder);
-    const h = byId.get(r.holder);
-    const want = h ? h.points : 0;
-    if (!founding && want <= 0) err(a.file + ':' + r.line + ': `' + r.holder + '` has no weight in the ledger before ' + a.cycle);
-    else if (r.weight !== null && r.weight !== want) err(a.file + ':' + r.line + ': weight of `' + r.holder + '` must be ' + want + ' (its points after the assemblies before ' + a.cycle + '), found ' + r.weight);
-    if (want > 0) counted.push(r.holder);
+    if (founding) {
+      if (!eligible.has(r.holder)) err(a.file + ':' + r.line + ': `' + r.holder + '` is not a participant with a delivery in this founding assembly; only those vote in it, once each (DAF-001 §4)');
+      else if (r.weight !== null && r.weight !== 1) err(a.file + ':' + r.line + ': weight of `' + r.holder + '` must be 1: in the founding assembly each participant with a delivery counts once (DAF-001 §4), found ' + r.weight);
+    } else {
+      const h = byId.get(r.holder);
+      const want = h ? h.points : 0;
+      if (want <= 0) err(a.file + ':' + r.line + ': `' + r.holder + '` has no weight in the ledger before ' + a.cycle);
+      else if (r.weight !== null && r.weight !== want) err(a.file + ':' + r.line + ': weight of `' + r.holder + '` must be ' + want + ' (its points after the assemblies before ' + a.cycle + '), found ' + r.weight);
+      if (want > 0) counted.push(r.holder);
+    }
     if (r.vote === 'for') sumFor += r.weight || 0;
     else if (r.vote === 'against') sumAgainst += r.weight || 0;
     else if (r.vote === 'abstain') sumAbstain += r.weight || 0;
   }
   const cast = sumFor + sumAgainst + sumAbstain;
-  const base = voteBase(prior, params, counted);
+  const base = founding ? eligible.size : voteBase(prior, params, counted);
 
   // The summary rows: each present and a number.
-  const label = params.quorum_base === 'total' ? 'Total points' : 'Active points';
+  const label = founding ? FOUNDING_LABEL : (params.quorum_base === 'total' ? 'Total points' : 'Active points');
   const rows = v.rows || {};
   if (!rows.base) err(a.file + ': the vote table has no "' + label + '" row');
   else {
-    if (rows.base.label !== label.toLowerCase()) err(a.file + ':' + rows.base.line + ': the vote table says "' + rows.base.label.replace(/^./, (c) => c.toUpperCase()) + '", but parameters.yml says quorum_base: ' + params.quorum_base + '; the row is "' + label + '"');
+    const said = rows.base.label.replace(/^./, (c) => c.toUpperCase());
+    if (rows.base.label !== label.toLowerCase()) {
+      err(a.file + ':' + rows.base.line + ': the vote table says "' + said + '", but ' + (founding
+        ? 'this is the founding assembly (DAF-001 §4); the row is "' + label + '"'
+        : (rows.base.label === FOUNDING_LABEL.toLowerCase() ? 'an assembly has passed before this one, so it is not the founding assembly' : 'parameters.yml says quorum_base: ' + params.quorum_base) + '; the row is "' + label + '"'));
+    }
     if (v.active === null) err(a.file + ':' + rows.base.line + ': ' + label + ' "' + rows.base.value + '" is not a number');
-    else if (v.active !== base) err(a.file + ': ' + label + ' is ' + v.active + ' but the ledger before ' + a.cycle + ' gives ' + base);
+    else if (v.active !== base) {
+      err(a.file + ': ' + label + ' is ' + v.active + (founding
+        ? ' but the Deliveries table of this founding assembly gives ' + base + ' participant' + (base === 1 ? '' : 's')
+        : ' but the ledger before ' + a.cycle + ' gives ' + base));
+    }
   }
   if (!rows.cast) err(a.file + ': the vote table has no "Votes cast" row');
   else if (v.cast === null) err(a.file + ':' + rows.cast.line + ': Votes cast "' + rows.cast.value + '" is not a number');
@@ -353,11 +374,11 @@ function checkVote(rec, a, params, out) {
   if (!rows.split) err(a.file + ': the vote table has no "For / against / abstain" row');
   else if (v.for !== null && (v.for !== sumFor || v.against !== sumAgainst || v.abstain !== sumAbstain)) err(a.file + ': For / against / abstain is ' + v.for + ' / ' + v.against + ' / ' + v.abstain + ' but the Votes table sums to ' + sumFor + ' / ' + sumAgainst + ' / ' + sumAbstain);
 
-  const determinable = !founding && !negative.length && base > 0;
+  const determinable = !negative.length && base > 0;
   checkParticipation(a, v, params, cast, base, determinable, err);
 
-  if (founding) {
-    (out.allowUndetermined ? out.warnings : errors).push(a.file + ': the outcome "' + v.outcome + '" cannot be recomputed: ' + FOUNDING_CHECK);
+  if (founding && base <= 0) {
+    err(a.file + ': the outcome "' + v.outcome + '" cannot be recomputed: no participant has a delivery in this founding assembly, so no participation can be computed (DAF-001 §4, DAF-000 §8).');
     return;
   }
   if (negative.length) {
@@ -374,7 +395,7 @@ function checkVote(rec, a, params, out) {
 }
 
 function cmdCheck(opts, io) {
-  const r = runCheck(opts.root, { base: opts.base, allowPending: opts['allow-pending'], allowUndetermined: opts['allow-undetermined'] });
+  const r = runCheck(opts.root, { base: opts.base, allowPending: opts['allow-pending'] });
   for (const n of r.notes) io.out('NOTE: ' + n);
   for (const w of r.warnings) io.err('WARNING: ' + w);
   for (const e of r.errors) io.err('ERROR: ' + e);
@@ -402,12 +423,9 @@ function cmdLedger(opts, io) {
   const text = renderLedger(foldLedger(rec, { params, before: opts.before || null }), params);
   if (opts.write) {
     if (broken.length) throw new Error('not writing LEDGER.md while assembly reports have problems; run `node tools/daf.js check`');
-    for (const w of requireDetermined(rec, params, opts['allow-undetermined'], 'write LEDGER.md')) io.err('WARNING: ' + w);
     fs.writeFileSync(path.join(rec.root, 'federation', 'LEDGER.md'), text);
     io.out('wrote federation/LEDGER.md');
   } else {
-    // Printing changes nothing; it says what it folded that cannot be recomputed.
-    for (const w of requireDetermined(rec, params, true, 'fold', opts.before || null)) io.err('WARNING: ' + w);
     io.write(text);
   }
   return 0;
@@ -417,7 +435,7 @@ function cmdLedger(opts, io) {
 // tally and close
 // ---------------------------------------------------------------------------
 
-function tallyInputs(opts, cycle, rec) {
+function tallyInputs(opts, cycle, rec, io) {
   if (!opts.comments) throw new UsageError('--comments <file> is required');
   const input = {
     record: rec,
@@ -430,7 +448,19 @@ function tallyInputs(opts, cycle, rec) {
     head: opts.head || null
   };
   if (opts['master-record']) input.masterRecord = loadRecord(opts['master-record']);
+  if (opts['founding-units']) input.foundingUnits = foundingUnits(opts['founding-units'], io);
   return input;
+}
+
+/**
+ * The unit records a pull request adds, read from a directory of <id>.yml
+ * files, for the founding assembly only (DAF-001 §4). A file that does not
+ * validate is named and left out.
+ */
+function foundingUnits(dir, io) {
+  const r = loadUnitsDir(path.resolve(dir));
+  for (const p of r.problems) io.err('WARNING: ' + p + ' (not used)');
+  return r.units;
 }
 
 /**
@@ -440,8 +470,7 @@ function tallyInputs(opts, cycle, rec) {
 function tallyRecord(opts, cycle, io) {
   if (opts.report && opts['master-record']) throw new UsageError('--report reads unit records from the record itself; --master-record does not apply');
   let rec = loadRecord(opts.record || opts.root);
-  const params = needParams(rec);
-  for (const w of requireDetermined(rec, params, opts['allow-undetermined'], 'tally ' + cycle, cycle)) io.err('WARNING: ' + w);
+  needParams(rec);
   if (opts.report) rec = withReport(rec, path.resolve(opts.report), cycle);
   const a = rec.assemblies.find((x) => x.cycle === cycle);
   if (a) for (const p of a.problems) io.err('WARNING: ' + p);
@@ -452,7 +481,7 @@ function cmdTally(opts, io) {
   const cycle = needCycle(opts.cycle);
   parseNow(opts.now); // a usage error before anything is read
   const rec = tallyRecord(opts, cycle, io);
-  const t = computeTally(tallyInputs(opts, cycle, rec));
+  const t = computeTally(tallyInputs(opts, cycle, rec, io));
   if (t.outcome === 'undetermined') io.err('NOTE: the outcome is undetermined; `close` will not write it.');
   if (opts.json) {
     const out = Object.assign({}, t, { prior: { asOf: t.prior.asOf, totals: t.prior.totals, holders: t.prior.holders } });
@@ -528,10 +557,8 @@ function cmdClose(opts, io) {
   // the LEDGER.md it regenerates.
   const rec = loadRecord(opts.root);
   const params = needParams(rec);
-  // close regenerates LEDGER.md, which folds every closed report.
   const said = new Set();
   const warn = (w) => { if (!said.has(w)) { said.add(w); io.err('WARNING: ' + w); } };
-  for (const w of requireDetermined(rec, params, opts['allow-undetermined'], 'close ' + cycle)) warn(w);
   const a = rec.assemblies.find((x) => x.cycle === cycle);
   if (!a) throw new Error('no report federation/assemblies/' + cycle + '.md');
   if (a.problems.length) throw new Error('the report has problems; fix them first:\n  ' + a.problems.join('\n  '));
@@ -548,11 +575,12 @@ function cmdClose(opts, io) {
     for (const w of baseChanges(rec.root, ref, cycle)) warn(w);
     const master = loadRecord(baseDir);
     if (!master.parameters) throw new Error(ref + ': federation/parameters.yml is missing or invalid: ' + master.problems.filter((p) => /parameters/.test(p)).join('; '));
-    for (const w of requireDetermined(master, master.parameters, opts['allow-undetermined'], 'close ' + cycle, cycle)) warn(w);
     const counted = withReport(master, path.join(rec.root, a.file), cycle);
     const under = counted.assemblies.find((x) => x.cycle === cycle);
     if (under.problems.length) throw new Error('the report has problems against the parameters of ' + ref + ':\n  ' + under.problems.join('\n  '));
-    t = computeTally(Object.assign(tallyInputs(opts, cycle, counted), { masterRecord: master, now }));
+    // In the founding assembly, the accounts that speak for a new participant
+    // come from the record this pull request adds: the working tree's.
+    t = computeTally(Object.assign(tallyInputs(opts, cycle, counted, io), { masterRecord: master, foundingUnits: rec.units, now }));
   } finally {
     fs.rmSync(baseDir, { recursive: true, force: true });
   }
@@ -563,7 +591,9 @@ function cmdClose(opts, io) {
   const changes = [];
   const reportPath = path.join(rec.root, a.file);
   const before = a.raw.toString('utf8');
-  const after = renderAssemblyVote(before, voteSummaryLines(t), votesTableLines(t, false));
+  let after = renderAssemblyVote(before, voteSummaryLines(t), votesTableLines(t, false));
+  // The line under "## The vote" says where the weight comes from.
+  if (t.founding) after = after.replace(new RegExp('^' + WEIGHT_LINE.replace(/[.]/g, '\\.') + '(\\r?)$', 'm'), FOUNDING_WEIGHT_LINE + '$1');
   const unitEdits = [];
   if (t.outcome === 'passed') {
     for (const r of a.newRecords) {
@@ -868,8 +898,7 @@ function writeEvents(dir, derived) {
 function cmdEvents(opts, io) {
   if (!opts.out) throw new UsageError('--out <dir> is required');
   const rec = loadRecord(opts.root);
-  const params = needParams(rec);
-  for (const w of requireDetermined(rec, params, opts['allow-undetermined'], 'export the events')) io.err('WARNING: ' + w);
+  needParams(rec);
   const derived = deriveEvents(rec);
   writeEvents(path.resolve(opts.out), derived);
   io.out('wrote ' + derived.count + ' events to ' + path.join(opts.out, 'events.json') + ' and events.log; head ' + derived.head);
@@ -880,7 +909,6 @@ function cmdSnapshot(opts, io) {
   if (!opts.out) throw new UsageError('--out <dir> is required');
   const rec = loadRecord(opts.root);
   const params = needParams(rec);
-  for (const w of requireDetermined(rec, params, opts['allow-undetermined'], 'build the snapshot')) io.err('WARNING: ' + w);
   const derived = deriveEvents(rec);
   let issues = [];
   if (opts.issues) {

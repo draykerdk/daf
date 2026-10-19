@@ -65,6 +65,12 @@ function renderLedger(fold, params) {
   return out.join('\n') + '\n';
 }
 
+/** The base row of the vote table in the founding assembly (DAF-001 §4). */
+const FOUNDING_LABEL = 'Participants with a delivery';
+/** The line under "## The vote": where the weight comes from. */
+const WEIGHT_LINE = 'Weight from the ledger as it stood at the previous assembly.';
+const FOUNDING_WEIGHT_LINE = 'Founding assembly: each participant with a delivery in this report counts once.';
+
 /** Participation as a percentage, truncated (never rounded up past the floor). */
 function pct(num, den) {
   if (!den) return null;
@@ -74,7 +80,7 @@ function pct(num, den) {
 
 /** The "## The vote" summary table lines for a tally result. */
 function voteSummaryLines(t) {
-  const label = t.baseKind === 'total' ? 'Total points' : 'Active points';
+  const label = t.founding ? FOUNDING_LABEL : (t.baseKind === 'total' ? 'Total points' : 'Active points');
   const p = t.outcome === 'undetermined' || t.participation === null ? '—' : pct(t.cast, t.base);
   return [
     '| | |',
@@ -101,7 +107,7 @@ function votesTableLines(t, withShare) {
 
 /** The markdown block printed by `daf.js tally` and `tools/tally.js`. */
 function renderTally(t) {
-  const out = ['## The vote', '', 'Weight from the ledger as it stood at the previous assembly.', ''];
+  const out = ['## The vote', '', t.founding ? FOUNDING_WEIGHT_LINE : WEIGHT_LINE, ''];
   out.push(...voteSummaryLines(t));
   out.push('');
   if (t.provisional) { out.push(PROVISIONAL); out.push(''); }
@@ -123,11 +129,11 @@ function renderTally(t) {
   if (t.pr) prov += ' on PR #' + String(t.pr).replace(/[^0-9]/g, '');
   if (t.head) prov += ' at head ' + String(t.head).replace(/[^0-9a-f]/gi, '').slice(0, 7);
   prov += t.window ? ', window from ' + t.window.opens + ' 00:00 to ' + t.window.closes + ' 00:00 UTC (a vote at or after the close is not counted)' : ', no window in the report';
-  prov += ', weights from the assemblies before ' + t.cycle + '.';
+  prov += t.founding ? ', one vote for each participant with a delivery in the report of ' + t.cycle + '.' : ', weights from the assemblies before ' + t.cycle + '.';
   out.push(prov);
   out.push('');
   out.push('This computes the arithmetic only. The vote table in the report is written and merged by a person.');
   return out.join('\n') + '\n';
 }
 
-module.exports = { code, renderLedger, renderTally, voteSummaryLines, votesTableLines, pct };
+module.exports = { code, renderLedger, renderTally, voteSummaryLines, votesTableLines, pct, FOUNDING_LABEL, WEIGHT_LINE, FOUNDING_WEIGHT_LINE };

@@ -354,7 +354,7 @@ function parseAssembly(text, opts) {
           if (out.vote.rows[key]) problem(r.i, 'the vote table has a second "' + c[0].replace(/\*\*/g, '').trim() + '" row');
           out.vote.rows[key] = { label, value: val, line: r.i + 1 };
         };
-        if (label === 'active points' || label === 'total points') { keep('base'); out.vote.active = n; out.vote.baseLabel = label; if (isN) out.vote.placeholder = true; }
+        if (label === 'active points' || label === 'total points' || label === 'participants with a delivery') { keep('base'); out.vote.active = n; out.vote.baseLabel = label; if (isN) out.vote.placeholder = true; }
         else if (label === 'votes cast') { keep('cast'); out.vote.cast = n; if (isN) out.vote.placeholder = true; }
         else if (label === 'participation') { keep('participation'); out.vote.participation = val; if (/^n%/.test(val)) out.vote.placeholder = true; }
         else if (label === 'for / against / abstain') {

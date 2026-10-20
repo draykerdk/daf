@@ -59,7 +59,7 @@ The Phase 0 repository, issue forms and assembly reports use English as the fede
 2. **Claim.** Anyone who delivered a function links the issue that declared it and the merged result. Claims are made in public and can be contested by anyone in the thread.
 3. **Draft.** The assembly report is opened as a pull request against `master`, with the proposed awards, penalties, and decisions written out and each one attributed to a specific delivery.
 4. **Review.** The pull request stays open for a fixed window of **seven days**, during which anyone can argue with any line of it.
-5. **Vote.** Holders vote on the pull request, one comment per holder, in the format below. Weight comes from the ledger as it stood at the *previous* assembly, so that the awards being voted on cannot change the votes that approve them.
+5. **Vote.** Holders vote on the pull request, one comment per holder, in the format below. Weight comes from the ledger as it stood at the *previous* assembly, so that the awards being voted on cannot change the votes that approve them. In the founding assembly only, each participant with a delivery already in the record counts once; from the second assembly on, weight comes from points as DAF-000 sets.
 6. **Tally and merge.** The tally is written into the report: active points, participation, votes for and against, and the outcome against [DAF-000 §5.3](./daf-000-federation-constitution.md#53-quorum-and-majority). Merging records the result. A proposal that fails to reach quorum is recorded as failed for lack of participation, and the report says so rather than quietly omitting it.
 
 A vote is a single comment, so it can be found and counted mechanically:
@@ -107,6 +107,8 @@ Phase 0 is implemented now: the structure in §3 exists, at [`federation/`](../f
 The next function is the first assembly: open the cycle, claim a delivery that already happened, and take the record through the procedure in §4 to see where it breaks. It is deliberately small, because the point is to find out what these rules cost to operate before anyone else is asked to live under them.
 
 The record is first used at that assembly.
+
+The first common trunk is a material delivery, however small, that serves members beyond its authors, with its result recorded in Dknowledge. The first candidate is the project's own servers.
 
 ---
 

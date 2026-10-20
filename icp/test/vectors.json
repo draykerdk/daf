@@ -7,8 +7,8 @@
       "name": "basic",
       "source": "tools/test/fixtures/basic",
       "dormantAfter": 3,
-      "count": 20,
-      "head": "65c6a3a9446a70174761d475f3ef0f7ec0ce94077c20c2b5758217959e73cbd7",
+      "count": 19,
+      "head": "7d0c81f251d8cd8ec9687b17781dc89a5c685d01e964d809ef7a187a91019af7",
       "events": [
         {
           "seq": 1,
@@ -50,14 +50,14 @@
           "points": 1,
           "value": "",
           "ref": "federation/assemblies/2026-01.md",
-          "blob": "af66b04598744f65d437bb3ae98b40a65467392c",
+          "blob": "9624edadc2a366c3ca809cb60488b89d571582ab",
           "evidence": [
             "https://github.com/draykerdk/daf/issues/11",
             "https://github.com/example-org/example-repo/pull/1"
           ],
           "prev": "55ace30b04536d57fa6446a533bd59beba780359e199672024644ee400634426",
-          "preimage": "daf-event/1\nseq=3\nkind=function.delivered\ncycle=2026-01\nholder=example-river\npoints=1\nvalue=\nref=federation/assemblies/2026-01.md\nblob=af66b04598744f65d437bb3ae98b40a65467392c\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/11\nevidence=https://github.com/example-org/example-repo/pull/1\nprev=55ace30b04536d57fa6446a533bd59beba780359e199672024644ee400634426\n",
-          "hash": "a0b15e915d9ad011b803f79c268d703bf38c64f256cf612ec4aa5cba26de5587"
+          "preimage": "daf-event/1\nseq=3\nkind=function.delivered\ncycle=2026-01\nholder=example-river\npoints=1\nvalue=\nref=federation/assemblies/2026-01.md\nblob=9624edadc2a366c3ca809cb60488b89d571582ab\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/11\nevidence=https://github.com/example-org/example-repo/pull/1\nprev=55ace30b04536d57fa6446a533bd59beba780359e199672024644ee400634426\n",
+          "hash": "c6752a075b227339ef540b06dc5bf1e8384247b504b0afa7ba35998c0998696d"
         },
         {
           "seq": 4,
@@ -67,14 +67,14 @@
           "points": 1,
           "value": "",
           "ref": "federation/assemblies/2026-01.md",
-          "blob": "af66b04598744f65d437bb3ae98b40a65467392c",
+          "blob": "9624edadc2a366c3ca809cb60488b89d571582ab",
           "evidence": [
             "https://github.com/example-org/example-repo/issues/12",
             "https://github.com/example-org/example-repo/pull/2"
           ],
-          "prev": "a0b15e915d9ad011b803f79c268d703bf38c64f256cf612ec4aa5cba26de5587",
-          "preimage": "daf-event/1\nseq=4\nkind=function.delivered\ncycle=2026-01\nholder=example-river\npoints=1\nvalue=\nref=federation/assemblies/2026-01.md\nblob=af66b04598744f65d437bb3ae98b40a65467392c\nevidence=2\nevidence=https://github.com/example-org/example-repo/issues/12\nevidence=https://github.com/example-org/example-repo/pull/2\nprev=a0b15e915d9ad011b803f79c268d703bf38c64f256cf612ec4aa5cba26de5587\n",
-          "hash": "345fd5cf5b20eee4c5a7ab2a1b4c85b1f0ca9b527423b9595fb5781733873909"
+          "prev": "c6752a075b227339ef540b06dc5bf1e8384247b504b0afa7ba35998c0998696d",
+          "preimage": "daf-event/1\nseq=4\nkind=function.delivered\ncycle=2026-01\nholder=example-river\npoints=1\nvalue=\nref=federation/assemblies/2026-01.md\nblob=9624edadc2a366c3ca809cb60488b89d571582ab\nevidence=2\nevidence=https://github.com/example-org/example-repo/issues/12\nevidence=https://github.com/example-org/example-repo/pull/2\nprev=c6752a075b227339ef540b06dc5bf1e8384247b504b0afa7ba35998c0998696d\n",
+          "hash": "9be72f9fccb7c67d1abee0a1a5b10762deb731c6d6d3ee59d8a976e878f4d409"
         },
         {
           "seq": 5,
@@ -84,61 +84,47 @@
           "points": 1,
           "value": "",
           "ref": "federation/assemblies/2026-01.md",
-          "blob": "af66b04598744f65d437bb3ae98b40a65467392c",
+          "blob": "9624edadc2a366c3ca809cb60488b89d571582ab",
           "evidence": [
             "https://github.com/draykerdk/daf/issues/13",
             "https://github.com/example-org/example-repo/commit/0123456789abcdef0123456789abcdef01234567"
           ],
-          "prev": "345fd5cf5b20eee4c5a7ab2a1b4c85b1f0ca9b527423b9595fb5781733873909",
-          "preimage": "daf-event/1\nseq=5\nkind=function.delivered\ncycle=2026-01\nholder=example-delta\npoints=1\nvalue=\nref=federation/assemblies/2026-01.md\nblob=af66b04598744f65d437bb3ae98b40a65467392c\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/13\nevidence=https://github.com/example-org/example-repo/commit/0123456789abcdef0123456789abcdef01234567\nprev=345fd5cf5b20eee4c5a7ab2a1b4c85b1f0ca9b527423b9595fb5781733873909\n",
-          "hash": "509e4a6b0fa88354a431b225de05dd2b468e54dee179602d88e37e13e42b93d5"
+          "prev": "9be72f9fccb7c67d1abee0a1a5b10762deb731c6d6d3ee59d8a976e878f4d409",
+          "preimage": "daf-event/1\nseq=5\nkind=function.delivered\ncycle=2026-01\nholder=example-delta\npoints=1\nvalue=\nref=federation/assemblies/2026-01.md\nblob=9624edadc2a366c3ca809cb60488b89d571582ab\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/13\nevidence=https://github.com/example-org/example-repo/commit/0123456789abcdef0123456789abcdef01234567\nprev=9be72f9fccb7c67d1abee0a1a5b10762deb731c6d6d3ee59d8a976e878f4d409\n",
+          "hash": "49deedb581b30d372390177ffa943e9fbea0b8bd32d0943196b014de459a3f36"
         },
         {
           "seq": 6,
           "kind": "vote.cast",
           "cycle": "2026-01",
           "holder": "example-river",
-          "points": 0,
+          "points": 1,
           "value": "for",
           "ref": "federation/assemblies/2026-01.md",
-          "blob": "af66b04598744f65d437bb3ae98b40a65467392c",
+          "blob": "9624edadc2a366c3ca809cb60488b89d571582ab",
           "evidence": [],
-          "prev": "509e4a6b0fa88354a431b225de05dd2b468e54dee179602d88e37e13e42b93d5",
-          "preimage": "daf-event/1\nseq=6\nkind=vote.cast\ncycle=2026-01\nholder=example-river\npoints=0\nvalue=for\nref=federation/assemblies/2026-01.md\nblob=af66b04598744f65d437bb3ae98b40a65467392c\nevidence=0\nprev=509e4a6b0fa88354a431b225de05dd2b468e54dee179602d88e37e13e42b93d5\n",
-          "hash": "2ddae9966429324b778b937ff6c3c4b75e81a4f34db2347983abc133f5c1ec77"
+          "prev": "49deedb581b30d372390177ffa943e9fbea0b8bd32d0943196b014de459a3f36",
+          "preimage": "daf-event/1\nseq=6\nkind=vote.cast\ncycle=2026-01\nholder=example-river\npoints=1\nvalue=for\nref=federation/assemblies/2026-01.md\nblob=9624edadc2a366c3ca809cb60488b89d571582ab\nevidence=0\nprev=49deedb581b30d372390177ffa943e9fbea0b8bd32d0943196b014de459a3f36\n",
+          "hash": "26b6df3c2d412c7c4c7110ff53a0001d128886f513ffdaddfdee7ef06df7c53a"
         },
         {
           "seq": 7,
-          "kind": "vote.cast",
-          "cycle": "2026-01",
-          "holder": "example-delta",
-          "points": 0,
-          "value": "for",
-          "ref": "federation/assemblies/2026-01.md",
-          "blob": "af66b04598744f65d437bb3ae98b40a65467392c",
-          "evidence": [],
-          "prev": "2ddae9966429324b778b937ff6c3c4b75e81a4f34db2347983abc133f5c1ec77",
-          "preimage": "daf-event/1\nseq=7\nkind=vote.cast\ncycle=2026-01\nholder=example-delta\npoints=0\nvalue=for\nref=federation/assemblies/2026-01.md\nblob=af66b04598744f65d437bb3ae98b40a65467392c\nevidence=0\nprev=2ddae9966429324b778b937ff6c3c4b75e81a4f34db2347983abc133f5c1ec77\n",
-          "hash": "d9cc4ce60428434a6f0e9383fe609fc6f96686d53ca1ffd25754f5daa2ac4a14"
-        },
-        {
-          "seq": 8,
           "kind": "assembly.closed",
           "cycle": "2026-01",
           "holder": "",
           "points": 0,
           "value": "passed",
           "ref": "federation/assemblies/2026-01.md",
-          "blob": "af66b04598744f65d437bb3ae98b40a65467392c",
+          "blob": "9624edadc2a366c3ca809cb60488b89d571582ab",
           "evidence": [
             "https://github.com/draykerdk/daf/issues/101"
           ],
-          "prev": "d9cc4ce60428434a6f0e9383fe609fc6f96686d53ca1ffd25754f5daa2ac4a14",
-          "preimage": "daf-event/1\nseq=8\nkind=assembly.closed\ncycle=2026-01\nholder=\npoints=0\nvalue=passed\nref=federation/assemblies/2026-01.md\nblob=af66b04598744f65d437bb3ae98b40a65467392c\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/101\nprev=d9cc4ce60428434a6f0e9383fe609fc6f96686d53ca1ffd25754f5daa2ac4a14\n",
-          "hash": "5759383f975f4cfd747fac0c53a9405f7c40bdc01cb5a5522cca4145ca7969cf"
+          "prev": "26b6df3c2d412c7c4c7110ff53a0001d128886f513ffdaddfdee7ef06df7c53a",
+          "preimage": "daf-event/1\nseq=7\nkind=assembly.closed\ncycle=2026-01\nholder=\npoints=0\nvalue=passed\nref=federation/assemblies/2026-01.md\nblob=9624edadc2a366c3ca809cb60488b89d571582ab\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/101\nprev=26b6df3c2d412c7c4c7110ff53a0001d128886f513ffdaddfdee7ef06df7c53a\n",
+          "hash": "9c07b672b4bf20ebf202bb38e79b148fdf0887df081c1d0bb76f5d2f198fb9ce"
         },
         {
-          "seq": 9,
+          "seq": 8,
           "kind": "unit.recorded",
           "cycle": "2026-02",
           "holder": "example-cedar",
@@ -149,12 +135,12 @@
           "evidence": [
             "https://github.com/example-org/example-repo/pull/8#pullrequestreview-1"
           ],
-          "prev": "5759383f975f4cfd747fac0c53a9405f7c40bdc01cb5a5522cca4145ca7969cf",
-          "preimage": "daf-event/1\nseq=9\nkind=unit.recorded\ncycle=2026-02\nholder=example-cedar\npoints=0\nvalue=participant\nref=federation/units/example-cedar.yml\nblob=\nevidence=1\nevidence=https://github.com/example-org/example-repo/pull/8#pullrequestreview-1\nprev=5759383f975f4cfd747fac0c53a9405f7c40bdc01cb5a5522cca4145ca7969cf\n",
-          "hash": "0fa98d85b8171dda50f6048bc86d846800105383f76092e84fc747b0576b5ade"
+          "prev": "9c07b672b4bf20ebf202bb38e79b148fdf0887df081c1d0bb76f5d2f198fb9ce",
+          "preimage": "daf-event/1\nseq=8\nkind=unit.recorded\ncycle=2026-02\nholder=example-cedar\npoints=0\nvalue=participant\nref=federation/units/example-cedar.yml\nblob=\nevidence=1\nevidence=https://github.com/example-org/example-repo/pull/8#pullrequestreview-1\nprev=9c07b672b4bf20ebf202bb38e79b148fdf0887df081c1d0bb76f5d2f198fb9ce\n",
+          "hash": "3b1f428a1b75710f1ca06d2393db3067df93f47717cece4bd6f7320a45f823c4"
         },
         {
-          "seq": 10,
+          "seq": 9,
           "kind": "function.delivered",
           "cycle": "2026-02",
           "holder": "example-delta",
@@ -166,12 +152,12 @@
             "https://github.com/draykerdk/daf/issues/22",
             "https://github.com/example-org/example-repo/pull/7"
           ],
-          "prev": "0fa98d85b8171dda50f6048bc86d846800105383f76092e84fc747b0576b5ade",
-          "preimage": "daf-event/1\nseq=10\nkind=function.delivered\ncycle=2026-02\nholder=example-delta\npoints=1\nvalue=\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/22\nevidence=https://github.com/example-org/example-repo/pull/7\nprev=0fa98d85b8171dda50f6048bc86d846800105383f76092e84fc747b0576b5ade\n",
-          "hash": "9717d8aa44eb58ca3da0753a12cade06820d1947a3fcc91487f81d6f16ed3d3f"
+          "prev": "3b1f428a1b75710f1ca06d2393db3067df93f47717cece4bd6f7320a45f823c4",
+          "preimage": "daf-event/1\nseq=9\nkind=function.delivered\ncycle=2026-02\nholder=example-delta\npoints=1\nvalue=\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/22\nevidence=https://github.com/example-org/example-repo/pull/7\nprev=3b1f428a1b75710f1ca06d2393db3067df93f47717cece4bd6f7320a45f823c4\n",
+          "hash": "e5efcd723a344d026c7cc761305678603187f5e40432d5ef6295eedac28709f9"
         },
         {
-          "seq": 11,
+          "seq": 10,
           "kind": "function.delivered",
           "cycle": "2026-02",
           "holder": "example-cedar",
@@ -183,12 +169,12 @@
             "https://github.com/draykerdk/daf/issues/23",
             "https://github.com/example-org/example-repo/pull/8#pullrequestreview-1"
           ],
-          "prev": "9717d8aa44eb58ca3da0753a12cade06820d1947a3fcc91487f81d6f16ed3d3f",
-          "preimage": "daf-event/1\nseq=11\nkind=function.delivered\ncycle=2026-02\nholder=example-cedar\npoints=1\nvalue=\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/23\nevidence=https://github.com/example-org/example-repo/pull/8#pullrequestreview-1\nprev=9717d8aa44eb58ca3da0753a12cade06820d1947a3fcc91487f81d6f16ed3d3f\n",
-          "hash": "a78bb2c8e607b533329c0d545b50687f869b56531708358c3f7886d9bab1983a"
+          "prev": "e5efcd723a344d026c7cc761305678603187f5e40432d5ef6295eedac28709f9",
+          "preimage": "daf-event/1\nseq=10\nkind=function.delivered\ncycle=2026-02\nholder=example-cedar\npoints=1\nvalue=\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/23\nevidence=https://github.com/example-org/example-repo/pull/8#pullrequestreview-1\nprev=e5efcd723a344d026c7cc761305678603187f5e40432d5ef6295eedac28709f9\n",
+          "hash": "d0df0890cc60641b38a55fed40c5c88068e493012ec0b191f11ac3dfeb7fbf0a"
         },
         {
-          "seq": 12,
+          "seq": 11,
           "kind": "module.completed",
           "cycle": "2026-02",
           "holder": "example-delta",
@@ -200,12 +186,12 @@
             "https://github.com/draykerdk/daf/issues/21",
             "https://github.com/draykerdk/daf/issues/22"
           ],
-          "prev": "a78bb2c8e607b533329c0d545b50687f869b56531708358c3f7886d9bab1983a",
-          "preimage": "daf-event/1\nseq=12\nkind=module.completed\ncycle=2026-02\nholder=example-delta\npoints=2\nvalue=\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/21\nevidence=https://github.com/draykerdk/daf/issues/22\nprev=a78bb2c8e607b533329c0d545b50687f869b56531708358c3f7886d9bab1983a\n",
-          "hash": "b479792cce2043a07f8c472e536f66b08bf1e3c97082f2935a74b6d028a64b1d"
+          "prev": "d0df0890cc60641b38a55fed40c5c88068e493012ec0b191f11ac3dfeb7fbf0a",
+          "preimage": "daf-event/1\nseq=11\nkind=module.completed\ncycle=2026-02\nholder=example-delta\npoints=2\nvalue=\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=2\nevidence=https://github.com/draykerdk/daf/issues/21\nevidence=https://github.com/draykerdk/daf/issues/22\nprev=d0df0890cc60641b38a55fed40c5c88068e493012ec0b191f11ac3dfeb7fbf0a\n",
+          "hash": "0e310304f3cd49062e10e45bf4de4c7ef3cad21a799f327a5c0239fb825596c7"
         },
         {
-          "seq": 13,
+          "seq": 12,
           "kind": "penalty",
           "cycle": "2026-02",
           "holder": "example-river",
@@ -216,12 +202,12 @@
           "evidence": [
             "https://github.com/example-org/example-repo/issues/24"
           ],
-          "prev": "b479792cce2043a07f8c472e536f66b08bf1e3c97082f2935a74b6d028a64b1d",
-          "preimage": "daf-event/1\nseq=13\nkind=penalty\ncycle=2026-02\nholder=example-river\npoints=-1\nvalue=\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=1\nevidence=https://github.com/example-org/example-repo/issues/24\nprev=b479792cce2043a07f8c472e536f66b08bf1e3c97082f2935a74b6d028a64b1d\n",
-          "hash": "41dba437aaf874f9386501b80cf7f065bbff8e63f6850e6a7420aff5e4e3f04f"
+          "prev": "0e310304f3cd49062e10e45bf4de4c7ef3cad21a799f327a5c0239fb825596c7",
+          "preimage": "daf-event/1\nseq=12\nkind=penalty\ncycle=2026-02\nholder=example-river\npoints=-1\nvalue=\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=1\nevidence=https://github.com/example-org/example-repo/issues/24\nprev=0e310304f3cd49062e10e45bf4de4c7ef3cad21a799f327a5c0239fb825596c7\n",
+          "hash": "7416213ef59b78231d454a11b3ed6a427d3de665131a643bbef6a4710a72d1ba"
         },
         {
-          "seq": 14,
+          "seq": 13,
           "kind": "request.decided",
           "cycle": "2026-02",
           "holder": "",
@@ -230,12 +216,12 @@
           "ref": "federation/requests/1-example-tooling.md",
           "blob": "",
           "evidence": [],
-          "prev": "41dba437aaf874f9386501b80cf7f065bbff8e63f6850e6a7420aff5e4e3f04f",
-          "preimage": "daf-event/1\nseq=14\nkind=request.decided\ncycle=2026-02\nholder=\npoints=0\nvalue=approved\nref=federation/requests/1-example-tooling.md\nblob=\nevidence=0\nprev=41dba437aaf874f9386501b80cf7f065bbff8e63f6850e6a7420aff5e4e3f04f\n",
-          "hash": "a2aa2d29a681b77dcf77de68f3b96c4bad7d8e37d357c4bd70f4384e04c0e4c7"
+          "prev": "7416213ef59b78231d454a11b3ed6a427d3de665131a643bbef6a4710a72d1ba",
+          "preimage": "daf-event/1\nseq=13\nkind=request.decided\ncycle=2026-02\nholder=\npoints=0\nvalue=approved\nref=federation/requests/1-example-tooling.md\nblob=\nevidence=0\nprev=7416213ef59b78231d454a11b3ed6a427d3de665131a643bbef6a4710a72d1ba\n",
+          "hash": "f6e9edc9e7126f90a4bfc325a61bfdf71114decddba264c4ac2d93ab963358c0"
         },
         {
-          "seq": 15,
+          "seq": 14,
           "kind": "vote.cast",
           "cycle": "2026-02",
           "holder": "example-river",
@@ -244,12 +230,12 @@
           "ref": "federation/assemblies/2026-02.md",
           "blob": "032008999ac7a8154eeae0bffdc7e82d064ddf45",
           "evidence": [],
-          "prev": "a2aa2d29a681b77dcf77de68f3b96c4bad7d8e37d357c4bd70f4384e04c0e4c7",
-          "preimage": "daf-event/1\nseq=15\nkind=vote.cast\ncycle=2026-02\nholder=example-river\npoints=2\nvalue=for\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=0\nprev=a2aa2d29a681b77dcf77de68f3b96c4bad7d8e37d357c4bd70f4384e04c0e4c7\n",
-          "hash": "6ff4883a5c55e343abf283c53bd78d1f984be267c5cbba484378854aa5e21134"
+          "prev": "f6e9edc9e7126f90a4bfc325a61bfdf71114decddba264c4ac2d93ab963358c0",
+          "preimage": "daf-event/1\nseq=14\nkind=vote.cast\ncycle=2026-02\nholder=example-river\npoints=2\nvalue=for\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=0\nprev=f6e9edc9e7126f90a4bfc325a61bfdf71114decddba264c4ac2d93ab963358c0\n",
+          "hash": "64ee74ca21105292a08fdd20cd679935cf4dfe323af8951ff83802c132cd1c5e"
         },
         {
-          "seq": 16,
+          "seq": 15,
           "kind": "vote.cast",
           "cycle": "2026-02",
           "holder": "example-delta",
@@ -258,12 +244,12 @@
           "ref": "federation/assemblies/2026-02.md",
           "blob": "032008999ac7a8154eeae0bffdc7e82d064ddf45",
           "evidence": [],
-          "prev": "6ff4883a5c55e343abf283c53bd78d1f984be267c5cbba484378854aa5e21134",
-          "preimage": "daf-event/1\nseq=16\nkind=vote.cast\ncycle=2026-02\nholder=example-delta\npoints=1\nvalue=against\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=0\nprev=6ff4883a5c55e343abf283c53bd78d1f984be267c5cbba484378854aa5e21134\n",
-          "hash": "38e1c7aa5e73e1233b33e5a0740409a63610b46b25b36e2a2346d34f93633ee4"
+          "prev": "64ee74ca21105292a08fdd20cd679935cf4dfe323af8951ff83802c132cd1c5e",
+          "preimage": "daf-event/1\nseq=15\nkind=vote.cast\ncycle=2026-02\nholder=example-delta\npoints=1\nvalue=against\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=0\nprev=64ee74ca21105292a08fdd20cd679935cf4dfe323af8951ff83802c132cd1c5e\n",
+          "hash": "8afd89def6610d92b41927b59cb2ab8f041286b90ceb52326d0ddab8148245da"
         },
         {
-          "seq": 17,
+          "seq": 16,
           "kind": "steward.intervention",
           "cycle": "2026-02",
           "holder": "",
@@ -274,12 +260,12 @@
           "evidence": [
             "https://github.com/example-org/example-repo/issues/29"
           ],
-          "prev": "38e1c7aa5e73e1233b33e5a0740409a63610b46b25b36e2a2346d34f93633ee4",
-          "preimage": "daf-event/1\nseq=17\nkind=steward.intervention\ncycle=2026-02\nholder=\npoints=0\nvalue=\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=1\nevidence=https://github.com/example-org/example-repo/issues/29\nprev=38e1c7aa5e73e1233b33e5a0740409a63610b46b25b36e2a2346d34f93633ee4\n",
-          "hash": "ced4761a1530ca32f267711e69c23530ef1f45b87b2575b8af7e64f3a55f7a8b"
+          "prev": "8afd89def6610d92b41927b59cb2ab8f041286b90ceb52326d0ddab8148245da",
+          "preimage": "daf-event/1\nseq=16\nkind=steward.intervention\ncycle=2026-02\nholder=\npoints=0\nvalue=\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=1\nevidence=https://github.com/example-org/example-repo/issues/29\nprev=8afd89def6610d92b41927b59cb2ab8f041286b90ceb52326d0ddab8148245da\n",
+          "hash": "c6c36b4b2b92fe1c51df2a0bca36667aa48143674158240991eb2d28b39ef97b"
         },
         {
-          "seq": 18,
+          "seq": 17,
           "kind": "assembly.closed",
           "cycle": "2026-02",
           "holder": "",
@@ -290,12 +276,12 @@
           "evidence": [
             "https://github.com/draykerdk/daf/issues/102"
           ],
-          "prev": "ced4761a1530ca32f267711e69c23530ef1f45b87b2575b8af7e64f3a55f7a8b",
-          "preimage": "daf-event/1\nseq=18\nkind=assembly.closed\ncycle=2026-02\nholder=\npoints=0\nvalue=passed\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/102\nprev=ced4761a1530ca32f267711e69c23530ef1f45b87b2575b8af7e64f3a55f7a8b\n",
-          "hash": "4b50e8e5958052268a45c89a075185449a0e7fc067723c86ef96bd0618d3c6e5"
+          "prev": "c6c36b4b2b92fe1c51df2a0bca36667aa48143674158240991eb2d28b39ef97b",
+          "preimage": "daf-event/1\nseq=17\nkind=assembly.closed\ncycle=2026-02\nholder=\npoints=0\nvalue=passed\nref=federation/assemblies/2026-02.md\nblob=032008999ac7a8154eeae0bffdc7e82d064ddf45\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/102\nprev=c6c36b4b2b92fe1c51df2a0bca36667aa48143674158240991eb2d28b39ef97b\n",
+          "hash": "17fced4aa698f55d7072351c3a92698db6011f05cea13be49ba968092cfb36a8"
         },
         {
-          "seq": 19,
+          "seq": 18,
           "kind": "vote.cast",
           "cycle": "2026-03",
           "holder": "example-cedar",
@@ -304,12 +290,12 @@
           "ref": "federation/assemblies/2026-03.md",
           "blob": "7a1c364df11232ec5f6f27eb98cf4a763f7ed0ac",
           "evidence": [],
-          "prev": "4b50e8e5958052268a45c89a075185449a0e7fc067723c86ef96bd0618d3c6e5",
-          "preimage": "daf-event/1\nseq=19\nkind=vote.cast\ncycle=2026-03\nholder=example-cedar\npoints=1\nvalue=for\nref=federation/assemblies/2026-03.md\nblob=7a1c364df11232ec5f6f27eb98cf4a763f7ed0ac\nevidence=0\nprev=4b50e8e5958052268a45c89a075185449a0e7fc067723c86ef96bd0618d3c6e5\n",
-          "hash": "ee990b57d9520b6a6bc672918e4872c734bf92f7cba343590d41b8c0252c7207"
+          "prev": "17fced4aa698f55d7072351c3a92698db6011f05cea13be49ba968092cfb36a8",
+          "preimage": "daf-event/1\nseq=18\nkind=vote.cast\ncycle=2026-03\nholder=example-cedar\npoints=1\nvalue=for\nref=federation/assemblies/2026-03.md\nblob=7a1c364df11232ec5f6f27eb98cf4a763f7ed0ac\nevidence=0\nprev=17fced4aa698f55d7072351c3a92698db6011f05cea13be49ba968092cfb36a8\n",
+          "hash": "da7f35ed0132ccd391bd14cbd475c2fbcf75571a3873f964eb3e5cb2dea2e978"
         },
         {
-          "seq": 20,
+          "seq": 19,
           "kind": "assembly.closed",
           "cycle": "2026-03",
           "holder": "",
@@ -320,9 +306,9 @@
           "evidence": [
             "https://github.com/draykerdk/daf/issues/103"
           ],
-          "prev": "ee990b57d9520b6a6bc672918e4872c734bf92f7cba343590d41b8c0252c7207",
-          "preimage": "daf-event/1\nseq=20\nkind=assembly.closed\ncycle=2026-03\nholder=\npoints=0\nvalue=failed\nref=federation/assemblies/2026-03.md\nblob=7a1c364df11232ec5f6f27eb98cf4a763f7ed0ac\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/103\nprev=ee990b57d9520b6a6bc672918e4872c734bf92f7cba343590d41b8c0252c7207\n",
-          "hash": "65c6a3a9446a70174761d475f3ef0f7ec0ce94077c20c2b5758217959e73cbd7"
+          "prev": "da7f35ed0132ccd391bd14cbd475c2fbcf75571a3873f964eb3e5cb2dea2e978",
+          "preimage": "daf-event/1\nseq=19\nkind=assembly.closed\ncycle=2026-03\nholder=\npoints=0\nvalue=failed\nref=federation/assemblies/2026-03.md\nblob=7a1c364df11232ec5f6f27eb98cf4a763f7ed0ac\nevidence=1\nevidence=https://github.com/draykerdk/daf/issues/103\nprev=da7f35ed0132ccd391bd14cbd475c2fbcf75571a3873f964eb3e5cb2dea2e978\n",
+          "hash": "7d0c81f251d8cd8ec9687b17781dc89a5c685d01e964d809ef7a187a91019af7"
         }
       ],
       "ledger": [
@@ -380,22 +366,6 @@
             "id": "example-delta",
             "kind": "unit",
             "points": 0,
-            "joined": "2026-01",
-            "active": false
-          }
-        ],
-        [
-          {
-            "id": "example-river",
-            "kind": "participant",
-            "points": 2,
-            "joined": "2026-01",
-            "active": false
-          },
-          {
-            "id": "example-delta",
-            "kind": "unit",
-            "points": 1,
             "joined": "2026-01",
             "active": false
           }

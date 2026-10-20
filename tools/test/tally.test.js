@@ -149,48 +149,129 @@ test('tally: no window in the report counts nothing', () => {
   assert.deepEqual(reasons(t), ['example-delta: not counted: no window in the report']);
 });
 
-test('tally: the founding assembly is undetermined, never failed', () => {
-  const dir = tmpCopy(null);
-  for (const f of ['parameters.yml']) write(dir, 'federation/' + f, require('node:fs').readFileSync(require('node:path').join(__dirname, 'fixtures/basic/federation', f), 'utf8'));
-  write(dir, 'federation/units/example-river.yml', require('node:fs').readFileSync(require('node:path').join(__dirname, 'fixtures/basic/federation/units/example-river.yml'), 'utf8'));
-  write(dir, 'federation/assemblies/2026-04.md', pendingReport({ newRecord: 'example-river' }));
-  const t = computeTally({ record: loadRecord(dir), cycle: '2026-04', comments: [comment(1, 'example-river-gh', IN, vote('for', 'example-river'))] });
-  assert.equal(t.outcome, 'undetermined');
-  assert.deepEqual(t.sentences, [FOUNDING]);
-  assert.deepEqual(t.votes.map((v) => [v.holder, v.vote, v.weight]), [['example-river', 'for', 0]], 'the votes found are still listed');
-  const md = renderTally(t);
-  assert.match(md, /\*\*undetermined\*\*/);
-  assert.doesNotMatch(md, /\*\*failed\*\*/);
-  assert.ok(md.includes(FOUNDING));
-});
-
-test('tally: in the founding case, a holder whose record is only in the pull request is said to be not on master yet', () => {
-  const fs = require('node:fs');
-  const fixture = (f) => fs.readFileSync(require('node:path').join(__dirname, 'fixtures/basic/federation', f), 'utf8');
-  // The default branch: parameters only, no unit and no assembly.
+// A founding record: parameters only on the default branch; the report under
+// vote lists `holders` ([id, kind]) as deliveries and as New records, and the
+// pull request carries their unit files.
+const fs = require('node:fs');
+const path = require('node:path');
+const { withReport, loadUnitsDir } = require('../lib/record');
+const { FOUNDING_EMPTY, foundingUnread, isFounding } = require('../lib/tally');
+const { FOUNDING_LABEL, FOUNDING_WEIGHT_LINE } = require('../lib/render');
+const fixture = (f) => fs.readFileSync(path.join(__dirname, 'fixtures/basic/federation', f), 'utf8');
+const RIVER_ROW = '| `example-river` | A fictional delivery under vote | #41 | https://github.com/example-org/example-repo/pull/10 | 1 |';
+const unitFile = (id, kind, login) => fixture('units/example-river.yml').replace(/example-river-gh/g, login || id + '-gh').replace(/example-river/g, id)
+  .replace(/kind: participant/, 'kind: ' + kind).replace(/joined: \S+/, 'joined: null');
+function foundingReport(holders) {
+  const rows = holders.map(([id], i) => '| `' + id + '` | A fictional founding delivery | #' + (60 + i) + ' | https://github.com/example-org/example-repo/pull/' + (60 + i) + ' | 1 |');
+  const records = holders.map(([id, kind], i) => '| `' + id + '` | ' + kind + ' | https://github.com/example-org/example-repo/pull/' + (60 + i) + ' |');
+  return pendingReport().replace(RIVER_ROW, rows.join('\n')).replace('| Holder | Kind | First delivery |\n| --- | --- | --- |\n', '| Holder | Kind | First delivery |\n| --- | --- | --- |\n' + records.join('\n') + '\n');
+}
+function foundingPr(holders, opts) {
+  opts = opts || {};
   const master = tmpCopy(null);
   write(master, 'federation/parameters.yml', fixture('parameters.yml'));
-  // The pull request: the report records example-river and example-gamma, and carries example-river's file.
+  for (const [id, kind, login] of opts.onMaster || []) write(master, 'federation/units/' + id + '.yml', unitFile(id, kind, login));
   const pr = tmpCopy(null);
   write(pr, 'federation/parameters.yml', fixture('parameters.yml'));
-  write(pr, 'federation/units/example-river.yml', fixture('units/example-river.yml'));
-  write(pr, 'federation/assemblies/2026-04.md', pendingReport({ newRecord: 'example-gamma' }));
+  for (const [id, kind, login] of holders) write(pr, 'federation/units/' + id + '.yml', unitFile(id, kind, login));
+  write(pr, 'federation/assemblies/2026-04.md', foundingReport(holders));
+  return { master, pr };
+}
+
+test('tally: the founding assembly counts each participant with a delivery once (DAF-001 §4)', () => {
+  const { pr } = foundingPr([['example-river', 'participant']]);
+  const t = computeTally({ record: loadRecord(pr), cycle: '2026-04', comments: [comment(1, 'example-river-gh', IN, vote('for', 'example-river'))] });
+  assert.equal(t.founding, true);
+  assert.deepEqual(t.eligible, ['example-river']);
+  assert.deepEqual([t.base, t.cast, t.for, t.outcome], [1, 1, 1, 'passed']);
+  assert.deepEqual(t.sentences, [FOUNDING]);
+  assert.deepEqual(t.votes.map((v) => [v.holder, v.vote, v.weight]), [['example-river', 'for', 1]]);
+  const md = renderTally(t);
+  assert.ok(md.includes('\n' + FOUNDING_WEIGHT_LINE + '\n'));
+  assert.match(md, new RegExp('\\| ' + FOUNDING_LABEL + ' \\| 1 \\|\\n\\| Votes cast \\| 1 \\|\\n\\| Participation \\| 100% \\(quorum 30%\\) \\|'));
+  assert.match(md, /one vote for each participant with a delivery in the report of 2026-04\./);
+  assert.ok(md.includes(FOUNDING));
+  // With no vote, it fails for lack of participation, like any assembly.
+  const none = computeTally({ record: loadRecord(pr), cycle: '2026-04', comments: [] });
+  assert.deepEqual([none.base, none.cast, none.outcome], [1, 0, 'failed']);
+  assert.match(none.sentences.join(' '), /Failed for lack of participation/);
+});
+
+test('tally: in the founding assembly a unit, a holder without a delivery and an earlier vote add nothing', () => {
+  const { pr } = foundingPr([['example-river', 'participant'], ['example-gamma', 'participant'], ['example-delta', 'unit']]);
+  write(pr, 'federation/units/example-cedar.yml', unitFile('example-cedar', 'participant'));
+  const t = computeTally({ record: loadRecord(pr), cycle: '2026-04', comments: [
+    comment(1, 'example-river-gh', IN, vote('for', 'example-river')),
+    comment(2, 'example-river-gh', '2026-04-04T12:00:00Z', vote('against', 'example-river')),
+    comment(3, 'example-gamma-gh', IN, vote('for', 'example-gamma')),
+    comment(4, 'example-delta-gh', IN, vote('for', 'example-delta')),
+    comment(5, 'example-cedar-gh', IN, vote('for', 'example-cedar')),
+    comment(6, 'example-mallory-gh', IN, vote('for', 'example-gamma'))
+  ] });
+  assert.deepEqual(t.eligible, ['example-gamma', 'example-river']);
+  assert.deepEqual([t.base, t.cast, t.for, t.against, t.outcome], [2, 2, 1, 1, 'failed']);
+  assert.match(t.sentences.join(' '), /Failed: the votes for are not more than half of the votes cast\./);
+  const NOT = (id) => id + ': `' + id + '` is not a participant with a delivery in this founding assembly; only those vote in it, once each (DAF-001 §4)';
+  assert.deepEqual(reasons(t).sort(), [
+    NOT('example-cedar'), NOT('example-delta'),
+    'example-gamma: the author is not listed in speaks_for of `example-gamma`',
+    'example-river: superseded by a later vote for the same holder'
+  ].sort());
+});
+
+test('tally: in the founding assembly the accounts come from the records the pull request adds', () => {
+  const holders = [['example-river', 'participant'], ['example-gamma', 'participant']];
+  const { master, pr } = foundingPr(holders);
   const comments = [
     comment(1, 'example-river-gh', IN, vote('for', 'example-river')),
     comment(2, 'example-gamma-gh', IN, vote('for', 'example-gamma')),
     comment(3, 'example-nobody-gh', IN, vote('for', 'example-nobody'))
   ];
-  const NOT_YET = (id) => id + ': the record of `' + id + '` is not on master yet; a holder exists from the assembly that accepts its record';
+  // close and a tally in a checkout of the pull request: the pull request's records.
   const t = computeTally({ record: loadRecord(pr), masterRecord: loadRecord(master), cycle: '2026-04', comments });
+  assert.deepEqual([t.base, t.cast, t.outcome], [2, 2, 'passed']);
+  assert.deepEqual(reasons(t), ['example-nobody: `example-nobody` is not a participant with a delivery in this founding assembly; only those vote in it, once each (DAF-001 §4)']);
+  // The tally workflow: the default branch's record and the report; without
+  // the added records it says so and decides nothing.
+  const asWorkflow = withReport(loadRecord(master), path.join(pr, 'federation/assemblies/2026-04.md'), '2026-04');
+  const blind = computeTally({ record: asWorkflow, cycle: '2026-04', comments });
+  assert.equal(blind.outcome, 'undetermined');
+  assert.deepEqual(blind.sentences, [FOUNDING, foundingUnread(['example-gamma', 'example-river'])]);
+  assert.equal(blind.cast, 0);
+  // With them, as the workflow passes --founding-units, it counts as close does.
+  const seen = computeTally({ record: asWorkflow, cycle: '2026-04', comments, foundingUnits: loadUnitsDir(path.join(pr, 'federation/units')).units });
+  assert.deepEqual([seen.base, seen.cast, seen.outcome], [2, 2, 'passed']);
+});
+
+test('tally: a founding participant already recorded on the default branch speaks with that record', () => {
+  // A stub merged by an earlier, failed founding assembly lists example-river-gh;
+  // the pull request rewrites it to an outsider, who is not counted.
+  const { master, pr } = foundingPr([['example-river', 'participant', 'example-outsider-gh']], { onMaster: [['example-river', 'participant']] });
+  const comments = [comment(1, 'example-outsider-gh', IN, vote('for', 'example-river'))];
+  const t = computeTally({ record: loadRecord(pr), masterRecord: loadRecord(master), cycle: '2026-04', comments });
+  assert.deepEqual(reasons(t), ['example-river: the author is not listed in speaks_for of `example-river`']);
+  assert.deepEqual([t.base, t.cast, t.outcome], [1, 0, 'failed']);
+});
+
+test('tally: a founding assembly with no participant delivery is undetermined', () => {
+  const { pr } = foundingPr([['example-delta', 'unit']]);
+  const t = computeTally({ record: loadRecord(pr), cycle: '2026-04', comments: [comment(1, 'example-delta-gh', IN, vote('for', 'example-delta'))] });
   assert.equal(t.outcome, 'undetermined');
-  assert.deepEqual(reasons(t), [NOT_YET('example-river'), NOT_YET('example-gamma'), 'example-nobody: no unit record for `example-nobody`']);
-  // The tally workflow's reading: the record is the default branch's, the report the pull request's.
-  const { withReport } = require('../lib/record');
-  const asWorkflow = computeTally({ record: withReport(loadRecord(master), require('node:path').join(pr, 'federation/assemblies/2026-04.md'), '2026-04'),
-    cycle: '2026-04', comments });
-  assert.deepEqual(reasons(asWorkflow), ['example-river: no unit record for `example-river`', NOT_YET('example-gamma'), 'example-nobody: no unit record for `example-nobody`'],
-    'without the pull request\'s unit files, the report\'s New records still say which holders the pull request records');
-  assert.deepEqual([t.votes.length, t.cast, asWorkflow.votes.length, asWorkflow.cast], [0, 0, 0, 0], 'nothing more is counted');
+  assert.deepEqual(t.sentences, [FOUNDING, FOUNDING_EMPTY]);
+  assert.equal(t.participation, null);
+  assert.doesNotMatch(renderTally(t), /\*\*(passed|failed)\*\*/);
+});
+
+test('tally: the founding assembly is the one before which none has passed', () => {
+  const rec = (outcomes) => ({ assemblies: outcomes.map(([cycle, outcome]) => ({ cycle, vote: { outcome } })) });
+  assert.equal(isFounding(rec([]), '2026-04'), true);
+  assert.equal(isFounding(rec([['2026-03', 'failed']]), '2026-04'), true, 'a founding assembly that failed is followed by another');
+  assert.equal(isFounding(rec([['2026-03', 'pending']]), '2026-04'), true);
+  assert.equal(isFounding(rec([['2026-03', 'passed']]), '2026-04'), false);
+  assert.equal(isFounding(rec([['2026-05', 'passed']]), '2026-04'), true, 'only earlier cycles count');
+  // The basic fixture: 2026-01 is its founding assembly, and 2026-04 is not.
+  assert.equal(isFounding(underVote(), '2026-01'), true);
+  assert.equal(isFounding(underVote(), '2026-04'), false);
 });
 
 test('tally: quorum_base total counts dormant points in the base', () => {
@@ -219,7 +300,7 @@ test('tally: T2 a dormant holder whose vote is counted joins the base; participa
     write(dir, 'federation/assemblies/' + cycle + '.md', pendingReport({ cycle }).replace(RIVER_ROW, ''));
     const file = path.join(dir, 'c-' + cycle + '.json');
     fs.writeFileSync(file, JSON.stringify(comments));
-    const r = run(['close', cycle, '--root', dir, '--comments', file, '--base-ref', base, '--allow-undetermined']);
+    const r = run(['close', cycle, '--root', dir, '--comments', file, '--base-ref', base]);
     assert.equal(r.code, 0, r.err);
     return read(dir, 'federation/assemblies/' + cycle + '.md');
   };
@@ -267,8 +348,8 @@ test('tally: T2 a dormant holder whose vote is counted joins the base; participa
   // close writes the same base, and check recomputes it from the Votes table.
   const file = path.join(dir, 'c-2026-07.json');
   fs.writeFileSync(file, JSON.stringify([delta, cedarAgainst]));
-  assert.equal(run(['close', '2026-07', '--root', dir, '--comments', file, '--base-ref', base7, '--allow-undetermined']).code, 0);
+  assert.equal(run(['close', '2026-07', '--root', dir, '--comments', file, '--base-ref', base7]).code, 0);
   assert.match(read(dir, 'federation/assemblies/2026-07.md'), /\| Active points \| 5 \|\n\| Votes cast \| 5 \|\n\| Participation \| 100% \(quorum 30%\) \|/);
-  const check = run(['check', '--root', dir, '--allow-undetermined']);
+  const check = run(['check', '--root', dir]);
   assert.equal(check.code, 0, check.err);
 });

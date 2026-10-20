@@ -5,8 +5,10 @@ name: Federation tally
 # (comments, reviews and review comments) and runs `node tools/daf.js tally`
 # from the default branch, against the record of the default branch: units,
 # parameters, earlier assemblies and the ledger all come from this checkout.
-# From the pull request it takes one file, as data only: the report it adds,
-# federation/assemblies/<cycle>.md. Anything else the pull request changes is
+# From the pull request it takes, as data only, the report it adds,
+# federation/assemblies/<cycle>.md, and the unit records it adds, which are
+# read only in the founding assembly (DAF-001 §4), whose participants have no
+# record on the default branch yet. Anything else the pull request changes is
 # not used, and is named in the result so a reader can see it. With `post` off
 # it writes the tally to the run summary; with `post` on it keeps one comment
 # on the pull request up to date.
@@ -136,6 +138,31 @@ jobs:
           # weighs it against is the default branch, checked out above.
           git show "FETCH_HEAD:$REPORT" > "$RUNNER_TEMP/report.md"
 
+      - name: Take the added unit records from the pull request head, as data
+        env:
+          HEAD: ${{ steps.pr.outputs.head }}
+        run: |
+          set -euo pipefail
+          # Read by the tally only in the founding assembly (DAF-001 §4): its
+          # participants' records arrive with the report. Never executed.
+          mkdir -p "$RUNNER_TEMP/units"
+          jq -r '[ .[][] | select(.status == "added") | .filename
+                   | select(test("^federation/units/[a-z0-9]+(-[a-z0-9]+)*\\.yml$")) ] | .[]' \
+            "$RUNNER_TEMP/files.json" > "$RUNNER_TEMP/units.txt"
+          while IFS= read -r unit; do
+            [ -n "$unit" ] || continue
+            if ! [[ "$unit" =~ ^federation/units/[a-z0-9]+(-[a-z0-9]+)*\.yml$ ]]; then
+              echo "::error::unexpected unit record path"
+              exit 1
+            fi
+            entry="$(git ls-tree "$HEAD" -- "$unit")"
+            if ! [[ "$entry" =~ ^100644\ blob\ [0-9a-f]{40}$'\t'"$unit"$ ]]; then
+              echo "::error::$unit in the pull request head is not a regular file; refusing to read it"
+              exit 1
+            fi
+            git show "$HEAD:$unit" > "$RUNNER_TEMP/units/${unit#federation/units/}"
+          done < "$RUNNER_TEMP/units.txt"
+
       - name: Read the votes
         env:
           GH_TOKEN: ${{ github.token }}
@@ -153,9 +180,10 @@ jobs:
           CYCLE: ${{ steps.pr.outputs.cycle }}
         run: |
           set -euo pipefail
-          # The record is this checkout of the default branch; the report is the
-          # one file taken from the pull request head.
+          # The record is this checkout of the default branch; the report and the
+          # added unit records are taken from the pull request head.
           node tools/daf.js tally --cycle "$CYCLE" --report "$RUNNER_TEMP/report.md" \
+            --founding-units "$RUNNER_TEMP/units" \
             --comments "$RUNNER_TEMP/comments.json" \
             --reviews "$RUNNER_TEMP/reviews.json" \
             --review-comments "$RUNNER_TEMP/review-comments.json" \

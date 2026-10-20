@@ -11,16 +11,18 @@ const { FIX, ROOT, tmpCopy, read, write } = require('./helpers');
 // Computed once from tools/test/fixtures/basic and written here, so that any
 // change to the derivation, or to the fixture's bytes, fails this test.
 // Before request.decided carried an empty holder (audit DAF-C3) it was
-// 4e0553ad0fb2621a95df6c8423d65f077a0977613cb0326c00888324074199f9.
-const GOLDEN_HEAD = '65c6a3a9446a70174761d475f3ef0f7ec0ce94077c20c2b5758217959e73cbd7';
+// 4e0553ad0fb2621a95df6c8423d65f077a0977613cb0326c00888324074199f9, and before
+// the founding assembly was decided by participant (DAF-001 §4) it was
+// 65c6a3a9446a70174761d475f3ef0f7ec0ce94077c20c2b5758217959e73cbd7.
+const GOLDEN_HEAD = '7d0c81f251d8cd8ec9687b17781dc89a5c685d01e964d809ef7a187a91019af7';
 
 test('events: golden head of the basic fixture', () => {
   const d = deriveEvents(loadRecord(path.join(FIX, 'basic')));
   assert.equal(d.version, 1);
-  assert.equal(d.count, 20);
+  assert.equal(d.count, 19);
   assert.equal(d.head, GOLDEN_HEAD);
   assert.deepEqual(d.events.map((e) => e.kind), [
-    'unit.recorded', 'unit.recorded', 'function.delivered', 'function.delivered', 'function.delivered', 'vote.cast', 'vote.cast', 'assembly.closed',
+    'unit.recorded', 'unit.recorded', 'function.delivered', 'function.delivered', 'function.delivered', 'vote.cast', 'assembly.closed',
     'unit.recorded', 'function.delivered', 'function.delivered', 'module.completed', 'penalty', 'request.decided', 'vote.cast', 'vote.cast', 'steward.intervention', 'assembly.closed',
     'vote.cast', 'assembly.closed'
   ]);
@@ -30,11 +32,11 @@ test('events: golden head of the basic fixture', () => {
   const req = d.events.find((e) => e.kind === 'request.decided');
   // The requester is not read from the request file, which can change after the decision.
   assert.deepEqual([req.holder, req.value, req.ref], ['', 'approved', 'federation/requests/1-example-tooling.md']);
-  const closed = d.events[7];
+  const closed = d.events[6];
   assert.equal(closed.preimage, [
-    'daf-event/1', 'seq=8', 'kind=assembly.closed', 'cycle=2026-01', 'holder=', 'points=0', 'value=passed',
+    'daf-event/1', 'seq=7', 'kind=assembly.closed', 'cycle=2026-01', 'holder=', 'points=0', 'value=passed',
     'ref=federation/assemblies/2026-01.md', 'blob=' + closed.blob, 'evidence=1', 'evidence=https://github.com/draykerdk/daf/issues/101',
-    'prev=' + d.events[6].hash, ''
+    'prev=' + d.events[5].hash, ''
   ].join('\n'));
   assert.equal(d.events[0].prev, ZERO);
 });
@@ -86,7 +88,7 @@ test('events: verifyChain accepts the chain and catches tampering', () => {
   assert.match(v.problems.join(), /event 4: hash does not match/);
   const log = serialize(d).log;
   assert.ok(log.startsWith('daf-event/1\nseq=1\n'));
-  assert.equal(log.split('\nhash=').length - 1, 20);
+  assert.equal(log.split('\nhash=').length - 1, 19);
 });
 
 test('events: foldEvents gives the same standing as foldLedger', () => {
@@ -115,9 +117,9 @@ test('events: T4 a closed report with parse problems stops the export, with file
   assert.throws(() => deriveEvents(loadRecord(dir)), /^Error: federation\/assemblies\/2026-02\.md: cannot derive events while the report has problems: federation\/assemblies\/2026-02\.md:13: points "one" is not an integer; federation\/assemblies\/2026-02\.md:\d+: weight "two"/);
   for (const cmd of ['events', 'snapshot']) {
     const out = path.join(dir, 'out-' + cmd);
-    const r = run([cmd, '--root', dir, '--out', out, '--allow-undetermined']);
+    const r = run([cmd, '--root', dir, '--out', out]);
     assert.equal(r.code, 1, cmd);
-    assert.match(r.err, /\nerror: federation\/assemblies\/2026-02\.md: cannot derive events while the report has problems: federation\/assemblies\/2026-02\.md:13: points "one"/, cmd);
+    assert.match(r.err, /(^|\n)error: federation\/assemblies\/2026-02\.md: cannot derive events while the report has problems: federation\/assemblies\/2026-02\.md:13: points "one"/, cmd);
     assert.ok(!fs.existsSync(out), cmd + ' writes nothing');
   }
   // A pending report is not exported, so its problems do not stop the export.

@@ -44,7 +44,7 @@ for (const file of ['README.md', 'federation/README.md', 'dafp/daf-000-federatio
 }
 
 // Voting is described as transitional once, where the vote is introduced.
-const TRANSITIONAL = 'Voting is transitional: it holds only until contextual weighing by Dk Global, justified vetoes weighed by their grounds and councils formed for each question can be reproduced and tested, and each one that is replaces part of the vote.';
+const TRANSITIONAL = 'Voting is transitional: it holds only until contextual weighing by the global Dk, justified vetoes weighed by their grounds and councils formed for each question can be reproduced and tested, and each one that is replaces part of the vote.';
 check(html.split(TRANSITIONAL).length === 2, 'The site must say once, where the vote is introduced, that voting is transitional.');
 check(html.includes("DAF_CACHE = 'daf-record-v2'"), 'The record cache key must change with the snapshot shape.');
 check(!/slice\(0, 24\)/.test(html), 'Assembly reports must not be capped at 24.');

@@ -17,7 +17,7 @@ The federation is an autonomous, distributed federation of autonomous units: the
 
 Useful functions are expected to migrate into PAP, member governance and member councils formed for each question as those layers mature. The federation may become progressively thinner or functionally dissolve; institutional survival is not one of its purposes.
 
-Voting is transitional. It holds only until the federation can reproduce and test what version 1.0 is designed around: contextual weighing by Dk Global, justified vetoes weighed by their grounds rather than counted, and member councils formed for each question. Each of these mechanisms that is reproduced and tested replaces part of the vote.
+Voting is transitional. It holds only until the federation can reproduce and test what version 1.0 is designed around: contextual weighing by the global Dk, justified vetoes weighed by their grounds rather than counted, and member councils formed for each question. Each of these mechanisms that is reproduced and tested replaces part of the vote.
 
 It is not a company, not a legal person, and not a fund with a return. Contribution earns recognition and voting weight inside the federation. It does not earn a wage, equity, or a claim on anything outside the federation.
 
@@ -121,7 +121,7 @@ Below 30% participation nothing passes, whatever the split. The threshold is del
 
 ### 5.4 The founding steward
 
-During the founding phase, the authority of the Embassy of Drayker, the core that founds the construction and answers for it until the system works as designed, is exercised on GitHub by the founding steward described in [GOVERNANCE.md](https://github.com/draykerdk/.github/blob/master/GOVERNANCE.md). While the total number of points is small, that steward's share is a majority by construction, because the steward has done most of the delivered work. This is stated rather than hidden.
+During the founding phase, the authority of the Drayker Embassy, the core that founds the construction and answers for it until the system works as designed, is exercised on GitHub by the founding steward described in [GOVERNANCE.md](https://github.com/draykerdk/.github/blob/master/GOVERNANCE.md). While the total number of points is small, that steward's share is a majority by construction, because the steward has done most of the delivered work. This is stated rather than hidden.
 
 The steward's intervention is limited to proposals that are misaligned with Drayker's published values and purpose, and to fraud, spam, and attacks on the federation. It is not a preference veto, and every use of it is recorded with its reason.
 

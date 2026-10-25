@@ -19,7 +19,7 @@ A justified veto contests one decision of the federation and carries its real gr
 
 A veto without grounds is not a veto under this proposal. It can still be argued in the thread like any other comment.
 
-A veto is criticism of a decision, and it is held to the deliberation standard every discussion in Drayker follows ([CONTRIBUTING](https://github.com/draykerdk/.github/blob/master/CONTRIBUTING.md)): kind to people, relentless with ideas. Its grounds are tested with the same rigor as the decision it contests, and a veto that does not pass does not cost its author the place to keep contributing.
+A veto is criticism of a decision, and it is held to the deliberation standard every discussion in Drayker follows ([CONTRIBUTING](https://github.com/draykerdk/.github/blob/master/CONTRIBUTING.md)): gentle with people and ruthless with ideas. Its grounds are tested with the same rigor as the decision it contests, and a veto that does not pass does not cost its author the place to keep contributing.
 
 Vetoes are not counted like votes. Their grounds are weighed: what each one shows, each person's relation to the decision, the certainty on each side, and what several vetoes reveal in common. A person counts once. Many vetoes that repeat the same grounds add weight to those grounds, not new information. One veto can be enough: when its grounds bring information beyond what was considered before the decision, it can lead by itself to an adjustment.
 

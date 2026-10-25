@@ -1,8 +1,8 @@
 > An autonomous federation of autonomous units, a basic and primitive form of PAP, implemented now.
 
-DAF, the Distributed Autonomous Federation, is an autonomous federation of autonomous units, distributed like Dk: the groups and organizations of people working on different questions and projects in Drayker. It is a basic and primitive form of [PAP](https://pap.drayker.org), implemented now on GitHub (Phase 0): its rules, instruments and public record exist. No unit has been recorded and no assembly has been held yet. Its dynamics are tested as the very way Drayker is built. It explores coordination among the units while the broader member constitution and Projects & Applications develop. It provides a place to test federative rules in public.
+DAF, the Distributed Autonomous Federation, is the first phase in distributing the power of the Drayker Embassy: an autonomous federation of autonomous units, distributed like Dk, the groups and organizations of people working on different questions and projects in Drayker. It is a basic and primitive form of [PAP](https://pap.drayker.org), implemented now on GitHub (Phase 0): its rules, instruments and public record exist. No unit has been recorded and no assembly has been held yet. Its dynamics are tested as the very way Drayker is built. It explores coordination among the units while the broader member constitution and Projects & Applications develop. It provides a place to test federative rules in public.
 
-DAF serves to build Drayker's own infrastructure, including UID and the network, together: the infrastructure that will make DAF unnecessary. In doing so it prepares its own dissolution into PAP.
+DAF serves to build Drayker's own infrastructure, including UID and the network, together: the independent infrastructure that will make DAF unnecessary. In doing so it prepares its own dissolution: it stops being a separate layer and comes to live inside PAP.
 
 Documented proposals examine decision rules, a distinct federative points ledger and review procedures. Useful functions can later migrate into PAP and member governance.
 
